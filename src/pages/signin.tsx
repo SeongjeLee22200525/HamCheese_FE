@@ -11,7 +11,6 @@ export default function Home() {
       {/* Main */}
       <main className="flex-1 flex flex-col items-center justify-center">
         <div className="flex flex-col items-center gap-10">
-          
           {/* 일러스트 / 로고 영역 */}
           <div className="w-[920px] h-[384px] bg-[#F5F7F7] flex items-center justify-center">
             <span className="text-4xl font-normal font-['Pretendard_Variable'] text-black">
@@ -20,17 +19,17 @@ export default function Home() {
           </div>
 
           {/* Google 로그인 버튼 */}
-          <button
+          <a
+            href="http://172.18.157.165:8080/oauth2/authorization/google"
             className="
-              w-[360px] h-[56px]
-              flex items-center justify-center gap-3
-              rounded-full border border-[#D0D7DE]
-              text-[#222829] font-medium font-['Pretendard_Variable']
-              hover:bg-gray-50 active:bg-gray-100
-              transition
-            "
+    w-[360px] h-[56px]
+    flex items-center justify-center gap-3
+    rounded-full border border-[#D0D7DE]
+    text-[#222829] font-medium font-['Pretendard_Variable']
+    hover:bg-gray-50 active:bg-gray-100
+    transition
+  "
           >
-            {/* Google 아이콘 */}
             <Image
               src="/images/google-logo.png"
               alt="Google"
@@ -38,7 +37,7 @@ export default function Home() {
               height={24}
             />
             Google로 계속하기
-          </button>
+          </a>
         </div>
       </main>
 
