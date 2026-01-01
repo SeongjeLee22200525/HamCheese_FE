@@ -28,26 +28,26 @@ export default function Header() {
             <nav className="flex items-baseline gap-8 font-['Pretendard_Variable'] text-base font-medium">
               <Link
                 href="/searchmate"
-                className={`pb-1 transition-all
+                className={`px-7 py-4 gap-2.5 pb-3 transition-all border-b-2 inline-flex rounded-tl rounded-tr
                   ${
                     isMate
-                      ? "text-[#222829] border-b border-black font-semibold"
-                      : "text-[#222829] border-b border-transparent hover:border-black active:border-black active:opacity-80"
+                      ? "text-[#00C3CC] border-b border-[#00C3CC] font-semibold"
+                      : "text-[#222829] border-b border-transparent hover:border-[#B7C4C7] hover:bg-[#F5F8F8] hover:text-[#222829] active:border-[#00C3CC] active:text-[#00C3CC] active:bg-[#B7C4C7]"
                   }`}
               >
-                메이트 찾기
+                메이트 둘러보기
               </Link>
 
               <Link
                 href="/recruitmate"
-                className={`pb-1 transition-all
+                className={`px-7 py-4 gap-2.5 pb-3 transition-all border-b-2 inline-flex rounded-tl rounded-tr
                   ${
                     isTeam
-                      ? "text-[#222829] border-b border-black font-semibold"
-                      : "text-[#222829] border-b border-transparent hover:border-black active:border-black active:opacity-80"
+                      ? "text-[#00C3CC] border-b border-[#00C3CC] font-semibold"
+                      : "text-[#222829] border-b border-transparent hover:border-[#B7C4C7] hover:bg-[#F5F8F8] hover:text-[#222829] active:border-[#00C3CC] active:text-[#00C3CC] active:bg-[#B7C4C7]"
                   }`}
               >
-                팀원 구하기
+                모집하기
               </Link>
             </nav>
           </div>
