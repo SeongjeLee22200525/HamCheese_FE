@@ -1,5 +1,3 @@
-"use client";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import UserMenu from "@/components/UserMenu";
@@ -13,13 +11,10 @@ export default function Header() {
   return (
     <header className="w-full h-50 bg-white border-b">
       <div className="max-w-7xl mx-auto px-20 h-full">
-        
         {/* 실제 콘텐츠 영역 */}
         <div className="flex items-center justify-between pt-14">
-          
           {/* 왼쪽 */}
-          <div className="flex items-center gap-14">
-            
+          <div className="flex items-baseline gap-14">
             {/* 로고 */}
             <Link
               href="/"
@@ -29,27 +24,27 @@ export default function Header() {
             </Link>
 
             {/* 네비 */}
-            <nav className="flex items-center gap-8">
+            <nav className="flex items-baseline gap-8 font-['Pretendard_Variable'] text-base font-medium">
               <Link
                 href="/mate"
-                className={`pb-1 text-base font-medium transition-colors
-                  ${
-                    isMate
-                      ? "text-black border-b border-black"
-                      : "text-gray-300 hover:text-black"
-                  }`}
+                className={`pb-1 transition-all
+        ${
+          isMate
+            ? "text-black border-b border-black font-semibold"
+            : "text-black border-b border-transparent hover:border-black active:border-black active:opacity-80"
+        }`}
               >
                 메이트 찾기
               </Link>
 
               <Link
                 href="/team"
-                className={`pb-1 text-base font-medium transition-colors
-                  ${
-                    isTeam
-                      ? "text-black border-b border-black"
-                      : "text-gray-300 hover:text-black"
-                  }`}
+                className={`pb-1 transition-all
+        ${
+          isTeam
+            ? "text-black border-b border-black font-semibold"
+            : "text-black border-b border-transparent hover:border-black active:border-black active:opacity-80"
+        }`}
               >
                 팀원 구하기
               </Link>
