@@ -10,15 +10,16 @@ export default function Header() {
 
   return (
     <header className="w-full h-50 bg-white border-b">
-      <div className="max-w-7xl mx-auto px-20 h-full">
+      <div className="w-full h-full px-[120px]">
         {/* 실제 콘텐츠 영역 */}
         <div className="flex items-center justify-between pt-14">
+          
           {/* 왼쪽 */}
           <div className="flex items-baseline gap-14">
             {/* 로고 */}
             <Link
               href="/"
-              className="text-black text-3xl font-light font-['Paperlogy'] leading-none"
+              className="text-[#222829] text-3xl font-light font-['Paperlogy'] leading-none"
             >
               MateCheck
             </Link>
@@ -26,25 +27,25 @@ export default function Header() {
             {/* 네비 */}
             <nav className="flex items-baseline gap-8 font-['Pretendard_Variable'] text-base font-medium">
               <Link
-                href="/mate"
+                href="/searchmate"
                 className={`pb-1 transition-all
-        ${
-          isMate
-            ? "text-black border-b border-black font-semibold"
-            : "text-black border-b border-transparent hover:border-black active:border-black active:opacity-80"
-        }`}
+                  ${
+                    isMate
+                      ? "text-[#222829] border-b border-black font-semibold"
+                      : "text-[#222829] border-b border-transparent hover:border-black active:border-black active:opacity-80"
+                  }`}
               >
                 메이트 찾기
               </Link>
 
               <Link
-                href="/team"
+                href="/recruitmate"
                 className={`pb-1 transition-all
-        ${
-          isTeam
-            ? "text-black border-b border-black font-semibold"
-            : "text-black border-b border-transparent hover:border-black active:border-black active:opacity-80"
-        }`}
+                  ${
+                    isTeam
+                      ? "text-[#222829] border-b border-black font-semibold"
+                      : "text-[#222829] border-b border-transparent hover:border-black active:border-black active:opacity-80"
+                  }`}
               >
                 팀원 구하기
               </Link>
@@ -56,11 +57,11 @@ export default function Header() {
             <UserMenu name="박소dbf" />
           ) : (
             <div className="flex items-center gap-2 text-sm text-gray-400">
-              <Link href="/login" className="hover:text-black">
+              <Link href="/signin" className="hover:text-black">
                 로그인
               </Link>
               <span>|</span>
-              <Link href="/signup" className="hover:text-black">
+              <Link href="/joinmc" className="hover:text-black">
                 회원가입
               </Link>
             </div>
