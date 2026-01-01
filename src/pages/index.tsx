@@ -4,8 +4,9 @@ import Header from "@/components/Header";
 
 export default function Home() {
   return (
-    <div className="w-full min-h-screen bg-zinc-100 flex flex-col items-center">
-      <Header/>
-    </div>
+    <main className="w-full bg-zinc-100">
+      {/* 여기부터 메인 콘텐츠 */}
+      <Header />
+    </main>
   );
 }
