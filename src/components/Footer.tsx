@@ -11,7 +11,7 @@ export default function Footer() {
         <div className="flex items-center justify-between pt-20">
           
           {/* 왼쪽 링크들 */}
-          <div className="flex items-center gap-14 text-base font-medium font-['Pretendard_Variable'] text-gray-400">
+          <div className="flex items-center gap-14 text-base font-medium font-['Pretendard_Variable'] text-[#838F91]">
             <Link href="/terms" className="hover:text-black">
               이용약관
             </Link>
@@ -27,10 +27,8 @@ export default function Footer() {
           </div>
 
           {/* 오른쪽 카피라이트 */}
-          <div className="text-xs font-semibold text-gray-400 text-right">
-            Copyright 2025 Ham Cheese Sandwich.
-            <br />
-            All rights reserved.
+          <div className="text-xs font-['Pretendard_Variable'] font-semibold text-[#B7C4C7] text-right">
+            Copyright 2025 Ham Cheese Sendwich. All rights reserved.
           </div>
         </div>
       </div>

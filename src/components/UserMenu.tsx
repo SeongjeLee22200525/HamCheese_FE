@@ -12,12 +12,7 @@ export default function UserMenu({ name, imageUrl }: Props) {
       {/* 프로필 이미지 */}
       <div className="w-8 h-8 rounded-full bg-gray-300 overflow-hidden">
         {imageUrl ? (
-          <Image
-            src={imageUrl}
-            alt="profile"
-            width={32}
-            height={32}
-          />
+          <Image src={imageUrl} alt="profile" width={32} height={32} />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-sm">
             👤
@@ -25,16 +20,10 @@ export default function UserMenu({ name, imageUrl }: Props) {
         )}
       </div>
 
-      {/* 이름 */}
-      <span className="text-sm font-medium">
-        {name} 님
-      </span>
-
       {/* 설정(마이페이지) */}
-      <Link
-        href="/mypage"
-        className="text-gray-500 hover:text-black"
-      >
+      <Link href="/mypage" className="text-gray-500 hover:text-black">
+        {/* 이름 */}
+        <span className="text-sm font-medium">{name} 님</span>
         ⚙️
       </Link>
     </div>
