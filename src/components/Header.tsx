@@ -6,65 +6,72 @@ import UserMenu from "@/components/UserMenu";
 
 export default function Header() {
   const pathname = usePathname().toLowerCase();
-
   const isMate = pathname.includes("mate");
   const isTeam = pathname.includes("team");
-
-  // 🔥 임시 로그인 상태
   const isLoggedIn = true;
 
-  const baseStyle =
-    "text-xl px-4 py-1 rounded-[15px] transition-colors font-bold";
-
   return (
-    <header className="w-full flex items-center bg-white justify-between px-20 py-6 border-b">
-      <div className="flex items-center gap-12">
-        {/* 로고 */}
-        <Link
-          href="/"
-          className="justify-start text-black text-3xl font-light font-['Paperlogy']"
-        >
-          MateCheck
-        </Link>
+    <header className="w-full h-50 bg-white border-b">
+      <div className="max-w-7xl mx-auto px-20 h-full">
+        
+        {/* 실제 콘텐츠 영역 */}
+        <div className="flex items-center justify-between pt-14">
+          
+          {/* 왼쪽 */}
+          <div className="flex items-center gap-14">
+            
+            {/* 로고 */}
+            <Link
+              href="/"
+              className="text-black text-3xl font-light font-['Paperlogy'] leading-none"
+            >
+              MateCheck
+            </Link>
 
-        {/* 네비게이션 */}
-        <nav className="flex items-center gap-10">
-          <Link
-            href="/mate"
-            className={
-              baseStyle +
-              (isMate ? " text-black" : " hover:bg-black/10")
-            }
-          >
-            메이트 찾기
-          </Link>
+            {/* 네비 */}
+            <nav className="flex items-center gap-8">
+              <Link
+                href="/mate"
+                className={`pb-1 text-base font-medium transition-colors
+                  ${
+                    isMate
+                      ? "text-black border-b border-black"
+                      : "text-gray-300 hover:text-black"
+                  }`}
+              >
+                메이트 찾기
+              </Link>
 
-          <Link
-            href="/team"
-            className={
-              baseStyle +
-              (isTeam ? " text-black" : " hover:bg-black/10")
-            }
-          >
-            팀원 구하기
-          </Link>
-        </nav>
-      </div>
+              <Link
+                href="/team"
+                className={`pb-1 text-base font-medium transition-colors
+                  ${
+                    isTeam
+                      ? "text-black border-b border-black"
+                      : "text-gray-300 hover:text-black"
+                  }`}
+              >
+                팀원 구하기
+              </Link>
+            </nav>
+          </div>
 
-      {/* 오른쪽 영역 */}
-      {isLoggedIn ? (
-        <UserMenu name="박소dbf" />
-      ) : (
-        <div className="flex items-center gap-4 text-sm font-medium">
-          <Link href="/login" className="hover:underline">
-            로그인
-          </Link>
-          <span className="text-gray-400">|</span>
-          <Link href="/signup" className="hover:underline">
-            회원가입
-          </Link>
+          {/* 오른쪽 */}
+          {isLoggedIn ? (
+            <UserMenu name="박소dbf" />
+          ) : (
+            <div className="flex items-center gap-2 text-sm text-gray-400">
+              <Link href="/login" className="hover:text-black">
+                로그인
+              </Link>
+              <span>|</span>
+              <Link href="/signup" className="hover:text-black">
+                회원가입
+              </Link>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </header>
   );
 }
