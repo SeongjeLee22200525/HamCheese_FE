@@ -64,13 +64,6 @@ export default function ProfileCard({ user }: Props) {
           ))}
         </div>
       )}
-
-      {/* CTA 힌트 */}
-      <div className="mt-4 text-right">
-        <span className="text-xs text-[#9AA4A6]">
-          클릭해서 자세히 보기 →
-        </span>
-      </div>
     </article>
   );
 }

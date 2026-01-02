@@ -1,8 +1,53 @@
+"use client";
+
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import Image from "next/image";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useRouter } from "next/router";
 
 export default function Home() {
+  const router = useRouter();
+
+  const googleLogin = useGoogleLogin({
+    flow: "implicit", // idToken 받기
+    onSuccess: async (tokenResponse) => {
+      const idToken = tokenResponse.id_token;
+      if (!idToken) return;
+
+      // ✅ 서버에 회원 존재 여부 확인
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google/exists`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ idToken }),
+        }
+      );
+
+      const data = await res.json();
+
+      if (data.exists) {
+        // ✅ 이미 회원 → 메인 페이지
+        router.push("/home");
+      } else {
+        // ❌ 신규 회원 → 회원가입 페이지
+        router.push({
+          pathname: "/signup",
+          query: {
+            email: data.email,
+            socialId: data.socialId,
+          },
+        });
+      }
+    },
+    onError: () => {
+      console.error("Google Login Failed");
+    },
+  });
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFFFF]">
       {/* Header */}
@@ -18,17 +63,17 @@ export default function Home() {
             </span>
           </div>
 
-          {/* Google 로그인 버튼 */}
-          <a
-            href="http://172.18.157.165:8080/oauth2/authorization/google"
+          {/* ✅ 디자인 동일 / 동작만 변경 */}
+          <button
+            onClick={() => googleLogin()}
             className="
-    w-[360px] h-[56px]
-    flex items-center justify-center gap-3
-    rounded-full border border-[#D0D7DE]
-    text-[#222829] font-medium font-['Pretendard_Variable']
-    hover:bg-gray-50 active:bg-gray-100
-    transition
-  "
+              w-[360px] h-[56px]
+              flex items-center justify-center gap-3
+              rounded-full border border-[#D0D7DE]
+              text-[#222829] font-medium font-['Pretendard_Variable']
+              hover:bg-gray-50 active:bg-gray-100
+              transition
+            "
           >
             <Image
               src="/images/google-logo.png"
@@ -37,7 +82,7 @@ export default function Home() {
               height={24}
             />
             Google로 계속하기
-          </a>
+          </button>
         </div>
       </main>
 
