@@ -2,25 +2,11 @@
 import { useRef, useState } from "react";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
+import { departments } from "@/constants/departments";
 
 export default function JoinMC() {
-  const departments = [
-    "글로벌리더십학부",
-    "경영경제학부",
-    "공간환경시스템공학부",
-    "국제어문학부",
-    "기계제어학부",
-    "법학부",
-    "커뮤니케이션학부",
-    "생명과학부",
-    "콘텐츠융합디자인학부",
-    "AI융합학부",
-    "전산전자공학부",
-    "상담심리사회복지학부",
-  ];
-
   const [deptOpen, setDeptOpen] = useState(false);
-  const [department, setDepartment] = useState<string>("");
+  const [selectedDepartment, setSelectedDepartment] = useState<string>("");
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -127,7 +113,7 @@ export default function JoinMC() {
                     <div className="w-1 h-4 bg-[#00C3CC]" />
                     이름 <span className="text-[#00C3CC]">*</span>
                   </div>
-                  <input className="mc-input w-72" placeholder="박소율" />
+                  <input className="mc-input w-72" placeholder="이름을 입력해주세요" />
                 </div>
 
                 {/* 학번 */}
@@ -178,16 +164,18 @@ export default function JoinMC() {
                     >
                       <span
                         className={
-                          department ? "text-[#222829]" : "text-gray-400"
+                          selectedDepartment
+                            ? "text-[#222829]"
+                            : "text-gray-400"
                         }
                       >
-                        {department || "학부 선택"}
+                        {selectedDepartment || "학부 선택"}
                       </span>
 
                       <img
                         src="/dropdownArrow.svg"
                         alt="toggle"
-                        className={`w-4 h-4 transition-transform duration-200 ease-in-out ${
+                        className={`w-4 h-4 transition-transform duration-200 ${
                           deptOpen ? "rotate-180" : ""
                         }`}
                       />
@@ -196,34 +184,39 @@ export default function JoinMC() {
                     {/* ===== dropdown ===== */}
                     <div
                       className={`
-      absolute left-0 top-full mt-2.5
-      w-full bg-white rounded shadow-md z-10
-
-      overflow-hidden
-      transition-[max-height] duration-300 ease-in-out
-      will-change-[max-height]
-
-      ${
-        deptOpen
-          ? "max-h-[245px] border-2 border-[#d1d5db]"
-          : "max-h-0 border-0 pointer-events-none"
-      }
-    `}
+        absolute left-0 top-full mt-2.5
+        w-full bg-white rounded-lg  shadow-[0px_0px_20px_0px_rgba(225,237,240,1.00)] z-10
+        overflow-hidden 
+        transition-[max-height] duration-300 ease-in-out
+        ${deptOpen ? "max-h-[245px] " : "max-h-0 border-0 pointer-events-none"}
+      `}
                     >
-                      {/* scroll area */}
                       <ul className="max-h-[220px] overflow-y-auto">
-                        {departments.map((dept) => (
-                          <li
-                            key={dept}
-                            onClick={() => {
-                              setDepartment(dept);
-                              setDeptOpen(false);
-                            }}
-                            className="px-3 py-3 cursor-pointer hover:bg-[#F5F8F8]"
-                          >
-                            {dept}
-                          </li>
-                        ))}
+                        {departments.map((dept) => {
+                          const isSelected = selectedDepartment === dept;
+
+                          return (
+                            <li
+                              key={dept}
+                              onClick={() => {
+                                setSelectedDepartment(dept);
+                                setDeptOpen(false);
+                              }}
+                              className={`
+          relative px-3 py-3 cursor-pointer
+          hover:bg-[#F5F8F8]
+          ${isSelected ? "bg-[#E0EDEF]" : ""}
+        `}
+                            >
+                              {/* 왼쪽 파란 블럭 */}
+                              {isSelected && (
+                                <span className="absolute left-0 top-0 h-full w-1 bg-[#00C3CC]" />
+                              )}
+
+                              <span className="pl-2">{dept}</span>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
                   </div>
@@ -242,7 +235,7 @@ export default function JoinMC() {
                       </p>
                       <input
                         className="mc-input w-72"
-                        placeholder="시각디자인"
+                        placeholder="1전공"
                       />
                     </div>
                     <div>
@@ -258,9 +251,9 @@ export default function JoinMC() {
                 <div className="flex items-center gap-16">
                   <div className="w-[100px] flex items-center gap-2 font-medium">
                     <div className="w-1 h-4 bg-[#00C3CC]" />
-                    학점
+                    평점 평균
                   </div>
-                  <input className="mc-input w-72" placeholder="학점" />
+                  <input className="mc-input w-72" placeholder="3.68" />
                 </div>
               </div>
 
