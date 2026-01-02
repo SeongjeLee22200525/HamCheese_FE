@@ -3,7 +3,7 @@ import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import SearchBar from "@/components/SearchBar";
 import ProfileCard from "@/components/ProfileCard";
-import { DEPARTMENTS } from "@/constants/departments";
+import { departments } from "@/constants/departments";
 import { UserProfile } from "@/types/user";
 import { mockUsers } from "@/mocks/mockUsers";
 
@@ -126,7 +126,7 @@ export default function SearchMate() {
               {/* 필터 바디 */}
               <div className="bg-white border-[#6EC6CC] border-t-0 relative rounded-bl rounded-br overflow-hidden border-2">
                 <div className="mt-5 flex flex-col mb-5">
-                  {DEPARTMENTS.map((dept) => {
+                  {departments.map((dept) => {
                     const checked = selected.includes(dept);
 
                     return (
