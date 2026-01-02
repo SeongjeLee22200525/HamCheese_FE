@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { SignUpRequest } from "@/types/user";
-// import { signUp } from "@/api/user";
-import { signUpMock as signUp } from "@/api/user.mock";
 
-export const useSignUp = () => {
+import { useState } from "react";
+import { signUp } from "@/api/user";
+import { SignUpRequest } from "@/types/user";
+
+export function useSignUp() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -11,15 +11,19 @@ export const useSignUp = () => {
     try {
       setLoading(true);
       setError(null);
-      await signUp(form);
+
+      const res = await signUp(form);
+
+      console.log("회원가입 성공:", res);
+      return res;
     } catch (e) {
       console.error(e);
       setError("회원가입에 실패했습니다.");
-      // ❌ throw new Error() 제거
+      throw e;
     } finally {
       setLoading(false);
     }
   };
 
   return { submit, loading, error };
-};
+}

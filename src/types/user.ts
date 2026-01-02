@@ -30,3 +30,17 @@ export interface UserProfile {
   peerGoodKeywords: string[];
   imageUrl: string;
 }
+
+// 동료 프로필 정보
+export type MateProfileInfo = {
+  name: string;
+  email: string;
+  department: string;
+  firstMajor: string;
+  secondMajor?: string;
+  grade: number;
+  gpa?: number;
+  studentId: string;
+  semester: number;
+  imageUrl: string;
+};
