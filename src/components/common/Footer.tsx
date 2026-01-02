@@ -6,10 +6,8 @@ export default function Footer() {
   return (
     <footer className="w-full h-75 bg-white ">
       <div className="w-full h-full px-[200px]">
-        
         {/* 실제 콘텐츠 영역 */}
         <div className="flex items-center justify-between pt-49">
-          
           {/* 왼쪽 링크들 */}
           <div className="flex items-center gap-15 text-base font-medium font-['Pretendard_Variable'] text-[#838F91]">
             <Link href="/terms" className="hover:text-black">
