@@ -9,7 +9,7 @@ export default function Header() {
   const isLoggedIn = true;
 
   return (
-    <header className="w-full h-50 bg-white border-b">
+    <header className="w-full h-50 bg-white">
       <div className="w-full h-full px-[120px]">
         {/* 실제 콘텐츠 영역 */}
         <div className="flex items-center justify-between pt-14">
