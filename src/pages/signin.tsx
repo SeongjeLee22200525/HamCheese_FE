@@ -15,9 +15,9 @@ export default function Home() {
       const idToken = tokenResponse.id_token;
       if (!idToken) return;
 
-      // 서버에 회원 존재 여부 확인
+      // ✅ 서버에 회원 존재 여부 확인
       const res = await fetch(
-        "http://172.18.157.165:8080/auth/google/exists",
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google/exists`,
         {
           method: "POST",
           headers: {
@@ -30,12 +30,12 @@ export default function Home() {
       const data = await res.json();
 
       if (data.exists) {
-        // 이미 회원 → 메인 페이지
-        router.push("/searchmate");
+        // ✅ 이미 회원 → 메인 페이지
+        router.push("/home");
       } else {
-        // 신규 회원 → 회원가입 페이지
+        // ❌ 신규 회원 → 회원가입 페이지
         router.push({
-          pathname: "/joinmc",
+          pathname: "/signup",
           query: {
             email: data.email,
             socialId: data.socialId,
