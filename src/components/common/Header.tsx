@@ -4,8 +4,8 @@ import UserMenu from "@/components/UserMenu";
 
 export default function Header() {
   const pathname = usePathname().toLowerCase();
-  const isMate = pathname.includes("mate");
-  const isTeam = pathname.includes("team");
+  const isMate = pathname === "/searchmate";
+  const isTeam = pathname === "/recruitmate";
   const isLoggedIn = true;
 
   return (
