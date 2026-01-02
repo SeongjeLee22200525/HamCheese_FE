@@ -12,7 +12,8 @@ export const mockMateProfile = {
     imageUrl: "/mock/profile.jpg",
   },
 
-  introduction: "안녕하세요. 20학번 GE전공 서예진입니다. 기획 전반에 대한 이해를 바탕으로 아이디어를 구조화하고, 목적에 맞는 실행 전략을 설계하는 데 강점이 있습니다.",
+  introduction:
+    "안녕하세요. 20학번 GE전공 서예진입니다. 기획 전반에 대한 이해를 바탕으로 아이디어를 구조화하고, 목적에 맞는 실행 전략을 설계하는 데 강점이 있습니다.",
 
   skills: ["기획", "PPT", "리서치", "PM"],
 
@@ -32,16 +33,25 @@ export const mockMateProfile = {
       title: "2023 한스트 1일차 기획운영팀장",
       link: "",
     },
-    
   ],
 
   peerReview: {
+    goodKeywordCount: 14,
+    badKeywordCount: 4,
+
     positive: [
-      { label: "기획력이 좋아요", count: 12 },
-      { label: "팀원 의견을 존중해요", count: 10 },
+      { key: "GOOD_PLANNING", count: 12 },
+      { key: "RESPECT_TEAM_OPINION", count: 10 },
+      { key: "ROLE_EXECUTION", count: 7 },
+      { key: "ROLE_EXECUTION", count: 7 },
     ],
+
     negative: [
-      { label: "자료조사가 부족해요", count: 2 },
+      { key: "LACK_RESEARCH", count: 2 },
+      { key: "DOC_UNDERSTANDING_DIFFICULT", count: 1 },
+      { key: "TEAM_MANAGEMENT_WEAK", count: 1 },
+      {key: "LOW_PARTICIPATION", count: 3},
+  
     ],
   },
 };

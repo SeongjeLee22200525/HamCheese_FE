@@ -101,6 +101,9 @@ export default function MateProfilePage() {
           {/* 동료평가 */}
           <div className="pb-30">
             <PeerReview
+              name={data.profile.name}
+              goodKeywordCount={data.peerReview.goodKeywordCount}
+              badKeywordCount={data.peerReview.badKeywordCount}
               positive={data.peerReview.positive}
               negative={data.peerReview.negative}
             />
