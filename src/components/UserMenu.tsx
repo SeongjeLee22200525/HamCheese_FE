@@ -2,33 +2,48 @@ import Image from "next/image";
 import Link from "next/link";
 
 interface Props {
-  name: string;
-  imageUrl?: string;
+  user?: {
+    name: string;
+    imageUrl?: string;
+  } | null;
 }
 
-export default function UserMenu({ name, imageUrl }: Props) {
+export default function UserMenu({ user }: Props) {
+  // 그인 안 된 상태
+  if (!user) {
+    return (
+      <Link
+        href="/signin"
+        className="text-sm text-gray-500 hover:text-black"
+      >
+        로그인 | 회원가입
+      </Link>
+    );
+  }
+
+  // 로그인 된 상태
   return (
     <div className="flex items-center gap-3">
       {/* 프로필 이미지 */}
       <div className="w-8 h-8 rounded-full bg-gray-300 overflow-hidden">
-        {imageUrl ? (
-          <Image src={imageUrl} alt="profile" width={32} height={32} />
+        {user.imageUrl ? (
+          <Image
+            src={user.imageUrl}
+            alt="profile"
+            width={32}
+            height={32}
+          />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-sm">
-            <img src="/images/profile.svg" alt="default profile" />
-          </div>
+          <img src="/images/profile.svg" alt="default profile" />
         )}
       </div>
 
-      {/* 설정(마이페이지) */}
+      {/* 마이페이지 */}
       <Link
         href="/mypage"
         className="flex items-center gap-2 text-gray-500 hover:text-black"
       >
-        {/* 이름 */}
-        <span className="text-sm font-medium">{name} 님</span>
-
-        {/* 설정 아이콘 (오른쪽) */}
+        <span className="text-sm font-medium">{user.name} 님</span>
         <img src="/images/setting.svg" alt="settings" className="w-6 h-6" />
       </Link>
     </div>

@@ -3,90 +3,109 @@
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import Image from "next/image";
-import { useGoogleLogin } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/router";
+import axios from "axios";
 
 export default function Home() {
   const router = useRouter();
 
-  const googleLogin = useGoogleLogin({
-    flow: "implicit", // idToken 받기
-    onSuccess: async (tokenResponse) => {
-      const idToken = tokenResponse.id_token;
-      if (!idToken) return;
+  const handleGoogleSuccess = async (credential: string) => {
+    console.log("idToken:", credential);
 
-      // ✅ 서버에 회원 존재 여부 확인
-      const res = await fetch(
+    try {
+      const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google/exists`,
         {
-          method: "POST",
+          idToken: credential,
+        },
+        {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ idToken }),
         }
       );
 
-      const data = await res.json();
+      console.log("response:", res.data);
+
+      const data = res.data;
 
       if (data.exists) {
-        // ✅ 이미 회원 → 메인 페이지
-        router.push("/home");
+        // 기존 회원
+        router.push("/searchmate");
       } else {
-        // ❌ 신규 회원 → 회원가입 페이지
+        // 신규 회원
         router.push({
-          pathname: "/signup",
+          pathname: "/joinmc",
           query: {
             email: data.email,
             socialId: data.socialId,
           },
         });
       }
-    },
-    onError: () => {
-      console.error("Google Login Failed");
-    },
-  });
+    } catch (error: any) {
+      if (error.response) {
+        // 서버가 응답을 준 경우
+        console.error("❌ server error:", error.response.status);
+        console.error("❌ server data:", error.response.data);
+      } else {
+        // 요청 자체가 실패한 경우
+        console.error("🔥 request failed:", error.message);
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FFFFFF]">
-      {/* Header */}
       <Header />
 
-      {/* Main */}
       <main className="flex-1 flex flex-col items-center justify-center">
         <div className="flex flex-col items-center gap-10">
-          {/* 일러스트 / 로고 영역 */}
+          {/* 일러스트 */}
           <div className="w-[920px] h-[384px] bg-[#F5F7F7] flex items-center justify-center">
-            <span className="text-4xl font-normal font-['Pretendard_Variable'] text-black">
+            <span className="text-4xl font-normal text-black">
               일러스트/로고
             </span>
           </div>
 
-          {/* ✅ 디자인 동일 / 동작만 변경 */}
-          <button
-            onClick={() => googleLogin()}
-            className="
-              w-[360px] h-[56px]
-              flex items-center justify-center gap-3
-              rounded-full border border-[#D0D7DE]
-              text-[#222829] font-medium font-['Pretendard_Variable']
-              hover:bg-gray-50 active:bg-gray-100
-              transition
-            "
-          >
-            <Image
-              src="/images/google-logo.png"
-              alt="Google"
-              width={24}
-              height={24}
-            />
-            Google로 계속하기
-          </button>
+          {/* 버튼 */}
+          <div className="relative w-[360px] h-[56px]">
+            {/* 기존 디자인 */}
+            <div
+              className="
+                absolute inset-0
+                flex items-center justify-center gap-3
+                rounded-full border border-[#D0D7DE]
+                text-[#222829] font-medium
+                bg-white
+              "
+            >
+              <Image
+                src="/images/google-logo.png"
+                alt="Google"
+                width={24}
+                height={24}
+              />
+              Google로 계속하기
+            </div>
+
+            {/* 실제 Google 로그인 */}
+            <div className="absolute inset-0 opacity-0">
+              <GoogleLogin
+                onSuccess={(res) => {
+                  if (res.credential) {
+                    handleGoogleSuccess(res.credential);
+                  }
+                }}
+                onError={() => {
+                  console.error("❌ Google Login Failed");
+                }}
+              />
+            </div>
+          </div>
         </div>
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );
