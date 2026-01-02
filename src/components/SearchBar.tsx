@@ -17,14 +17,14 @@ export default function SearchBar({
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
-              onSearch(); // 🔥 Enter 키 검색
+              onSearch(); // Enter 키 검색
             }
           }}
           placeholder={placeholder}
           className="w-full outline-none text-[16px] py-1 text-[#222729] placeholder:text-[#838F91]"
         />
 
-        {/* 🔍 검색 버튼 */}
+        {/* 검색 버튼 */}
         <button
           type="button"
           onClick={onSearch}
