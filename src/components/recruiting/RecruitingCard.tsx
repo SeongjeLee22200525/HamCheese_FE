@@ -31,13 +31,13 @@ export default function RecruitingCard({ item, onClick }: Props) {
               {item.projectType}
             </span>
 
-            <span className="text-[#D1D5DB]">{">"}</span>
+            <span className="text-[#D1D5DB]"><img src="/images/Vector.svg" alt="arrow" className="w-3 h-3" /></span>
 
             <span>
               {item.projectSpecific} {item.classes}분반
             </span>
 
-            <span className="text-[#D1D5DB]">{">"}</span>
+            <span className="text-[#D1D5DB]"><img src="/images/Vector.svg" alt="arrow" className="w-3 h-3" /></span>
 
             <span>
               <span className="font-bold text-[#222829]">주제</span>
@@ -80,7 +80,7 @@ export default function RecruitingCard({ item, onClick }: Props) {
           </div>
 
           {/* 날짜 */}
-          <div className="text-sm text-[#6B7280]">{item.date}</div>
+          <div className="text-sm text-[#B7C4C7]">{item.date}</div>
         </div>
       </div>
     </div>

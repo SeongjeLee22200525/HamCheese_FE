@@ -100,7 +100,9 @@ export default function RecruitMate() {
 
         <div className="max-w-[1280px] mx-auto px-10 flex gap-10">
           {/* 왼쪽 필터 */}
+
           <aside className="w-[260px] sticky top-24 self-start">
+
             {/* ---------- 유형별 필터 ---------- */}
             <div className="relative">
               <img
@@ -148,7 +150,7 @@ export default function RecruitMate() {
                         />
                       </div>
 
-                      <span className="text-base text-[#222829]">
+                      <span className="text-base font-medium text-[#222829]">
                         {type}
                       </span>
                     </label>
@@ -169,7 +171,7 @@ export default function RecruitMate() {
               </h3>
             </div>
 
-            <div className="bg-white border-2 border-[#6EC6CC] border-t-0 rounded-b-xl overflow-hidden">
+            <div className="bg-white border-2 border-[#6EC6CC] border-t-0  rounded-bl rounded-br overflow-hidden">
               <div className="mt-5 mb-5 flex flex-col">
                 {departments.map(dept => {
                   const checked = selectedDepartments.includes(dept);
@@ -204,7 +206,7 @@ export default function RecruitMate() {
                         />
                       </div>
 
-                      <span className="text-base text-[#222829]">
+                      <span className="text-base font-medium text-[#222829]">
                         {dept}
                       </span>
                     </label>
