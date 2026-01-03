@@ -1,3 +1,23 @@
+/* =========================
+ * 공통 유저 베이스
+ * ========================= */
+
+export interface UserBase {
+  name: string;
+  studentId: string;        // "20학번"
+  department: string;
+  firstMajor: string;
+  secondMajor?: string;
+  grade: number;
+  semester: number;
+  gpa?: number;
+  imageUrl?: string;
+}
+
+/* =========================
+ * 회원가입
+ * ========================= */
+
 // 회원가입 요청
 export interface SignUpRequest {
   name: string;
@@ -18,29 +38,71 @@ export interface SignUpResponse {
   name: string;
 }
 
-//유저 조회용
+/* =========================
+ * 유저 조회 (리스트 / 카드)
+ * ========================= */
+
 export interface UserProfile {
   userId: number;
   name: string;
+  studentId: string;
   firstMajor: string;
   secondMajor?: string;
-  studentId: string;
   introduction: string;
   skillList: string[];
   peerGoodKeywords: string[];
-  imageUrl: string;
+  imageUrl?: string;
 }
 
-// 동료 프로필 정보
-export type MateProfileInfo = {
-  name: string;
+/* =========================
+ * 메이트 프로필 (상세 페이지)
+ * ========================= */
+
+export interface MateProfileInfo extends UserBase {
   email: string;
-  department: string;
-  firstMajor: string;
-  secondMajor?: string;
-  grade: number;
-  gpa?: number;
-  studentId: string;
-  semester: number;
-  imageUrl: string;
-};
+}
+
+/* =========================
+ * 메이트 프로필 페이지 전체 응답
+ * (mock / 서버 동일하게 사용)
+ * ========================= */
+
+export interface MateProfileResponse {
+  profile: MateProfileInfo;
+
+  introduction: string;
+  skills: string[];
+
+  activities: {
+    year: number;
+    title: string;
+    link?: string;
+  }[];
+
+  peerReview: {
+    goodKeywordCount: number;
+    badKeywordCount: number;
+    positive: {
+      key: string;
+      count: number;
+    }[];
+    negative: {
+      key: string;
+      count: number;
+    }[];
+  };
+}
+
+/* =========================
+ * 동료평가 모달용 메타 태그
+ * ========================= */
+
+export type MetaTag =
+  | {
+      type: "studentId";
+      value: string;
+    }
+  | {
+      type: "major";
+      value: string;
+    };

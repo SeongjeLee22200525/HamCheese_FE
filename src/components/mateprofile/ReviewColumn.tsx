@@ -47,7 +47,7 @@ export default function ReviewColumn({ type, title, subtitle, items }: Props) {
       {items.length === 0 ? (
         <p className="text-xs text-[#8FAEB2]">아직 평가가 없습니다.</p>
       ) : (
-        <ul className="space-y-3">
+        <ul className="space-y-1">
           {items.map(({ key, count }) => {
             const keyword = keywordMap[key];
             if (!keyword) return null;
