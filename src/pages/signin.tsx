@@ -4,15 +4,15 @@ import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import Image from "next/image";
 import { GoogleLogin } from "@react-oauth/google";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation"; // ✅ 수정
 import axios from "axios";
+import { useUserStore } from "@/stores/useUserStore"; // ✅ 추가
 
 export default function Home() {
   const router = useRouter();
+  const { setUser } = useUserStore(); // ✅ 추가
 
   const handleGoogleSuccess = async (credential: string) => {
-    console.log("idToken:", credential);
-
     try {
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/google/exists`,
@@ -26,12 +26,15 @@ export default function Home() {
         }
       );
 
-      console.log("response:", res.data);
-
       const data = res.data;
 
       if (data.exists) {
-        // 기존 회원
+        // ✅ 기존 회원 로그인 → 전역 상태 저장
+        setUser({
+          myId: data.myId,
+          name: data.name,
+        });
+
         router.push("/searchmate");
       } else {
         // 신규 회원
@@ -45,11 +48,9 @@ export default function Home() {
       }
     } catch (error: any) {
       if (error.response) {
-        // 서버가 응답을 준 경우
         console.error("❌ server error:", error.response.status);
         console.error("❌ server data:", error.response.data);
       } else {
-        // 요청 자체가 실패한 경우
         console.error("🔥 request failed:", error.message);
       }
     }

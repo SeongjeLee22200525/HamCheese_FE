@@ -1,22 +1,35 @@
 "use client";
+
 import { useRef, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import { departments } from "@/constants/departments";
 import { SignUpRequest } from "@/types/user";
 import { useSignUp } from "@/hooks/useSignUp";
+import { useUserStore } from "@/stores/useUserStore";
 
 export default function JoinMC() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  /** 로그인 페이지에서 전달받은 값 */
+  const email = searchParams.get("email") ?? "";
+  const socialId = searchParams.get("socialId") ?? "";
+
+  /** zustand */
+  const { setUser } = useUserStore();
+
+  /** dropdown */
   const [deptOpen, setDeptOpen] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState<string>("");
 
+  /** profile image */
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  // 미리보기용 (UI)
   const [profileImage, setProfileImage] = useState<string | null>(null);
-
-  // 서버 전송용
   const [profileFile, setProfileFile] = useState<File | null>(null);
 
+  /** form */
   const [form, setForm] = useState<SignUpRequest>({
     name: "",
     studentId: "",
@@ -24,9 +37,15 @@ export default function JoinMC() {
     semester: 0,
     department: "",
     firstMajor: "",
+    secondMajor: "",
+    phoneNumber: "",
+    gpa: undefined,
+    email,
+    socialId,
   });
+  const [gpaInput, setGpaInput] = useState("");
 
-  const { submit, loading, error } = useSignUp();
+  const { submit, loading } = useSignUp();
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -35,23 +54,19 @@ export default function JoinMC() {
       <main className="flex-1">
         <div className="w-full flex justify-center">
           <div className="w-[920px]">
-            {/* 제목 */}
             <h1 className="text-[32px] font-light text-[#222829] mb-5">
               회원가입하기
             </h1>
 
-            {/* 카드 */}
             <div className="bg-[#F5F8F8] rounded-lg px-20 py-17">
               {/* ================= 프로필 이미지 ================= */}
               <div className="mb-14">
                 <div className="flex items-start">
-                  {/* 라벨 (160px 기준) */}
                   <div className="w-[160px] flex items-center gap-2 text-sm font-medium text-[#222829] mt-2">
                     <div className="w-1 h-4 bg-[#00C3CC]" />
                     프로필 이미지
                   </div>
 
-                  {/* 이미지 + 아이콘 */}
                   <div className="relative">
                     <div className="w-[172px] h-[172px] rounded-full bg-[#D9EEF0] overflow-hidden flex items-center justify-center">
                       {profileImage ? (
@@ -65,43 +80,25 @@ export default function JoinMC() {
                       )}
                     </div>
 
-                    {/* 업로드 버튼 */}
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="absolute -right-12 bottom-1 w-7.5 h-7.5 group"
+                      className="absolute -right-12 bottom-1 w-7.5 h-7.5"
                     >
-                      <img
-                        src="/upload.svg"
-                        alt="업로드"
-                        className="absolute inset-0 transition-opacity duration-150 group-hover:opacity-0"
-                      />
-                      <img
-                        src="/upload_hover.svg"
-                        alt="업로드 hover"
-                        className="absolute inset-0 opacity-0 transition-opacity duration-150 group-hover:opacity-100"
-                      />
+                      <img src="/upload.svg" alt="upload" />
                     </button>
 
-                    {/* 삭제 버튼 */}
                     <button
                       type="button"
-                      onClick={() => setProfileImage(null)}
-                      className="absolute -right-20 bottom-1 w-7.5 h-7.5 group"
+                      onClick={() => {
+                        setProfileImage(null);
+                        setProfileFile(null);
+                      }}
+                      className="absolute -right-20 bottom-1 w-7.5 h-7.5"
                     >
-                      <img
-                        src="/trash.svg"
-                        alt="삭제"
-                        className="absolute inset-0 transition-opacity duration-150 group-hover:opacity-0"
-                      />
-                      <img
-                        src="/trash_hover.svg"
-                        alt="삭제 hover"
-                        className="absolute inset-0 opacity-0 transition-opacity duration-150 group-hover:opacity-100"
-                      />
+                      <img src="/trash.svg" alt="delete" />
                     </button>
 
-                    {/* hidden file input */}
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -111,20 +108,8 @@ export default function JoinMC() {
                         const file = e.target.files?.[0];
                         if (!file) return;
 
-                        // 서버용
                         setProfileFile(file);
-
-                        // 미리보기용
-                        const previewUrl = URL.createObjectURL(file);
-                        setProfileImage(previewUrl);
-
-                        // form에 File 연결
-                        setForm((prev) => ({
-                          ...prev,
-                          profileImage: file,
-                        }));
-
-                        // 같은 파일 다시 선택 가능
+                        setProfileImage(URL.createObjectURL(file));
                         e.target.value = "";
                       }}
                     />
@@ -211,51 +196,40 @@ export default function JoinMC() {
                 </div>
 
                 {/* 학부 */}
+                {/* 🔧 수정 1: <di> → <div> */}
                 <div className="flex items-center gap-16 relative">
-                  {/* 라벨 */}
                   <div className="w-[100px] flex items-center gap-2 font-medium">
                     <div className="w-1 h-4 bg-[#00C3CC]" />
                     학부 <span className="text-[#00C3CC]">*</span>
                   </div>
 
-                  {/* 학부 */}
-                  <div className="flex items-center gap-16 relative">
-                    {/* 라벨 */}
-                    <div className="w-[100px] flex items-center gap-2 font-medium">
-                      <div className="w-1 h-4 bg-[#00C3CC]" />
-                      학부 <span className="text-[#00C3CC]">*</span>
-                    </div>
-
-                    {/* 드롭다운 */}
-                    <div className="relative w-72">
-                      {/* ===== trigger ===== */}
-                      <button
-                        type="button"
-                        onClick={() => setDeptOpen((prev) => !prev)}
-                        className="mc-input w-full flex justify-between items-center"
+                  <div className="relative w-72">
+                    <button
+                      type="button"
+                      onClick={() => setDeptOpen((prev) => !prev)}
+                      className="mc-input w-full flex justify-between items-center"
+                    >
+                      <span
+                        className={
+                          selectedDepartment
+                            ? "text-[#222829]"
+                            : "text-[#CEDBDE]"
+                        }
                       >
-                        <span
-                          className={
-                            selectedDepartment
-                              ? "text-[#222829]"
-                              : "text-[#CEDBDE]"
-                          }
-                        >
-                          {selectedDepartment || "학부 선택"}
-                        </span>
+                        {selectedDepartment || "학부 선택"}
+                      </span>
 
-                        <img
-                          src="/dropdownArrow.svg"
-                          alt="toggle"
-                          className={`w-4 h-4 transition-transform duration-200 ${
-                            deptOpen ? "rotate-180" : ""
-                          }`}
-                        />
-                      </button>
+                      <img
+                        src="/dropdownArrow.svg"
+                        alt="toggle"
+                        className={`w-4 h-4 transition-transform duration-200 ${
+                          deptOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
 
-                      {/* ===== dropdown list ===== */}
-                      <div
-                        className={`
+                    <div
+                      className={`
         absolute left-0 top-full mt-2.5
         w-full bg-white rounded-lg
         shadow-[0px_0px_20px_0px_rgba(225,237,240,1.00)]
@@ -263,39 +237,36 @@ export default function JoinMC() {
         transition-[max-height] duration-300 ease-in-out
         ${deptOpen ? "max-h-[245px]" : "max-h-0 pointer-events-none"}
       `}
-                      >
-                        <ul className="max-h-[220px] overflow-y-auto">
-                          {departments.map((dept) => {
-                            const isSelected = selectedDepartment === dept;
+                    >
+                      <ul className="max-h-[220px] overflow-y-auto">
+                        {departments.map((dept) => {
+                          const isSelected = selectedDepartment === dept;
 
-                            return (
-                              <li
-                                key={dept}
-                                onClick={() => {
-                                  setSelectedDepartment(dept);
-                                  setForm((prev) => ({
-                                    ...prev,
-                                    department: dept,
-                                  }));
-                                  setDeptOpen(false);
-                                }}
-                                className={`
+                          return (
+                            <li
+                              key={dept}
+                              onClick={() => {
+                                setSelectedDepartment(dept);
+                                setForm((prev) => ({
+                                  ...prev,
+                                  department: dept,
+                                }));
+                                setDeptOpen(false);
+                              }}
+                              className={`
                 relative px-3 py-3 cursor-pointer
                 hover:bg-[#F5F8F8]
                 ${isSelected ? "bg-[#E0EDEF]" : ""}
               `}
-                              >
-                                {/* 왼쪽 파란 블럭 */}
-                                {isSelected && (
-                                  <span className="absolute left-0 top-0 h-full w-1 bg-[#00C3CC]" />
-                                )}
-
-                                <span className="pl-2">{dept}</span>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
+                            >
+                              {isSelected && (
+                                <span className="absolute left-0 top-0 h-full w-1 bg-[#00C3CC]" />
+                              )}
+                              <span className="pl-2">{dept}</span>
+                            </li>
+                          );
+                        })}
+                      </ul>
                     </div>
                   </div>
                 </div>
@@ -351,13 +322,20 @@ export default function JoinMC() {
                   <input
                     className="mc-input w-72"
                     placeholder="3.68"
-                    value={form.gpa ?? ""}
-                    onChange={(e) =>
+                    value={gpaInput}
+                    onChange={(e) => {
+                      const value = e.target.value;
+
+                      // 숫자 + 소수점만 허용
+                      if (!/^\d*\.?\d*$/.test(value)) return;
+
+                      setGpaInput(value);
+
                       setForm((prev) => ({
                         ...prev,
-                        gpa: Number(e.target.value),
-                      }))
-                    }
+                        gpa: value === "" ? undefined : Number(value),
+                      }));
+                    }}
                   />
                 </div>
               </div>
@@ -367,7 +345,17 @@ export default function JoinMC() {
                 <button
                   className="w-72 py-4 bg-[#00C3CC] text-white font-bold rounded"
                   disabled={loading}
-                  onClick={() => submit(form)}
+                  /* 🔧 수정 2: submit + zustand + 이동 */
+                  onClick={async () => {
+                    const result = await submit(form, profileFile);
+
+                    setUser({
+                      myId: result.myId,
+                      name: result.name,
+                    });
+
+                    router.replace("/searchmate");
+                  }}
                 >
                   가입하기
                 </button>
@@ -379,23 +367,14 @@ export default function JoinMC() {
 
       <Footer />
 
-      {/* ================= GLOBAL STYLE ================= */}
       <style jsx global>{`
         .mc-input {
           padding: 12px;
           border: 2px solid #d1d5db;
           border-radius: 4px;
           font-size: 14px;
-          line-height: 21px;
           color: #495456;
-          background-color: #ffffff;
-          box-sizing: border-box;
         }
-
-        .mc-input::placeholder {
-          color: #cedbde;
-        }
-
         .mc-input:focus {
           outline: none;
           border-color: #00c3cc;
