@@ -187,7 +187,7 @@ export default function JoinMC() {
                         onChange={(e) =>
                           setForm((prev) => ({
                             ...prev,
-                            grade:(e.target.value),
+                            grade: e.target.value,
                           }))
                         }
                       />
@@ -201,7 +201,7 @@ export default function JoinMC() {
                         onChange={(e) =>
                           setForm((prev) => ({
                             ...prev,
-                            semester: (e.target.value),
+                            semester: e.target.value,
                           }))
                         }
                       />
@@ -364,11 +364,23 @@ export default function JoinMC() {
                   onClick={async () => {
                     const result = await submit(form, profileFile);
 
+                    console.log("✅ signup result:", result);
+
+                    // 🔥 1. 쿠키 먼저 (제일 중요)
+                    document.cookie = `myId=${result.myId}; path=/;`;
+                    document.cookie = `name=${encodeURIComponent(
+                      result.name
+                    )}; path=/;`;
+
+                    console.log("🍪 after signup cookie:", document.cookie);
+
+                    // 🔥 2. store
                     setUser({
                       myId: result.myId,
                       name: result.name,
                     });
 
+                    // 🔥 3. 이동
                     router.replace("/searchmate");
                   }}
                 >
