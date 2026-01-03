@@ -22,15 +22,17 @@ export interface UserBase {
 export interface SignUpRequest {
   name: string;
   studentId: string;
-  grade: number;
-  semester: number;
+  grade: string;        // ✅ string
+  semester: string;     // ✅ string
   department: string;
   firstMajor: string;
   secondMajor?: string;
-  phoneNumber?: string;
-  gpa?: number;
-  profileImage?: File;
+  phoneNumber: string;
+  gpa?: string;         // ✅ string
+  email: string;
+  socialId: string;
 }
+
 
 // 회원가입 응답
 export interface SignUpResponse {

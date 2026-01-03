@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
@@ -33,19 +33,34 @@ export default function JoinMC() {
   const [form, setForm] = useState<SignUpRequest>({
     name: "",
     studentId: "",
-    grade: 0,
-    semester: 0,
+    grade: "",
+    semester: "",
     department: "",
     firstMajor: "",
     secondMajor: "",
     phoneNumber: "",
-    gpa: undefined,
+    gpa: "",
     email,
     socialId,
   });
   const [gpaInput, setGpaInput] = useState("");
 
   const { submit, loading } = useSignUp();
+  useEffect(() => {
+    console.log("🟢 JoinMC email:", email);
+    console.log("🟢 JoinMC socialId:", socialId);
+
+    if (!email || !socialId) {
+      console.error("❌ email 또는 socialId 없음");
+      return;
+    }
+
+    setForm((prev) => ({
+      ...prev,
+      email,
+      socialId,
+    }));
+  }, [email, socialId]);
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
@@ -172,7 +187,7 @@ export default function JoinMC() {
                         onChange={(e) =>
                           setForm((prev) => ({
                             ...prev,
-                            grade: Number(e.target.value),
+                            grade:(e.target.value),
                           }))
                         }
                       />
@@ -186,7 +201,7 @@ export default function JoinMC() {
                         onChange={(e) =>
                           setForm((prev) => ({
                             ...prev,
-                            semester: Number(e.target.value),
+                            semester: (e.target.value),
                           }))
                         }
                       />
@@ -333,7 +348,7 @@ export default function JoinMC() {
 
                       setForm((prev) => ({
                         ...prev,
-                        gpa: value === "" ? undefined : Number(value),
+                        gpa: value,
                       }));
                     }}
                   />

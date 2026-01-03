@@ -5,8 +5,6 @@ import SearchBar from "@/components/SearchBar";
 import ProfileCard from "@/components/ProfileCard";
 import { departments } from "@/constants/departments";
 import { UserProfile } from "@/types/user";
-import { mockUsers } from "@/mocks/mockUsers";
-
 
 export default function SearchMate() {
   const [selected, setSelected] = useState<string[]>([]);
@@ -18,12 +16,11 @@ export default function SearchMate() {
   const [error, setError] = useState<string | null>(null);
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
-  const USE_MOCK = true; // ← 테스트 끝나면 false
-
 
   /* 학부 토글 */
   const toggleDept = (dept: string) => {
     setPage(0);
+    setUsers([]);
     setSelected((prev) =>
       prev.includes(dept) ? prev.filter((d) => d !== dept) : [...prev, dept]
     );
@@ -35,16 +32,6 @@ export default function SearchMate() {
     setUsers([]);
     setSearchKeyword(keyword.trim());
   };
-  useEffect(() => {
-  if (USE_MOCK) {
-    setUsers(mockUsers);
-    setHasMore(false);
-    return;
-  }
-
-  // ⬇️ 기존 fetchUsers 코드 그대로
-}, [selected, searchKeyword, page]);
-
 
   /* API 호출 */
   useEffect(() => {
@@ -64,12 +51,19 @@ export default function SearchMate() {
           params.append("name", searchKeyword);
         }
 
-        const url =
+        const endpoint =
           selected.length > 0 || searchKeyword
-            ? `/user/filter?${params.toString()}`
-            : `/user/findAll?${params.toString()}`;
+            ? "/user/filter"
+            : "/user/findAll";
 
-        const res = await fetch(url);
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}${endpoint}?${params.toString()}`
+        );
+
+        if (!res.ok) {
+          throw new Error("API 요청 실패");
+        }
+
         const data: UserProfile[] = await res.json();
 
         setUsers((prev) => (page === 0 ? data : [...prev, ...data]));
@@ -100,8 +94,8 @@ export default function SearchMate() {
             placeholder="원하는 메이트의 이름을 검색해보세요."
             title={
               <>
-                팀원으로 적합한 <span className="text-[#00C3CC]">메이트</span>를
-                찾아보세요!
+                팀원으로 적합한{" "}
+                <span className="text-[#00C3CC]">메이트</span>를 찾아보세요!
               </>
             }
           />
@@ -109,15 +103,13 @@ export default function SearchMate() {
           <div className="flex gap-10 mt-10">
             {/* 왼쪽 필터 */}
             <aside className="w-[260px] sticky top-24">
-              {/* SVG 헤더 */}
+              {/* 헤더 */}
               <div className="relative">
                 <img
                   src="/images/Rectangle.svg"
                   alt="filter header"
                   className="w-full block"
                 />
-
-                {/* 헤더 텍스트 */}
                 <h3 className="absolute left-5 top-1/2 -translate-y-1/2 text-xl font-extrabold text-white">
                   학부별 필터
                 </h3>
@@ -173,7 +165,13 @@ export default function SearchMate() {
                 </p>
               )}
 
-              {!loading && users.length === 0 && (
+              {!loading && error && (
+                <p className="text-center text-sm text-red-500 mt-20">
+                  {error}
+                </p>
+              )}
+
+              {!loading && !error && users.length === 0 && (
                 <p className="text-center text-sm text-gray-400 mt-20">
                   검색 결과가 없습니다.
                 </p>

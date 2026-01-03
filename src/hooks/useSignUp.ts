@@ -16,29 +16,43 @@ export function useSignUp() {
       setLoading(true);
       setError(null);
 
+      // 🔍 디버깅: payload 확인
+      console.log("🟢 signup payload", payload);
+      console.log("🟢 email:", payload.email);
+      console.log("🟢 socialId:", payload.socialId);
+
       const formData = new FormData();
 
       if (profileImage) {
-        // 사용자가 업로드한 이미지
         formData.append("profileImage", profileImage);
       } else {
-        // 기본 프로필 이미지
-        const defaultImageBlob = await fetch("/images/Ellipse.png").then((res) =>
-          res.blob()
+        const defaultImageBlob = await fetch("/images/Ellipse.png").then(
+          (res) => res.blob()
         );
 
         formData.append(
           "profileImage",
           defaultImageBlob,
-          "default-profile.svg"
+          "default-profile.png"
         );
       }
 
       formData.append("data", JSON.stringify(payload));
 
+      // 🔍 FormData 내부 확인 (중요)
+      for (const [key, value] of formData.entries()) {
+        console.log("🟡 formData:", key, value);
+      }
+
       const res = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/create`,
-        formData
+        formData,
+        {
+          headers: {
+            // ❗ axios가 boundary 자동 설정하게 두는 게 맞음
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
 
       return res.data; // { myId, name }
