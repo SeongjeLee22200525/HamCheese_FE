@@ -1,13 +1,12 @@
 // src/api/axios.ts
 import axios from "axios";
 
-const axiosInstance = axios.create({
+const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-  // 지금은 로그인 / 세션 / 쿠키 없음
-  // withCredentials ❌
+  withCredentials: true, // 🔥 세션/쿠키 기반 대비 (지금은 없어도 OK)
   headers: {
-    "Content-Type": "application/json",
+    Accept: "application/json",
   },
 });
 
-export default axiosInstance;
+export default instance;
