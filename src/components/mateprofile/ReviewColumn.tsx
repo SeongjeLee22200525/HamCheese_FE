@@ -6,8 +6,8 @@ import {
 } from "@/constants/peerKeywords";
 
 type KeywordItem = {
-  key: string;
-  count: number;
+  key: string;   // 키워드 문자열 (서버와 동일)
+  count: number; // 받은 평가 수
 };
 
 type Props = {
@@ -17,7 +17,7 @@ type Props = {
   items: KeywordItem[];
 };
 
-// ===== 막대 길이 기준 =====
+/* ===== 막대 길이 기준 ===== */
 const MIN_COUNT = 1;
 const MAX_COUNT = 14;
 const MIN_WIDTH = 73;
@@ -27,30 +27,38 @@ function getBarWidth(count: number) {
   const clamped = Math.min(Math.max(count, MIN_COUNT), MAX_COUNT);
   return (
     MIN_WIDTH +
-    ((clamped - MIN_COUNT) / (MAX_COUNT - MIN_COUNT)) * (MAX_WIDTH - MIN_WIDTH)
+    ((clamped - MIN_COUNT) / (MAX_COUNT - MIN_COUNT)) *
+      (MAX_WIDTH - MIN_WIDTH)
   );
 }
 
-export default function ReviewColumn({ type, title, subtitle, items }: Props) {
+export default function ReviewColumn({
+  type,
+  title,
+  subtitle,
+  items,
+}: Props) {
   const keywordMap =
-    type === "positive" ? POSITIVE_PEER_KEYWORDS : NEGATIVE_PEER_KEYWORDS;
+    type === "positive"
+      ? POSITIVE_PEER_KEYWORDS
+      : NEGATIVE_PEER_KEYWORDS;
 
   return (
     <div>
-      {/* 제목 */}
+      {/* ===== 제목 ===== */}
       <div className="w-114 pb-3">
         <span className="font-extrabold pr-4 text-[#222829]">{title}</span>
         <span className="text-sm font-bold text-[#838F91]">{subtitle}</span>
       </div>
 
-      {/* 내용 */}
+      {/* ===== 내용 ===== */}
       {items.length === 0 ? (
         <p className="text-xs text-[#8FAEB2]">아직 평가가 없습니다.</p>
       ) : (
         <ul className="space-y-1">
           {items.map(({ key, count }) => {
-            const keyword = keywordMap[key];
-            if (!keyword) return null;
+            const meta = keywordMap[key];
+            if (!meta) return null;
 
             const barWidth = getBarWidth(count);
 
@@ -65,12 +73,13 @@ export default function ReviewColumn({ type, title, subtitle, items }: Props) {
                   style={{ width: `${barWidth}px` }}
                 />
 
-                {/* ===== 텍스트 (위에 올라오게) ===== */}
+                {/* ===== 키워드 + 이모지 ===== */}
                 <span className="relative z-10 flex items-center gap-2 text-base font-medium text-[#222829]">
-                  <span>{keyword.emoji}</span>
-                  {keyword.label}
+                  <span>{meta.emoji}</span>
+                  {key}
                 </span>
 
+                {/* ===== 카운트 ===== */}
                 <span className="relative z-10 text-base font-extrabold text-[#00C3CC]">
                   {count}
                 </span>
