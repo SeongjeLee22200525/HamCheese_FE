@@ -4,10 +4,11 @@
 import { useEffect, useState } from "react";
 import PeerReviewForm, { PeerReviewSubmitPayload } from "./PeerReviewForm";
 import ConfirmExitModal from "./ConfirmExitModal";
-import ReviewSuccessModal from "./ReviewSuccessModal";
+import ReviewSuccessSnackbar from "./ReviewSuccessSnackbar";
+
 import type { MetaTag } from "@/types/user";
 
-type Step = "FORM" | "CONFIRM_EXIT" | "SUCCESS";
+type Step = "FORM" | "CONFIRM_EXIT";
 
 type Props = {
   targetName: string;
@@ -27,6 +28,7 @@ export default function PeerReviewModal({
   const [step, setStep] = useState<Step>("FORM");
   const [submittedPayload, setSubmittedPayload] =
     useState<PeerReviewSubmitPayload | null>(null);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   /* ===== ESC 키 처리 ===== */
   useEffect(() => {
@@ -57,54 +59,53 @@ export default function PeerReviewModal({
 
   const handleSubmit = (payload: PeerReviewSubmitPayload) => {
     setSubmittedPayload(payload);
-    setStep("SUCCESS");
-  };
-
-  const handleSuccessConfirm = () => {
-    if (submittedPayload) onSubmit(submittedPayload);
-    else onClose();
+    setShowSuccess(true); // ✅ 스낵바 표시
+    onSubmit(payload); // ✅ 즉시 서버 전송
+    onClose(); // ✅ 모달 닫기
   };
 
   return (
-    <div className="fixed inset-0 z-[9999]">
-      {/* ===== dim ===== */}
-      <div className="absolute inset-0 bg-black/40" onClick={requestClose} />
+    <>
+      {/* ================= MODAL ================= */}
+      <div className="fixed inset-0 z-[9999]">
+        {/* dim */}
+        <div className="absolute inset-0 bg-black/40" onClick={requestClose} />
 
-      {/* ===== modal wrapper ===== */}
-      <div className="relative w-full h-full flex items-center justify-center px-6">
-        {/* ===== modal card (고정 크기) ===== */}
-        <div className="relative w-[1200px] h-[800px] bg-white rounded-xl overflow-hidden">
-          {/* X 버튼 */}
-          <button
-            onClick={requestClose}
-            className="absolute right-25 top-25 text-[#B7C4C7] hover:text-[#495456] text-2xl z-10"
-            aria-label="close"
-          >
-            <img src="/cancel.svg" alt="close icon" />
-          </button>
+        {/* modal wrapper */}
+        <div className="relative w-full h-full flex items-center justify-center px-6">
+          <div className="relative w-[1200px] h-[800px] bg-white rounded-xl overflow-hidden">
+            {/* X 버튼 */}
+            <button
+              onClick={requestClose}
+              className="absolute right-25 top-25 z-10"
+              aria-label="close"
+            >
+              <img src="/cancel.svg" alt="close icon" />
+            </button>
 
-          <PeerReviewForm
-            targetName={targetName}
-            targetImageUrl={targetImageUrl}
-            targetMetaTags={targetMetaTags}
-            onCancel={() => setStep("CONFIRM_EXIT")}
-            onSubmit={handleSubmit}
-          />
-
-          {/* ✅ 위에 얹히는 confirm */}
-          {step === "CONFIRM_EXIT" && (
-            <ConfirmExitModal
-              onExit={onClose}
-              onContinue={() => setStep("FORM")}
+            <PeerReviewForm
+              targetName={targetName}
+              targetImageUrl={targetImageUrl}
+              targetMetaTags={targetMetaTags}
+              onCancel={() => setStep("CONFIRM_EXIT")}
+              onSubmit={handleSubmit}
             />
-          )}
 
-          {/* ✅ 위에 얹히는 success */}
-          {step === "SUCCESS" && (
-            <ReviewSuccessModal onConfirm={handleSuccessConfirm} />
-          )}
+            {/* confirm exit */}
+            {step === "CONFIRM_EXIT" && (
+              <ConfirmExitModal
+                onExit={onClose}
+                onContinue={() => setStep("FORM")}
+              />
+            )}
+          </div>
         </div>
       </div>
-    </div>
+
+      {/* ================= SUCCESS SNACKBAR ================= */}
+      {showSuccess && (
+        <ReviewSuccessSnackbar onClose={() => setShowSuccess(false)} />
+      )}
+    </>
   );
 }

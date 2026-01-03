@@ -12,6 +12,7 @@ import PeerReviewModal from "@/components/mateprofile/peerReviewModal/PeerReview
 
 import { mockMateProfile } from "@/mocks/mateProfile";
 import { MetaTag } from "@/types/user";
+import ReviewSuccessSnackbar from "@/components/mateprofile/peerReviewModal/ReviewSuccessSnackbar";
 
 export default function MateProfilePage() {
   const router = useRouter();
@@ -28,6 +29,8 @@ export default function MateProfilePage() {
     { type: "studentId", value: data.profile.studentId },
     { type: "major", value: data.profile.firstMajor },
   ];
+  //동료평가 완료 스낵바용 상태관리
+  const [showReviewSuccess, setShowReviewSuccess] = useState(false);
 
   if (data.profile.secondMajor) {
     targetMetaTags.push({
@@ -58,8 +61,12 @@ export default function MateProfilePage() {
             onSubmit={(payload) => {
               console.log("submit", payload);
               setIsPeerReviewOpen(false);
+              setShowReviewSuccess(true);
             }}
           />
+        )}
+        {showReviewSuccess && (
+          <ReviewSuccessSnackbar onClose={() => setShowReviewSuccess(false)} />
         )}
 
         {/* ===== RIGHT : 콘텐츠 ===== */}
