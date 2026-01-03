@@ -82,6 +82,7 @@ export default function Profile({ profile, onGivePiece, onPeerReview }: Props) {
   );
 }
 
+
 /* ===== 내부 전용 컴포넌트 ===== */
 function InfoRow({ label, value }: { label: string; value: string | number }) {
   return (

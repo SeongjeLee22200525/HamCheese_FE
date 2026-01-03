@@ -1,12 +1,14 @@
 "use client";
 
 import { useRouter } from "next/router";
+import { useState } from "react";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 
 import Profile from "@/components/mateprofile/Profile";
 import ProfileSection from "@/components/mateprofile/ProfileSection";
 import PeerReview from "@/components/mateprofile/PeerReview";
+import PeerReviewModal from "@/components/mateprofile/peerReviewModal/PeerReviewModal";
 
 import { mockMateProfile } from "@/mocks/mateProfile";
 
@@ -22,6 +24,9 @@ export default function MateProfilePage() {
 
   const data = mockMateProfile;
 
+  //동료평가 모달 상태 관리
+  const [isPeerReviewOpen, setIsPeerReviewOpen] = useState(false);
+
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F8F8]">
       <Header />
@@ -32,9 +37,25 @@ export default function MateProfilePage() {
           <Profile
             profile={data.profile}
             onGivePiece={() => console.log("조각 건네기")}
-            onPeerReview={() => console.log("동료평가")}
+            onPeerReview={() => setIsPeerReviewOpen(true)}
           />
         </div>
+        {isPeerReviewOpen && (
+          <PeerReviewModal
+            targetName={data.profile.name}
+            targetImageUrl={data.profile.imageUrl}
+            targetMetaTags={[
+              data.profile.studentId,
+              data.profile.firstMajor,
+              data.profile.secondMajor,
+            ]}
+            onClose={() => setIsPeerReviewOpen(false)}
+            onSubmit={(payload) => {
+              console.log("submit", payload);
+              setIsPeerReviewOpen(false);
+            }}
+          />
+        )}
 
         {/* ===== RIGHT : 콘텐츠 ===== */}
         <section className="flex-col space-y-14.5 pl-10 w-full pr-49 pt-10">
