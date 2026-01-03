@@ -1,30 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import ReviewColumn from "./ReviewColumn";
 import { PEER_REVIEW_VISIBLE_COUNT } from "@/constants/peerKeywords";
 
 type KeywordItem = {
-  key: string;
-  count: number;
+  key: string; // 키워드 문자열
+  count: number; // 받은 평가 수
 };
 
 type Props = {
   name: string;
+
+  // 🔥 서버 response 그대로 받음
+  peerGoodKeyword: Record<string, number>;
   goodKeywordCount: number;
+  peerBadKeyword: Record<string, number>;
   badKeywordCount: number;
-  positive: KeywordItem[];
-  negative: KeywordItem[];
 };
 
 export default function PeerReview({
   name,
+  peerGoodKeyword,
   goodKeywordCount,
+  peerBadKeyword,
   badKeywordCount,
-  positive,
-  negative,
 }: Props) {
   const [expanded, setExpanded] = useState(false);
+
+  // ===== 서버 데이터 → UI 데이터 변환 =====
+  const positive: KeywordItem[] = useMemo(
+    () =>
+      Object.entries(peerGoodKeyword)
+        .sort((a, b) => b[1] - a[1])
+        .map(([key, count]) => ({ key, count })),
+    [peerGoodKeyword]
+  );
+
+  const negative: KeywordItem[] = useMemo(
+    () =>
+      Object.entries(peerBadKeyword)
+        .sort((a, b) => b[1] - a[1])
+        .map(([key, count]) => ({ key, count })),
+    [peerBadKeyword]
+  );
 
   const visiblePositive = expanded
     ? positive
@@ -35,8 +54,8 @@ export default function PeerReview({
     : negative.slice(0, PEER_REVIEW_VISIBLE_COUNT);
 
   const hasMore =
-    goodKeywordCount > PEER_REVIEW_VISIBLE_COUNT ||
-    badKeywordCount > PEER_REVIEW_VISIBLE_COUNT;
+    positive.length > PEER_REVIEW_VISIBLE_COUNT ||
+    negative.length > PEER_REVIEW_VISIBLE_COUNT;
 
   return (
     <section className="relative">
@@ -64,6 +83,7 @@ export default function PeerReview({
             items={visibleNegative}
           />
         </div>
+
         {hasMore && (
           <div className="text-right">
             <button

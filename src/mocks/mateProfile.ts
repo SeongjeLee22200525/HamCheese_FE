@@ -39,19 +39,18 @@ export const mockMateProfile = {
     goodKeywordCount: 14,
     badKeywordCount: 4,
 
-    positive: [
-      { key: "GOOD_PLANNING", count: 12 },
-      { key: "RESPECT_TEAM_OPINION", count: 10 },
-      { key: "ROLE_EXECUTION", count: 7 },
-      { key: "ROLE_EXECUTION", count: 7 },
-    ],
+    // ✅ 서버 해시맵 형식 (키워드 문자열 = 식별자)
+    peerGoodKeyword: {
+      "자료조사를 꼼꼼하게 해요": 12,
+      "팀원 의견을 존중해요": 10,
+      "맡은 역할을 잘 해내요": 7,
+    },
 
-    negative: [
-      { key: "LACK_RESEARCH", count: 2 },
-      { key: "DOC_UNDERSTANDING_DIFFICULT", count: 1 },
-      { key: "TEAM_MANAGEMENT_WEAK", count: 1 },
-      {key: "LOW_PARTICIPATION", count: 3},
-  
-    ],
+    peerBadKeyword: {
+      "자료조사가 부족해요": 2,
+      "공유 문서를 이해하기 어려워요": 1,
+      "팀 관리가 원활하지 않아요": 1,
+      "프로젝트 참여도가 낮아요": 3,
+    },
   },
 };

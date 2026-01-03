@@ -11,21 +11,30 @@ import PeerReview from "@/components/mateprofile/PeerReview";
 import PeerReviewModal from "@/components/mateprofile/peerReviewModal/PeerReviewModal";
 
 import { mockMateProfile } from "@/mocks/mateProfile";
+import { MetaTag } from "@/types/user";
 
 export default function MateProfilePage() {
   const router = useRouter();
   const { userId } = router.query;
+  if (typeof userId !== "string") return null;
 
-  // 추후 로그인 연동 시
-  // const myId = auth.userId;
-  // if (myId === userId) router.replace("/mypage");
-
-  if (!userId) return null;
-
+  const targetUserId = Number(userId);
   const data = mockMateProfile;
 
   //동료평가 모달 상태 관리
   const [isPeerReviewOpen, setIsPeerReviewOpen] = useState(false);
+
+  const targetMetaTags: MetaTag[] = [
+    { type: "studentId", value: data.profile.studentId },
+    { type: "major", value: data.profile.firstMajor },
+  ];
+
+  if (data.profile.secondMajor) {
+    targetMetaTags.push({
+      type: "major",
+      value: data.profile.secondMajor,
+    });
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F8F8]">
@@ -44,11 +53,7 @@ export default function MateProfilePage() {
           <PeerReviewModal
             targetName={data.profile.name}
             targetImageUrl={data.profile.imageUrl}
-            targetMetaTags={[
-              data.profile.studentId,
-              data.profile.firstMajor,
-              data.profile.secondMajor,
-            ]}
+            targetMetaTags={targetMetaTags}
             onClose={() => setIsPeerReviewOpen(false)}
             onSubmit={(payload) => {
               console.log("submit", payload);
@@ -123,10 +128,10 @@ export default function MateProfilePage() {
           <div className="pb-30">
             <PeerReview
               name={data.profile.name}
+              peerGoodKeyword={data.peerReview.peerGoodKeyword}
               goodKeywordCount={data.peerReview.goodKeywordCount}
+              peerBadKeyword={data.peerReview.peerBadKeyword}
               badKeywordCount={data.peerReview.badKeywordCount}
-              positive={data.peerReview.positive}
-              negative={data.peerReview.negative}
             />
           </div>
         </section>

@@ -5,13 +5,14 @@ import { useEffect, useState } from "react";
 import PeerReviewForm, { PeerReviewSubmitPayload } from "./PeerReviewForm";
 import ConfirmExitModal from "./ConfirmExitModal";
 import ReviewSuccessModal from "./ReviewSuccessModal";
+import type { MetaTag } from "@/types/user";
 
 type Step = "FORM" | "CONFIRM_EXIT" | "SUCCESS";
 
 type Props = {
   targetName: string;
   targetImageUrl?: string;
-  targetMetaTags?: string[];
+  targetMetaTags?: MetaTag[];
   onClose: () => void;
   onSubmit: (payload: PeerReviewSubmitPayload) => void;
 };
