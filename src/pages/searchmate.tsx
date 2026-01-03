@@ -199,7 +199,7 @@ export default function SearchMate() {
           </div>
         </div>
       </main>
-
+      
       <Footer />
     </div>
   );

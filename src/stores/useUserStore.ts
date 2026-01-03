@@ -2,13 +2,11 @@ import { create } from "zustand";
 
 /**
  * 전역에서 사용할 유저 타입
- * - 로그인 직후: myId만 존재
- * - 회원가입 완료 후: myId + name
  */
 export interface User {
-  myId: string;
+  myId: number;
   name?: string;
-  profileImageUrl?: string; // ✅ (선택) 프로필 이미지
+  profileImageUrl?: string;
 }
 
 interface UserStore {
@@ -20,7 +18,7 @@ interface UserStore {
   /** 로그아웃 시 */
   clearUser: () => void;
 
-  /** 🔥 새로고침 시 쿠키로부터 복구 */
+  /** 새로고침 시 쿠키로부터 복구 */
   hydrateUser: () => void;
 }
 
@@ -29,7 +27,7 @@ function getCookie(name: string) {
   if (typeof document === "undefined") return null;
   return document.cookie
     .split("; ")
-    .find(row => row.startsWith(name + "="))
+    .find((row) => row.startsWith(name + "="))
     ?.split("=")[1];
 }
 
@@ -41,16 +39,22 @@ export const useUserStore = create<UserStore>((set) => ({
   clearUser: () => set({ user: null }),
 
   hydrateUser: () => {
-    const myId = getCookie("myId");
-    if (!myId) return;
+  const myId = getCookie("myId");
+  const name = getCookie("name");
 
-    const name = getCookie("name");
+  console.log("💧 hydrateUser called", { myId, name });
 
-    set({
-      user: {
-        myId: Number(myId),
-        name: name ? decodeURIComponent(name) : undefined,
-      },
-    });
-  },
+  if (!myId) {
+    set({ user: null });
+    return;
+  }
+
+  set({
+    user: {
+      myId: Number(myId),
+      name: name ? decodeURIComponent(name) : undefined,
+    },
+  });
+},
+
 }));

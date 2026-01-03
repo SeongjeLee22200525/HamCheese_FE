@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useUserStore } from "@/stores/useUserStore";
 
+/** 쿠키 유틸 */
 function getCookie(name: string) {
   if (typeof document === "undefined") return null;
   return document.cookie
@@ -23,9 +24,11 @@ export default function Header() {
 
   const { name: storeName, clearUser } = useUserStore();
 
+  const [mounted, setMounted] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [displayName, setDisplayName] = useState("");
 
+  /** ✅ CSR 이후 쿠키 기준 로그인 판단 */
   useEffect(() => {
     const myId = getCookie("myId");
     const cookieName = getCookie("name");
@@ -39,8 +42,12 @@ export default function Header() {
       setIsLoggedIn(false);
       setDisplayName("");
     }
-  }, [storeName]);
+  }, []); // 👈 의존성 제거
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
+  /** ✅ 로그아웃 */
   const handleLogout = () => {
     document.cookie = "myId=; Max-Age=0; path=/";
     document.cookie = "name=; Max-Age=0; path=/";
@@ -52,10 +59,14 @@ export default function Header() {
     router.replace("/signin");
   };
 
+  /** ⛔ hydration 단계에서는 렌더 안 함 */
+  if (!mounted) return null;
+
   return (
     <header className="w-full h-50 bg-white">
       <div className="w-full h-full px-[120px]">
         <div className="flex items-center justify-between pt-14">
+          {/* ================= 좌측 ================= */}
           <div className="flex items-baseline gap-14">
             <Link
               href="/"
@@ -89,9 +100,11 @@ export default function Header() {
             </nav>
           </div>
 
+          {/* ================= 우측 ================= */}
           {isLoggedIn ? (
-            <div className="flex items-center gap-4">
-              <div className="w-9 h-9 rounded-full overflow-hidden bg-gray-200">
+            <div className="flex items-center gap-3">
+              {/* 프로필 */}
+              <div className="w-9 h-9 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
                 <Image
                   src="/images/profile.svg"
                   alt="profile"
@@ -100,27 +113,30 @@ export default function Header() {
                 />
               </div>
 
-              <span className="text-sm font-medium text-[#222829]">
-                {displayName}
+              {/* 이름 */}
+              <span className="text-sm text-[#222829] text-base font-extrabold leading-none">
+                {displayName} <span className="text-m font-medium text-[#222829]">학부생</span>
               </span>
 
+              {/* 구분선 (| 대체) */}
+              <div className="w-px h-4 bg-[#E5E7EB]" />
+
+              {/* 로그아웃 */}
               <button
                 onClick={handleLogout}
-                className="text-sm text-red-500 font-semibold hover:underline"
+                className="text-sm text-red-500 font-semibold leading-none hover:underline"
               >
                 로그아웃
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2 text-sm text-gray-400">
-              <Link href="/signin" className="hover:text-black">
-                로그인
-              </Link>
-              <span>|</span>
-              <Link href="/joinmc" className="hover:text-black">
-                회원가입
-              </Link>
-            </div>
+            /** 로그인 | 회원가입 묶음 */
+            <button
+              onClick={() => router.push("/signin")}
+              className="text-sm text-gray-400 hover:text-black font-medium"
+            >
+              로그인 | 회원가입
+            </button>
           )}
         </div>
       </div>
