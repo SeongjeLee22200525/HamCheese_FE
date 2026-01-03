@@ -1,7 +1,8 @@
 "use client";
 
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
+
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 
@@ -9,53 +10,38 @@ import Profile from "@/components/mateprofile/Profile";
 import ProfileSection from "@/components/mateprofile/ProfileSection";
 import PeerReview from "@/components/mateprofile/PeerReview";
 import PeerReviewModal from "@/components/mateprofile/peerReviewModal/PeerReviewModal";
-
-import { mockMateProfile } from "@/mocks/mateProfile";
-import { MetaTag } from "@/types/user";
 import ReviewSuccessSnackbar from "@/components/mateprofile/peerReviewModal/ReviewSuccessSnackbar";
+
+import { MetaTag } from "@/types/user";
 import { checkUserEqual, getMateProfile } from "@/api/profile";
 import { useUserStore } from "@/stores/useUserStore";
 
 export default function MateProfilePage() {
   const router = useRouter();
   const { userId } = router.query;
-  if (typeof userId !== "string") return null;
 
-  const targetUserId = Number(userId);
-  const data = mockMateProfile;
+  const myId = useUserStore((state) => state.user?.myId);
 
-  //동료평가 모달 상태 관리
-  const [isPeerReviewOpen, setIsPeerReviewOpen] = useState(false);
-
-  const targetMetaTags: MetaTag[] = [
-    { type: "studentId", value: data.profile.studentId },
-    { type: "major", value: data.profile.firstMajor },
-  ];
-  //동료평가 완료 스낵바용 상태관리
-  const [showReviewSuccess, setShowReviewSuccess] = useState(false);
-  //myId와 userId 비교용 상태관리
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  if (data.profile.secondMajor) {
-    targetMetaTags.push({
-      type: "major",
-      value: data.profile.secondMajor,
-    });
-  }
-  const myId = useUserStore((state) => state.user?.myId);
+  const [isPeerReviewOpen, setIsPeerReviewOpen] = useState(false);
+  const [showReviewSuccess, setShowReviewSuccess] = useState(false);
 
+  /* =========================
+   * 프로필 조회
+   * ========================= */
   useEffect(() => {
     if (typeof userId !== "string") return;
     if (!myId) return;
 
     const targetUserId = Number(userId);
-    const currentMyId: number = myId; // 🔥 핵심 수정
 
     const fetchProfile = async () => {
       try {
-        const isMine = await checkUserEqual(currentMyId, targetUserId);
+        setLoading(true);
 
+        const isMine = await checkUserEqual(myId, targetUserId);
         if (isMine) {
           router.replace("/mypage");
           return;
@@ -65,97 +51,145 @@ export default function MateProfilePage() {
         setProfile(data);
       } catch (e) {
         console.error("메이트 프로필 조회 실패", e);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProfile();
   }, [myId, userId, router]);
 
+  /* =========================
+   * 메타 태그
+   * ========================= */
+  const targetMetaTags: MetaTag[] = useMemo(() => {
+    if (!profile) return [];
+
+    const tags: MetaTag[] = [
+      { type: "studentId", value: profile.studentId },
+      { type: "major", value: profile.firstMajor },
+    ];
+
+    if (profile.secondMajor) {
+      tags.push({ type: "major", value: profile.secondMajor });
+    }
+
+    return tags;
+  }, [profile]);
+
+  /* =========================
+   * 로딩 처리
+   * ========================= */
+  if (loading || !profile) {
+    return null; // 필요하면 Skeleton으로 교체
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F8F8]">
       <Header />
 
       <main className="flex pt-5">
-        {/* ===== LEFT : 프로필 카드 ===== */}
+        {/* ===== LEFT ===== */}
         <div className="pl-50">
           <Profile
-            profile={data.profile}
+            profile={profile}
             onGivePiece={() => console.log("조각 건네기")}
             onPeerReview={() => setIsPeerReviewOpen(true)}
           />
         </div>
+
+        {/* ===== 동료평가 모달 ===== */}
         {isPeerReviewOpen && (
           <PeerReviewModal
-            targetName={data.profile.name}
-            targetImageUrl={data.profile.imageUrl}
+            targetName={profile.name}
+            targetImageUrl={profile.imageUrl}
             targetMetaTags={targetMetaTags}
             onClose={() => setIsPeerReviewOpen(false)}
-            onSubmit={(payload) => {
-              console.log("submit", payload);
+            onSubmit={async (payload) => {
+              console.log("peer review submit", payload);
+
               setIsPeerReviewOpen(false);
               setShowReviewSuccess(true);
+
+              // 🔥 반드시 userId로 재조회
+              const refreshed = await getMateProfile(Number(userId));
+              setProfile(refreshed);
             }}
           />
         )}
+
+        {/* ===== 성공 스낵바 ===== */}
         {showReviewSuccess && (
           <ReviewSuccessSnackbar onClose={() => setShowReviewSuccess(false)} />
         )}
 
-        {/* ===== RIGHT : 콘텐츠 ===== */}
+        {/* ===== RIGHT ===== */}
         <section className="flex-col space-y-14.5 pl-10 w-full pr-49 pt-10">
+          {/* 자기소개 */}
           <ProfileSection tabTitle="자기소개">
-            {/* 소제목: 자기소개 */}
             <div className="py-17 px-20">
-              <div className="flex h-16 mb-10 ">
-                <span className="w-1.5 h-5 bg-[#00C3CC] mt-[5px]" />
-                <div className=" pl-5 font-extrabold text-xl w-45 text-[#495456]">
+              <div className="flex h-16 mb-10">
+                <span className="w-1 h-5 bg-[#00C3CC] mt-[5px]" />
+                <div className="pl-5 font-extrabold text-xl w-30 text-[#495456]">
                   자기소개
                 </div>
-                <p className="pl-11 text-xl text-[#222829]">
-                  {data.introduction}
+                <p className="pl-10 text-xl text-[#222829]">
+                  {profile.introduction}
                 </p>
               </div>
 
-              {/* 소제목: 강점 해시태그 */}
-              <div className="flex ">
+              {/* 강점 태그 */}
+              <div className="flex">
                 <span className="w-1 h-5 bg-[#00C3CC] mt-[5px]" />
-                <div className="pl-5 font-extrabold text-xl w-41.5 text-[#495456]">
+                <div className="pl-5 font-extrabold text-xl w-40 text-[#495456]">
                   강점 해시태그
                 </div>
 
-                <div className="flex gap-2.5">
-                  {data.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="px-3 py-1.5 border border-[#CEDBDE] rounded font-medium text-sm text-[#838F91]"
-                    >
-                      #{skill}
+                <div className="flex gap-2.5 flex-wrap">
+                  {profile.skillList.length === 0 ? (
+                    <span className="text-sm text-[#838F91]">
+                      아직 등록된 강점 태그가 없습니다.
                     </span>
-                  ))}
+                  ) : (
+                    profile.skillList.map((skill: string) => (
+                      <span
+                        key={skill}
+                        className="px-3 py-1.5 border border-[#CEDBDE] rounded font-medium text-sm text-[#838F91]"
+                      >
+                        #{skill}
+                      </span>
+                    ))
+                  )}
                 </div>
               </div>
             </div>
           </ProfileSection>
 
+          {/* 활동내역 */}
           <ProfileSection tabTitle="활동내역">
             <ul className="space-y-4 text-xl text-[#222829] py-17 px-20">
-              {data.activities.map((item) => (
-                <li key={item.title} className="flex items-center">
-                  <span className="text-[#222829] font-extrabold w-12">
-                    {item.year}
-                  </span>
+              {profile.activity.length === 0 && (
+                <p className="text-sm text-[#838F91]">
+                  아직 활동 내역이 없습니다.
+                </p>
+              )}
 
+              {profile.activity.map((item: any) => (
+                <li
+                  key={`${item.year}-${item.title}`}
+                  className="flex items-center"
+                >
+                  <span className="font-extrabold w-12">{item.year}</span>
                   <span className="font-normal ml-7">{item.title}</span>
 
-                  {item.link && (
+                  {item.link && item.link.trim() !== "" && (
                     <a
                       href={item.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="pl-4 font-medium text-base mt-0.5 cursor-pointer"
+                      className="pl-4 font-medium text-base mt-0.5"
                     >
-                      <span className="hover:underline">바로가기</span>
-                      <span className="ml-1">🔗</span>
+                      <span className="hover:underline">바로가기</span> 🔗
                     </a>
                   )}
                 </li>
@@ -166,11 +200,11 @@ export default function MateProfilePage() {
           {/* 동료평가 */}
           <div className="pb-30">
             <PeerReview
-              name={data.profile.name}
-              peerGoodKeyword={data.peerReview.peerGoodKeyword}
-              goodKeywordCount={data.peerReview.goodKeywordCount}
-              peerBadKeyword={data.peerReview.peerBadKeyword}
-              badKeywordCount={data.peerReview.badKeywordCount}
+              name={profile.name}
+              peerGoodKeyword={profile.peerGoodKeyword}
+              goodKeywordCount={profile.goodKeywordCount}
+              peerBadKeyword={profile.peerBadKeyword}
+              badKeywordCount={profile.badKeywordCount}
             />
           </div>
         </section>

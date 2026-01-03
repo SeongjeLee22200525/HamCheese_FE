@@ -24,7 +24,7 @@ export default function Profile({ profile, onGivePiece, onPeerReview }: Props) {
   return (
     // 전체 블럭
     <div>
-      <div className="w-[350px] bg-[#F5F8F8] shadow-sm">
+      <div className="w-[350px] bg-[#F5F8F8]">
         <div className="p-10 text-[#222829]">
           {/* ===== 프로필 이미지 ===== */}
           <div className="flex flex-col items-center">

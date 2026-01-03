@@ -8,7 +8,7 @@ export interface UserBase {
   department: string;
   firstMajor: string;
   secondMajor?: string;
-  grade: number;
+  grade: string;
   semester: number;
   gpa?: number;
   imageUrl?: string;
@@ -54,6 +54,7 @@ export interface UserProfile {
   skillList: string[];
   peerGoodKeywords: string[];
   imageUrl?: string;
+  grade:string;
 }
 
 /* =========================

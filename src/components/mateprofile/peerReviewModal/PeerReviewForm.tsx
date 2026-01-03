@@ -77,8 +77,9 @@ export default function PeerReviewForm({
   /* ===== constants → 렌더링용 배열 ===== */
   const GOOD_OPTIONS = useMemo(
     () =>
-      Object.entries(POSITIVE_PEER_KEYWORDS).map(([label, meta]) => ({
-        label,
+      Object.entries(POSITIVE_PEER_KEYWORDS).map(([key, meta]) => ({
+        key, // 서버로 보낼 값
+        label: meta.label, // 화면에 보여줄 문장
         emoji: meta.emoji,
       })),
     []
@@ -86,8 +87,9 @@ export default function PeerReviewForm({
 
   const BAD_OPTIONS = useMemo(
     () =>
-      Object.entries(NEGATIVE_PEER_KEYWORDS).map(([label, meta]) => ({
-        label,
+      Object.entries(NEGATIVE_PEER_KEYWORDS).map(([key, meta]) => ({
+        key,
+        label: meta.label,
         emoji: meta.emoji,
       })),
     []
@@ -187,11 +189,11 @@ export default function PeerReviewForm({
             <div className="flex flex-wrap gap-2">
               {GOOD_OPTIONS.map((o) => (
                 <Chip
-                  key={o.label}
+                  key={o.key}
                   emoji={o.emoji}
                   label={o.label}
-                  selected={goodKeys.includes(o.label)}
-                  onClick={() => setGoodKeys(toggle(goodKeys, o.label))}
+                  selected={goodKeys.includes(o.key)}
+                  onClick={() => setGoodKeys(toggle(goodKeys, o.key))}
                 />
               ))}
             </div>
@@ -206,11 +208,11 @@ export default function PeerReviewForm({
             <div className="flex flex-wrap gap-2">
               {BAD_OPTIONS.map((o) => (
                 <Chip
-                  key={o.label}
+                  key={o.key}
                   emoji={o.emoji}
                   label={o.label}
-                  selected={badKeys.includes(o.label)}
-                  onClick={() => setBadKeys(toggle(badKeys, o.label))}
+                  selected={badKeys.includes(o.key)}
+                  onClick={() => setBadKeys(toggle(badKeys, o.key))}
                 />
               ))}
             </div>
