@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 
@@ -13,6 +13,8 @@ import PeerReviewModal from "@/components/mateprofile/peerReviewModal/PeerReview
 import { mockMateProfile } from "@/mocks/mateProfile";
 import { MetaTag } from "@/types/user";
 import ReviewSuccessSnackbar from "@/components/mateprofile/peerReviewModal/ReviewSuccessSnackbar";
+import { checkUserEqual, getMateProfile } from "@/api/profile";
+import { useUserStore } from "@/stores/useUserStore";
 
 export default function MateProfilePage() {
   const router = useRouter();
@@ -31,6 +33,9 @@ export default function MateProfilePage() {
   ];
   //동료평가 완료 스낵바용 상태관리
   const [showReviewSuccess, setShowReviewSuccess] = useState(false);
+  //myId와 userId 비교용 상태관리
+  const [profile, setProfile] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
 
   if (data.profile.secondMajor) {
     targetMetaTags.push({
@@ -38,6 +43,33 @@ export default function MateProfilePage() {
       value: data.profile.secondMajor,
     });
   }
+  const myId = useUserStore((state) => state.user?.myId);
+
+  useEffect(() => {
+    if (typeof userId !== "string") return;
+    if (!myId) return;
+
+    const targetUserId = Number(userId);
+    const currentMyId: number = myId; // 🔥 핵심 수정
+
+    const fetchProfile = async () => {
+      try {
+        const isMine = await checkUserEqual(currentMyId, targetUserId);
+
+        if (isMine) {
+          router.replace("/mypage");
+          return;
+        }
+
+        const data = await getMateProfile(targetUserId);
+        setProfile(data);
+      } catch (e) {
+        console.error("메이트 프로필 조회 실패", e);
+      }
+    };
+
+    fetchProfile();
+  }, [myId, userId, router]);
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F5F8F8]">

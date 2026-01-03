@@ -6,7 +6,7 @@ import { create } from "zustand";
  * - 회원가입 완료 후: myId + name
  */
 export interface User {
-  myId: string;
+  myId: Number;
   name?: string;
   profileImageUrl?: string; // ✅ (선택) 프로필 이미지
 }
