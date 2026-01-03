@@ -215,11 +215,11 @@ export default function RecruitMate() {
           </aside>
 
           {/* 우측 피드 */}
-          <section className="flex-1 min-h-[400px] rounded-xl p-6">
+          <section className="flex-1 min-h-[400px] rounded-xl p-6 -mt-6">
             <div className="flex justify-end mb-4">
               <button
                 onClick={() => router.push("/recruitmate/create")}
-                className="w-72 px-2 py-5 justify-start rounded bg-[#6EC6CC] text-[#F5F8F8] text-[16px] font-extrabold "
+                className="w-72 h-16 px-2 py-5 justify-start rounded bg-[#6EC6CC] text-[#F5F8F8] text-[16px] font-extrabold "
               >
                 모집글 쓰기
               </button>
