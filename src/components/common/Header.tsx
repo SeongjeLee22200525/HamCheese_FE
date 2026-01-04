@@ -72,7 +72,7 @@ export default function Header() {
               href="/"
               className="text-[#222829] text-3xl font-light font-['Paperlogy'] leading-none"
             >
-              MateCheck
+              <img src="/images/logo.svg" alt="logo" className="w-40 h-10" />
             </Link>
 
             <nav className="flex items-baseline gap-8 font-['Pretendard_Variable'] text-base font-medium">

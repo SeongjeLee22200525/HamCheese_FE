@@ -2,6 +2,9 @@ import axios from "@/api/axios";
 import { Recruiting } from "@/types/recruiting";
 import { RecruitingDetail } from "@/types/recruitingDetail";
 
+/**
+ * 모집글 생성 body (명세 기준)
+ */
 type CreateRecruitingBody = {
   projectType: string;
   projectSpecific: string;
@@ -10,10 +13,13 @@ type CreateRecruitingBody = {
   totalPeople: number;
   recruitPeople: number;
   title: string;
-  context: string;
-  keyword: string[];
+  context: string;  
+  myKeyword: string[];
 };
 
+/**
+ * 모집글 생성
+ */
 export const createRecruiting = async (
   userId: number,
   body: CreateRecruitingBody
@@ -26,6 +32,10 @@ export const createRecruiting = async (
   return res.data;
 };
 
+/**
+ * 모집글 상세 조회
+ * GET /recruiting/detail/{recruitingId}/{myId}
+ */
 export const getRecruitingDetail = async (
   recruitingId: number,
   myId: number
@@ -37,7 +47,9 @@ export const getRecruitingDetail = async (
   return res.data;
 };
 
-
+/**
+ * 모집글 필터 조회
+ */
 type FilterRecruitingsParams = {
   types?: string[];
   departments?: string[];
@@ -61,6 +73,9 @@ export const filterRecruitings = async (
   return res.data;
 };
 
+/**
+ * 모집글 전체 조회
+ */
 type GetRecruitingsParams = {
   types?: string[];
   departments?: string[];

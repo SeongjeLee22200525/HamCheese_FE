@@ -5,6 +5,31 @@ type Props = {
   onClick: (id: number) => void;
 };
 
+/* 날짜 포맷 함수 */
+const formatRecruitingDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const now = new Date();
+
+  const isToday =
+    date.getFullYear() === now.getFullYear() &&
+    date.getMonth() === now.getMonth() &&
+    date.getDate() === now.getDate();
+
+  if (isToday) {
+    return date.toLocaleTimeString("ko-KR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    });
+  }
+
+  const yyyy = date.getFullYear();
+  const mm = String(date.getMonth() + 1).padStart(2, "0");
+  const dd = String(date.getDate()).padStart(2, "0");
+
+  return `${yyyy}.${mm}.${dd}`;
+};
+
 export default function RecruitingCard({ item, onClick }: Props) {
   return (
     <div
@@ -19,6 +44,7 @@ export default function RecruitingCard({ item, onClick }: Props) {
       "
     >
       <div className="flex items-start">
+        {/* 왼쪽 영역 */}
         <div className="flex-1">
           <div className="flex items-center gap-3 text-sm text-[#6B7280] mb-3">
             <span className="px-2 py-1 rounded bg-[#EEF7F8] text-[#0FA4AB] font-semibold">
@@ -63,14 +89,17 @@ export default function RecruitingCard({ item, onClick }: Props) {
           </h3>
         </div>
 
+        {/* 오른쪽 영역 (이름 / 해시태그 / 시간) */}
         <div className="flex items-center gap-10">
-          <div className="flex flex-col items-center">
-            <div className="text-center text-l font-medium text-[#222829] mb-2">
+          <div className="flex flex-col items-end">
+            {/* 이름 */}
+            <div className="text-sm font-medium text-[#222829] mb-2">
               {item.name} 학부생
             </div>
 
-            <div className="flex gap-2">
-              {item.skillList.map(skill => (
+            {/* 해시태그 (최대 2개) */}
+            <div className="flex gap-2 mb-2">
+              {(item.skillList ?? []).slice(0, 2).map((skill) => (
                 <span
                   key={skill}
                   className="
@@ -86,9 +115,12 @@ export default function RecruitingCard({ item, onClick }: Props) {
                 </span>
               ))}
             </div>
-          </div>
 
-          {/* recruiting.ts에 없으므로 제거 */}
+            {/* 날짜 / 시간 */}
+            <div className="text-xs text-[#B7C4C7]">
+              {formatRecruitingDate(item.date)}
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -6,6 +6,7 @@ import Footer from "@/components/common/Footer";
 
 import { useUserStore } from "@/stores/useUserStore";
 import { createRecruiting } from "@/api/recruiting";
+import { types } from "@/constants/types";
 
 export default function RecruitMateCreate() {
   const router = useRouter();
@@ -56,23 +57,30 @@ export default function RecruitMateCreate() {
       recruitPeople: Number(form.recruitPeople),
       title: form.title,
       context: form.context,
-      keyword: keywords,
+      myKeyword: keywords,
     });
 
     router.push("/recruitmate");
   };
 
+  const inputBaseClass = `
+    border border-[#E6EEF0]
+    rounded
+    text-sm text-[#222829]
+    placeholder:text-[#CEDBDE]
+    focus:outline-none
+  `;
+
   return (
-    <div className="min-h-screen flex flex-col bg-[#FFFFFF]">
+    <div className="min-h-screen flex flex-col bg-white">
       <Header />
 
       <main className="flex-1">
         <div className="max-w-[920px] mx-auto px-10 py-12">
           {/* breadcrumb */}
-          <div className="flex items-center text-sm font-medium text-[#838F91] mb-8">
+          <div className="flex items-center text-m font-medium text-[#838F91] mb-3">
             모집하기
-            <img src="/images/Vector.svg" className="w-2 h-2 mx-2" />
-            글 쓰기
+            <img src="/images/Vector.svg" className="w-2 h-2 mx-2" />글 쓰기
           </div>
 
           <div className="bg-white border border-[#E6EEF0] rounded p-10">
@@ -85,17 +93,43 @@ export default function RecruitMateCreate() {
                     모집 유형
                   </span>
 
-                  <select
-                    name="projectType"
-                    value={form.projectType}
-                    onChange={handleChange}
-                    className="border px-4 py-2 rounded text-sm w-40"
-                  >
-                    <option>수업</option>
-                    <option>동아리</option>
-                    <option>학회</option>
-                    <option>대회</option>
-                  </select>
+                  <div className="relative w-40">
+                    <select
+                      name="projectType"
+                      value={form.projectType}
+                      onChange={handleChange}
+                      className="
+      w-full
+      appearance-none
+      border border-[#E6EEF0]
+      rounded
+      px-4 py-2 pr-10
+      text-sm text-[#222829]
+      focus:outline-none
+      bg-white
+    "
+                    >
+                      {types.map((type) => (
+                        <option key={type} value={type}>
+                          {type}
+                        </option>
+                      ))}
+                    </select>
+
+                    {/* dropdown arrow */}
+                    <img
+                      src="/dropdownArrow.svg"
+                      alt=""
+                      className="
+      pointer-events-none
+      absolute
+      right-3
+      top-1/2
+      -translate-y-1/2
+      w-4 h-4
+    "
+                    />
+                  </div>
                 </div>
 
                 {/* 수업명 + 분반 */}
@@ -107,32 +141,14 @@ export default function RecruitMateCreate() {
                     name="projectSpecific"
                     placeholder="(ex) 환경과 인간, 컴퓨터 구조"
                     onChange={handleChange}
-                    className="
-                      w-72
-                      border
-                      px-3
-                      py-2
-                      rounded
-                      text-sm
-                      placeholder:text-[#CEDBDE]
-                    "
+                    className={`${inputBaseClass} w-72 px-3 py-2`}
                   />
 
                   <input
                     name="classes"
-                    type="number"
                     placeholder="2"
                     onChange={handleChange}
-                    className="
-                      w-12
-                      border
-                      px-3
-                      py-2
-                      rounded
-                      text-sm
-                      text-center
-                      placeholder:text-[#CEDBDE]
-                    "
+                    className={`${inputBaseClass} w-12 px-3 py-2 text-center`}
                   />
                   <span className="text-sm text-[#6B7280]">분반</span>
                 </div>
@@ -150,15 +166,7 @@ export default function RecruitMateCreate() {
                     name="topic"
                     placeholder="해양생물"
                     onChange={handleChange}
-                    className="
-                      w-72
-                      border
-                      px-3
-                      py-2
-                      rounded
-                      text-sm
-                      placeholder:text-[#CEDBDE]
-                    "
+                    className={`${inputBaseClass} w-72 px-3 py-2`}
                   />
                 </div>
 
@@ -179,15 +187,7 @@ export default function RecruitMateCreate() {
                   type="number"
                   placeholder="5"
                   onChange={handleChange}
-                  className="
-                    w-12
-                    border
-                    px-3
-                    py-2
-                    rounded
-                    text-sm
-                    placeholder:text-[#CEDBDE]
-                  "
+                  className={`${inputBaseClass} w-14 px-3 py-2`}
                 />
                 <span className="text-sm text-[#6B7280]">명</span>
               </div>
@@ -204,15 +204,7 @@ export default function RecruitMateCreate() {
                   type="number"
                   placeholder="4"
                   onChange={handleChange}
-                  className="
-                    w-12
-                    border
-                    px-3
-                    py-2
-                    rounded
-                    text-sm
-                    placeholder:text-[#CEDBDE]
-                  "
+                  className={`${inputBaseClass} w-14 px-3 py-2`}
                 />
                 <span className="text-sm text-[#6B7280]">명</span>
               </div>
@@ -227,42 +219,55 @@ export default function RecruitMateCreate() {
                   </span>
                 </div>
 
-                <div className="inline-flex justify-start gap-5 items-center">
+                {/* 해시태그 + 입력칸 (맨 왼쪽 시작) */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  {/* 해시태그 */}
+                  {keywords.map((k) => (
+                    <div
+                      key={k}
+                      className="
+          h-10
+          px-3
+          flex items-center
+          border border-[#E6EEF0]
+          rounded
+          text-sm
+          text-[#0FA4AB]
+          bg-[#EEF7F8]
+          whitespace-nowrap
+        "
+                    >
+                      #{k}
+                    </div>
+                  ))}
+
+                  {/* 입력칸 */}
                   <input
                     value={keywordInput}
                     onChange={(e) => setKeywordInput(e.target.value)}
                     placeholder="(ex) 자료조사"
                     className="
-                      w-36
-                      border
-                      px-3
-                      py-2
-                      rounded
-                      text-sm
-                      placeholder:text-[#CEDBDE]
-                    "
+        h-10
+        w-36
+        border border-[#E6EEF0]
+        rounded
+        px-3
+        text-sm
+        text-[#222829]
+        placeholder:text-[#CEDBDE]
+        focus:outline-none
+      "
                   />
+
+                  {/* + 버튼 */}
                   <button
                     type="button"
                     onClick={addKeyword}
-                    className="w-8 h-8 rounded text-[#0FA4AB] font-bold"
+                    className="h-10 w-10 flex items-center justify-center"
                   >
                     <img src="/images/add.svg" alt="+" className="w-4 h-4" />
                   </button>
                 </div>
-
-                {keywords.length > 0 && (
-                  <div className="flex flex-wrap gap-2 ml-[calc(1rem+7rem)]">
-                    {keywords.map((k) => (
-                      <span
-                        key={k}
-                        className="px-3 py-1 text-xs rounded bg-[#EEF7F8] text-[#0FA4AB]"
-                      >
-                        #{k}
-                      </span>
-                    ))}
-                  </div>
-                )}
               </div>
 
               {/* 제목 */}
@@ -271,15 +276,12 @@ export default function RecruitMateCreate() {
                 placeholder="제목을 입력해주세요"
                 onChange={handleChange}
                 className="
-                  border
-                  px-7
-                  py-6
+                  border border-[#E6EEF0]
                   rounded
-                  text-l
+                  px-7 py-6
+                  text-xl font-extrabold text-[#222829]
                   placeholder:text-[#CEDBDE]
-                  placeholder:text-xl
-                  placeholder:font-extrabold
-                  placeholder:justify-start
+                  focus:outline-none
                 "
               />
 
@@ -290,13 +292,13 @@ export default function RecruitMateCreate() {
                 placeholder="내용을 입력해주세요"
                 onChange={handleChange}
                 className="
-                  border
-                  px-4
-                  py-3
+                  border border-[#E6EEF0]
                   rounded
+                  px-4 py-3
                   resize-none
-                  text-sm
+                  text-sm text-[#222829]
                   placeholder:text-[#CEDBDE]
+                  focus:outline-none
                 "
               />
             </div>
