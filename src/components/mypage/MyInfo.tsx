@@ -33,7 +33,21 @@ export default function MyInfo() {
   /* profile image */
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [profileImage, setProfileImage] = useState<string | null>(null);
-  const [profileFile, setProfileFile] = useState<File | null>(null);
+
+  const uploadProfileImage = async (file: File) => {
+    if (!myId) return;
+
+    const formData = new FormData();
+    formData.append("profileImage", file);
+
+    try {
+      await axios.post(`/user/update/${myId}`, formData);
+      alert("프로필 사진이 변경되었습니다.");
+    } catch (e) {
+      console.error("❌ image upload error", e);
+      alert("사진 업로드 실패");
+    }
+  };
 
   /* department dropdown */
   const [deptOpen, setDeptOpen] = useState(false);
@@ -92,8 +106,7 @@ export default function MyInfo() {
         i === index
           ? {
               ...a,
-              [field]:
-                field === "year" ? (value === "" ? "" : Number(value)) : value,
+              [field]: field === "year" ? Number(value) : value,
             }
           : a
       ),
@@ -146,22 +159,28 @@ export default function MyInfo() {
     if (!myId) return;
 
     const payload = {
-      ...form,
+      name: form.name,
+      email: form.email,
+      department: form.department,
+      firstMajor: form.firstMajor,
+      secondMajor: form.secondMajor,
+      gpa: form.gpa,
+      studentId: form.studentId,
       grade: String(form.grade),
       semester: String(form.semester),
+      imageUrl: profileImage,
+      introduction: form.introduction,
+      skillList: form.skillList,
+      activity: form.activity.map((a) => ({
+        activityType: "CUSTOM",
+        activityName: a.title,
+        activityDetail: a.link ?? "",
+      })),
     };
 
-    const formData = new FormData();
-    formData.append("data", JSON.stringify(payload));
-
-    if (profileFile) {
-      formData.append("profileImage", profileFile);
-    }
-
     try {
-      await axios.patch(`/user/update/${myId}`, formData);
-
-      alert("프로필이 저장되었습니다.");
+      await axios.patch(`/user/update/${myId}`, payload);
+      alert("프로필 정보가 저장되었습니다.");
     } catch (e) {
       console.error("❌ update profile error", e);
       alert("저장에 실패했습니다.");
@@ -208,7 +227,6 @@ export default function MyInfo() {
               type="button"
               onClick={() => {
                 setProfileImage(null);
-                setProfileFile(null);
               }}
               className="absolute -right-20 bottom-1 w-7.5 h-7.5"
             >
@@ -223,8 +241,9 @@ export default function MyInfo() {
               onChange={(e) => {
                 const file = e.target.files?.[0];
                 if (!file) return;
-                setProfileFile(file);
-                setProfileImage(URL.createObjectURL(file));
+
+                setProfileImage(URL.createObjectURL(file)); // 미리보기
+                uploadProfileImage(file); // 🔥 즉시 POST
                 e.target.value = "";
               }}
             />

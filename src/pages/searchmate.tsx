@@ -93,7 +93,7 @@ export default function SearchMate() {
       <Header />
 
       <main className="flex-1">
-        <div className="max-w-[1280px] mx-auto px-10 py-12">
+        <div className="w-full mx-auto px-50 py-12">
           {/* 검색바 */}
           <SearchBar
             value={keyword}
@@ -109,7 +109,7 @@ export default function SearchMate() {
             }
           />
 
-          <div className="flex gap-10 mt-10">
+          <div className="flex gap-9.5 mt-10">
             {/* 왼쪽 필터 */}
             <aside className="w-[260px] sticky top-24">
               {/* 헤더 */}
@@ -187,7 +187,7 @@ export default function SearchMate() {
               )}
 
               {!loading && users.length > 0 && (
-                <div className="grid grid-cols-1 gap-6">
+                <div className=" grid grid-cols-1 gap-1.5">
                   {users.map((user) => (
                     <ProfileCard key={user.userId} user={user} />
                   ))}
