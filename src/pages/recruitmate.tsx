@@ -186,7 +186,7 @@ export default function RecruitMate() {
             </div>
           </aside>
 
-          <section className="flex-1 min-h-[400px] rounded-xl p-6 -mt-6">
+          <section className="flex-1 min-h-[400px] rounded-xl">
             <div className="flex justify-end mb-4">
               <button
                 onClick={() => router.push("/recruitmate/create")}

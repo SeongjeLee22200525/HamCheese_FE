@@ -6,7 +6,7 @@ export default function SearchBar({
   title,
 }: Props) {
   return (
-    <div className="w-full px-12 py-8 bg-[#F5F8F8] rounded-lg inline-flex justify-between items-center">
+    <div className="w-full px-10 py-8 bg-[#F5F8F8] rounded-lg inline-flex justify-between items-center">
       <p className="text-[24px] font-extrabold text-[#222729]">
         {title}
       </p>

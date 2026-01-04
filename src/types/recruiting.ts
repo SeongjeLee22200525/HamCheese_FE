@@ -8,5 +8,6 @@ export type Recruiting = {
   totalPeople: number;
   recruitPeople: number;
   title: string;
-  skillList: string[];
+  myKeyword: string[];
+  date: string;
 };
