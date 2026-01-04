@@ -3,11 +3,9 @@ import { MateProfileInfo } from "@/types/user";
 
 type Props = {
   profile: MateProfileInfo;
-  onGivePiece?: () => void;
-  onPeerReview?: () => void;
 };
 
-export default function Profile({ profile, onGivePiece, onPeerReview }: Props) {
+export default function Profile({ profile }: Props) {
   const {
     name,
     email,
@@ -60,24 +58,10 @@ export default function Profile({ profile, onGivePiece, onPeerReview }: Props) {
             )}
 
             <InfoRow label="이메일" value={email} />
+            {/* ===== 버튼 영역 ===== */}
+            <button className="w-72 h-16 mt-4 bg-[#00C3CC] rounded text-white text-xl font-extrabold">프로필 확인하기</button>
           </div>
         </div>
-      </div>
-      {/* ===== 버튼 영역 ===== */}
-      <div className="mt-6 flex flex- gap-3">
-        <button
-          onClick={onGivePiece}
-          className="w-[169px] h-16 py-2 rounded bg-[#00C3CC] text-white text-xl font-extrabold flex items-center justify-center gap-2.5 hover:bg-[#0FA4AB] active:bg-[#1A858A]"
-        >
-          <img src="/sendingpiece.svg" className="w-7.5 h-7.5" />
-          조각 건네기
-        </button>
-        <button
-          onClick={onPeerReview}
-          className="w-[169px] h-16 py-2 rounded bg-[#00C3CC] text-white text-xl font-extrabold hover:bg-[#0FA4AB] active:bg-[#1A858A]"
-        >
-          동료평가 하기
-        </button>
       </div>
     </div>
   );

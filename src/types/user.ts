@@ -56,7 +56,7 @@ export interface UserProfile {
 }
 
 /* =========================
- * 메이트 프로필 (상세 페이지)
+ * 메이트 프로필 (상세 페이지) + 마이페이지 좌측 프로필바에도 사용
  * ========================= */
 
 export interface MateProfileInfo extends UserBase {
