@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import MyPageLayout from "@/components/mypage/MyPageLayout";
 import MyPageTabs from "@/components/mypage/MyPageTabs";
-import MyInfo from "@/components/mypage/MyInfo";
+import MyPosts from "@/components/mypage/MyPosts";
 import { useUserStore } from "@/stores/useUserStore";
 import axios from "@/api/axios";
 import { MateProfileInfo } from "@/types/user";
@@ -55,7 +55,7 @@ export default function MyPage() {
 
       {/* 🔥 콘텐츠 박스 (완전 분리) */}
       <div className=" rounded-lg ">
-       
+        <MyPosts />
       </div>
     </MyPageLayout>
   );

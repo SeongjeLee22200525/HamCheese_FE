@@ -56,11 +56,7 @@ export default function RecruitingCard({ item, onClick }: Props) {
             </span>
 
             <span className="text-[#D1D5DB]">
-              <img
-                src="/images/Vector.svg"
-                alt="arrow"
-                className="w-3 h-3"
-              />
+              <img src="/images/Vector.svg" alt="arrow" className="w-3 h-3" />
             </span>
 
             <span>
@@ -68,25 +64,17 @@ export default function RecruitingCard({ item, onClick }: Props) {
             </span>
 
             <span className="text-[#D1D5DB]">
-              <img
-                src="/images/Vector.svg"
-                alt="arrow"
-                className="w-3 h-3"
-              />
+              <img src="/images/Vector.svg" alt="arrow" className="w-3 h-3" />
             </span>
 
             <span>
               <span className="font-bold text-[#222829]">주제</span>
               <span className="mx-1 font-medium text-[#B7C4C7]">|</span>
-              <span className="font-medium text-[#222829]">
-                {item.topic}
-              </span>
+              <span className="font-medium text-[#222829]">{item.topic}</span>
             </span>
           </div>
 
-          <h3 className="text-xl font-bold text-[#111827]">
-            {item.title}
-          </h3>
+          <h3 className="text-xl font-bold text-[#111827]">{item.title}</h3>
         </div>
 
         {/* 오른쪽 영역 (이름 / 해시태그 / 시간) */}
@@ -99,9 +87,9 @@ export default function RecruitingCard({ item, onClick }: Props) {
 
             {/* 해시태그 (최대 2개) */}
             <div className="flex gap-2 mb-2">
-              {(item.skillList ?? []).slice(0, 2).map((skill) => (
+              {(item.myKeyword ?? []).slice(0, 2).map((keyword) => (
                 <span
-                  key={skill}
+                  key={keyword}
                   className="
                     px-2 py-1
                     text-xs
@@ -111,7 +99,7 @@ export default function RecruitingCard({ item, onClick }: Props) {
                     text-[#838F91]
                   "
                 >
-                  #{skill}
+                  #{keyword}
                 </span>
               ))}
             </div>

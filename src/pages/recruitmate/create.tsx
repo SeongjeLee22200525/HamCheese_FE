@@ -246,17 +246,13 @@ export default function RecruitMateCreate() {
                     value={keywordInput}
                     onChange={(e) => setKeywordInput(e.target.value)}
                     placeholder="(ex) 자료조사"
-                    className="
-        h-10
-        w-36
-        border border-[#E6EEF0]
-        rounded
-        px-3
-        text-sm
-        text-[#222829]
-        placeholder:text-[#CEDBDE]
-        focus:outline-none
-      "
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        addKeyword();
+                      }
+                    }}
+                    className="h-10 w-36 border border-[#E6EEF0] rounded px-3 text-sm"
                   />
 
                   {/* + 버튼 */}
