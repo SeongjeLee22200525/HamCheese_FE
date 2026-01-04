@@ -66,20 +66,29 @@ export default function PeerReviewForm({
   const [goodKeys, setGoodKeys] = useState<string[]>([]);
   const [badKeys, setBadKeys] = useState<string[]>([]);
 
-  const canSubmit = useMemo(
-    () => startedYear.trim() !== "" && meetWhere.trim() !== "",
-    [startedYear, meetWhere]
-  );
+  const canSubmit = useMemo(() => {
+    const yearValid = /^\d{4}$/.test(startedYear);
+    const monthNum = Number(startedMonth);
 
-  const toggle = (arr: string[], key: string) =>
-    arr.includes(key) ? arr.filter((k) => k !== key) : [...arr, key];
+    const monthValid = startedMonth !== "" && monthNum >= 1 && monthNum <= 12;
+
+    return yearValid && monthValid && meetWhere.trim() !== "";
+  }, [startedYear, startedMonth, meetWhere]);
+
+  const toggleWithLimit = (arr: string[], key: string, limit: number) => {
+    if (arr.includes(key)) {
+      return arr.filter((k) => k !== key);
+    }
+    if (arr.length >= limit) return arr;
+    return [...arr, key];
+  };
 
   /* ===== constants → 렌더링용 배열 ===== */
   const GOOD_OPTIONS = useMemo(
     () =>
       Object.entries(POSITIVE_PEER_KEYWORDS).map(([key, meta]) => ({
         key, // 서버로 보낼 값
-        label: meta.label, // 화면에 보여줄 문장
+        label: key, // 화면에 보여줄 문장 ✅
         emoji: meta.emoji,
       })),
     []
@@ -89,7 +98,7 @@ export default function PeerReviewForm({
     () =>
       Object.entries(NEGATIVE_PEER_KEYWORDS).map(([key, meta]) => ({
         key,
-        label: meta.label,
+        label: key,
         emoji: meta.emoji,
       })),
     []
@@ -193,7 +202,9 @@ export default function PeerReviewForm({
                   emoji={o.emoji}
                   label={o.label}
                   selected={goodKeys.includes(o.key)}
-                  onClick={() => setGoodKeys(toggle(goodKeys, o.key))}
+                  onClick={() =>
+                    setGoodKeys(toggleWithLimit(goodKeys, o.key, 5))
+                  }
                 />
               ))}
             </div>
@@ -212,7 +223,7 @@ export default function PeerReviewForm({
                   emoji={o.emoji}
                   label={o.label}
                   selected={badKeys.includes(o.key)}
-                  onClick={() => setBadKeys(toggle(badKeys, o.key))}
+                  onClick={() => setBadKeys(toggleWithLimit(badKeys, o.key, 5))}
                 />
               ))}
             </div>

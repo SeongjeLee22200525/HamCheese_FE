@@ -15,6 +15,7 @@ import ReviewSuccessSnackbar from "@/components/mateprofile/peerReviewModal/Revi
 import { MetaTag } from "@/types/user";
 import { checkUserEqual, getMateProfile } from "@/api/profile";
 import { useUserStore } from "@/stores/useUserStore";
+import { submitPeerReview } from "@/api/peerReview";
 
 export default function MateProfilePage() {
   const router = useRouter();
@@ -31,11 +32,13 @@ export default function MateProfilePage() {
   /* =========================
    * 프로필 조회
    * ========================= */
+
   useEffect(() => {
     if (typeof userId !== "string") return;
     if (!myId) return;
 
     const targetUserId = Number(userId);
+    if (Number.isNaN(targetUserId)) return;
 
     const fetchProfile = async () => {
       try {
@@ -80,8 +83,20 @@ export default function MateProfilePage() {
   /* =========================
    * 로딩 처리
    * ========================= */
-  if (loading || !profile) {
-    return null; // 필요하면 Skeleton으로 교체
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-400">프로필 불러오는 중...</p>
+      </div>
+    );
+  }
+
+  if (!profile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-red-500">프로필 정보를 불러오지 못했습니다.</p>
+      </div>
+    );
   }
 
   return (
@@ -99,21 +114,19 @@ export default function MateProfilePage() {
         </div>
 
         {/* ===== 동료평가 모달 ===== */}
-        {isPeerReviewOpen && (
+        {isPeerReviewOpen && profile && myId && (
           <PeerReviewModal
             targetName={profile.name}
             targetImageUrl={profile.imageUrl}
             targetMetaTags={targetMetaTags}
             onClose={() => setIsPeerReviewOpen(false)}
             onSubmit={async (payload) => {
-              console.log("peer review submit", payload);
+              const targetUserId = Number(userId);
+              if (!myId || Number.isNaN(targetUserId)) return;
 
+              await submitPeerReview(myId, targetUserId, payload);
               setIsPeerReviewOpen(false);
               setShowReviewSuccess(true);
-
-              // 🔥 반드시 userId로 재조회
-              const refreshed = await getMateProfile(Number(userId));
-              setProfile(refreshed);
             }}
           />
         )}

@@ -4,7 +4,7 @@
 
 export interface UserBase {
   name: string;
-  studentId: string;        // "20학번"
+  studentId: string; // "20학번"
   department: string;
   firstMajor: string;
   secondMajor?: string;
@@ -22,17 +22,16 @@ export interface UserBase {
 export interface SignUpRequest {
   name: string;
   studentId: string;
-  grade: string;        // ✅ string
-  semester: string;     // ✅ string
+  grade: string; // ✅ string
+  semester: string; // ✅ string
   department: string;
   firstMajor: string;
   secondMajor?: string;
   phoneNumber: string;
-  gpa?: string;         // ✅ string
+  gpa?: string; // ✅ string
   email: string;
   socialId: string;
 }
-
 
 // 회원가입 응답
 export interface SignUpResponse {
@@ -52,9 +51,8 @@ export interface UserProfile {
   secondMajor?: string;
   introduction: string;
   skillList: string[];
-  peerGoodKeywords: string[];
+  peerGoodKeywords: Record<string, number>; // 🔥 여기
   imageUrl?: string;
-  grade:string;
 }
 
 /* =========================

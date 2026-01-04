@@ -2,6 +2,9 @@
 import axios from "./axios";
 import { SignUpRequest, SignUpResponse } from "@/types/user";
 
+/* =========================
+ * 회원가입
+ * ========================= */
 export const signUp = async (
   payload: SignUpRequest
 ): Promise<SignUpResponse> => {
@@ -23,5 +26,17 @@ export const signUp = async (
     },
   });
 
+  return res.data;
+};
+
+/* =========================
+ * 마이 프로필 여부 확인
+ * GET /user/equal/{myId}/{userId}
+ * ========================= */
+export const checkIsMyProfile = async (
+  myId: number,
+  userId: number
+): Promise<boolean> => {
+  const res = await axios.get<boolean>(`/user/equal/${myId}/${userId}`);
   return res.data;
 };

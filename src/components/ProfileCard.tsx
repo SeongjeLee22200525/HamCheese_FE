@@ -1,13 +1,48 @@
+import { useRouter } from "next/router";
 import { UserProfile } from "@/types/user";
+import { useUserStore } from "@/stores/useUserStore";
+import { checkIsMyProfile } from "@/api/user";
 
 type Props = {
   user: UserProfile;
 };
 
 export default function ProfileCard({ user }: Props) {
+  const router = useRouter();
+  const myId = useUserStore((state) => state.user?.myId);
+
+  const handleClick = async () => {
+    // 로그인 안 된 경우
+    if (!myId) {
+      router.push("/signin");
+      return;
+    }
+
+    try {
+      const isMyProfile = await checkIsMyProfile(myId, user.userId);
+
+      if (isMyProfile) {
+        router.push("/mypage");
+      } else {
+        router.push(`/mateprofile/${user.userId}`);
+      }
+    } catch (e) {
+      console.error("❌ 프로필 이동 중 오류", e);
+      // 실패 시 안전하게 타인 프로필로 이동
+      router.push(`/mateprofile/${user.userId}`);
+    }
+  };
+
+  // 긍정 동료평가 상위 3개
+  const topPeerKeywords = Object.entries(user.peerGoodKeywords ?? {})
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 3);
+
   return (
-    <article className="border rounded-xl p-5 bg-white hover:shadow-md transition cursor-pointer">
-      
+    <article
+      onClick={handleClick}
+      className="border rounded-xl p-5 bg-white hover:shadow-md transition cursor-pointer"
+    >
       {/* 상단 */}
       <div className="flex gap-4 items-start">
         <img
@@ -17,18 +52,14 @@ export default function ProfileCard({ user }: Props) {
         />
 
         <div className="flex-1">
-          <p className="text-lg font-semibold text-[#222729]">
-            {user.name}
-          </p>
+          <p className="text-lg font-semibold text-[#222729]">{user.name}</p>
 
           <p className="text-sm text-[#6B7678] mt-0.5">
             {user.firstMajor}
             {user.secondMajor && ` · ${user.secondMajor}`}
           </p>
 
-          <p className="text-xs text-[#9AA4A6] mt-0.5">
-            {user.studentId}
-          </p>
+          <p className="text-xs text-[#9AA4A6] mt-0.5">{user.studentId}</p>
         </div>
       </div>
 
@@ -51,10 +82,10 @@ export default function ProfileCard({ user }: Props) {
         </div>
       )}
 
-      {/* 긍정 키워드 */}
-      {user.peerGoodKeywords.length > 0 && (
+      {/* 긍정 동료평가 상위 3개 */}
+      {topPeerKeywords.length > 0 && (
         <div className="mt-3 flex flex-wrap gap-2">
-          {user.peerGoodKeywords.map((keyword) => (
+          {topPeerKeywords.map(([keyword]) => (
             <span
               key={keyword}
               className="text-xs text-[#6EC6CC] bg-[#F8FBFB] px-2 py-1 rounded"

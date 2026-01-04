@@ -5,6 +5,7 @@ import SearchBar from "@/components/SearchBar";
 import ProfileCard from "@/components/ProfileCard";
 import { departments } from "@/constants/departments";
 import { UserProfile } from "@/types/user";
+import axios from "@/api/axios";
 
 export default function SearchMate() {
   const [selected, setSelected] = useState<string[]>([]);
@@ -34,41 +35,49 @@ export default function SearchMate() {
   };
 
   /* API 호출 */
+
+  const PAGE_SIZE = 10; // 또는 8 (너가 원하는 값)
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const params = new URLSearchParams();
-        params.append("page", page.toString());
-        params.append("size", "10");
-
-        if (selected.length > 0) {
-          params.append("departments", selected.join(","));
-        }
-        if (searchKeyword) {
-          params.append("name", searchKeyword);
-        }
-
         const endpoint =
           selected.length > 0 || searchKeyword
             ? "/user/filter"
             : "/user/findAll";
 
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_BASE_URL}${endpoint}?${params.toString()}`
-        );
+        const params: Record<string, string> = {};
 
-        if (!res.ok) {
-          throw new Error("API 요청 실패");
+        if (selected.length > 0) {
+          params.departments = selected.join(",");
         }
 
-        const data: UserProfile[] = await res.json();
+        if (searchKeyword) {
+          params.name = searchKeyword;
+        }
 
-        setUsers((prev) => (page === 0 ? data : [...prev, ...data]));
-        setHasMore(data.length === 10);
-      } catch (e) {
+        console.log("📡 GET", endpoint, params);
+        
+
+        const res = await axios.get(endpoint, { params });
+        console.log("🧾 raw response data:", res.data);
+
+        const allUsers: UserProfile[] = res.data;
+
+        // ✅ 프론트에서 페이지 처리
+        const PAGE_SIZE = 10;
+        const start = page * PAGE_SIZE;
+        const end = start + PAGE_SIZE;
+
+        const sliced = allUsers.slice(start, end);
+
+        setUsers((prev) => (page === 0 ? sliced : [...prev, ...sliced]));
+        setHasMore(end < allUsers.length);
+      } catch (e: any) {
+        console.error("❌ fetchUsers error", e.response?.data || e);
         setError("데이터를 불러오지 못했습니다.");
         setHasMore(false);
       } finally {
@@ -94,8 +103,8 @@ export default function SearchMate() {
             placeholder="원하는 메이트의 이름을 검색해보세요."
             title={
               <>
-                팀원으로 적합한{" "}
-                <span className="text-[#00C3CC]">메이트</span>를 찾아보세요!
+                팀원으로 적합한 <span className="text-[#00C3CC]">메이트</span>를
+                찾아보세요!
               </>
             }
           />
@@ -199,7 +208,7 @@ export default function SearchMate() {
           </div>
         </div>
       </main>
-      
+
       <Footer />
     </div>
   );
