@@ -60,12 +60,10 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-white">
       <Header />
 
-      <main className="flex-1 flex flex-col items-center justify-center">
-        <div className="flex flex-col items-center gap-10">
+      <main className="flex-1 flex flex-col items-center justify-center py-16.5">
+        <div className="flex flex-col items-center gap-18">
           {/* 일러스트 영역 */}
-          <div className="w-[920px] h-[384px] bg-[#F5F7F7] flex items-center justify-center">
-            <span className="text-4xl text-black">일러스트 / 로고</span>
-          </div>
+          <img src="/loginlogo.png"></img>
 
           {/* Google 로그인 버튼 */}
           <div className="relative w-[360px] h-[56px]">
