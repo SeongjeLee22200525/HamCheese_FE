@@ -48,8 +48,15 @@ export default function MyPage() {
 
   return (
     <MyPageLayout profile={profile}>
-      <MyPageTabs />
-      <MyInfo />
+      {/* 🔥 탭 영역 (완전 분리) */}
+      <div className=" z-10">
+        <MyPageTabs />
+      </div>
+
+      {/* 🔥 콘텐츠 박스 (완전 분리) */}
+      <div className=" rounded-lg ">
+        <MyInfo />
+      </div>
     </MyPageLayout>
   );
 }

@@ -12,34 +12,32 @@ export default function MyPageTabs() {
   ];
 
   return (
-    <div className="relative ml-8 mb-8">
-      <div className="flex items-end">
-        {tabs.map((tab) => {
-          const isActive = router.pathname === tab.href;
+    <div className="flex bg-[#F5F8F8]">
+      {tabs.map((tab) => {
+        const isActive = router.pathname === tab.href;
 
-          return (
-            <Link
-              key={tab.href}
-              href={tab.href}
-              className={`relative -mr-4 ${isActive ? "z-10" : "z-0"}`}
-            >
-              {/* SVG 배경 */}
-              <TabSvg active={isActive} />
+        return (
+          <Link
+            key={tab.href}
+            href={tab.href}
+            className={`relative -mr-2 ${isActive ? "z-10" : "z-0"}`}
+          >
+            {/* SVG 배경 */}
+            <TabSvg active={isActive} />
 
-              {/* 텍스트 */}
-              <span
-                className={`
-                  absolute inset-0 flex items-center justify-center
-                  text-base font-extrabold
-                  ${isActive ? "text-white" : "text-[#838F91]"}
+            {/* 텍스트 */}
+            <div
+              className={`
+                  absolute inset-0 flex items-center justify-center -ml-2
+                  text-xl font-extrabold
+                  ${isActive ? "text-white" : "text-[#495456] font-medium"}
                 `}
-              >
-                {tab.label}
-              </span>
-            </Link>
-          );
-        })}
-      </div>
+            >
+              {tab.label}
+            </div>
+          </Link>
+        );
+      })}
     </div>
   );
 }
