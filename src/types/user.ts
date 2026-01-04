@@ -11,7 +11,7 @@ export interface UserBase {
   grade: string;
   semester: number;
   gpa?: number;
-  imageUrl?: string;
+  imageUrl?: string | null;
 }
 
 /* =========================
@@ -52,7 +52,7 @@ export interface UserProfile {
   introduction: string;
   skillList: string[];
   peerGoodKeywords: Record<string, number>; // 🔥 여기
-  imageUrl?: string;
+  imageUrl?: string | null;
 }
 
 /* =========================
