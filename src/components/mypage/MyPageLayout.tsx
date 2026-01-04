@@ -19,7 +19,7 @@ export default function MyPageLayout({ profile, children }: Props) {
         </div>
 
         {/* 🔥 우측 콘텐츠 카드 */}
-        <section className="flex-1 bg-white rounded-lg mt-30 mr-50 mb-30 relative">{children}</section>
+        <section className="flex-1 bg-white rounded-lg mt-16 mr-50 mb-30 ">{children}</section>
       </main>
       <Footer />
     </div>
