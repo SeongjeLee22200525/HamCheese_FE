@@ -5,19 +5,17 @@ import { useEffect } from "react";
 import { useUserStore } from "@/stores/useUserStore";
 
 export default function App({ Component, pageProps }: AppProps) {
-  console.log("🔥 _app.tsx mounted");
-  const hydrateUser = useUserStore((state) => state.hydrateUser);
+  const hydrateUser = useUserStore(state => state.hydrateUser);
 
   useEffect(() => {
     hydrateUser();
-  }, [hydrateUser]);
+  }, []); // 최초 1회
 
   return (
     <GoogleOAuthProvider
-      clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}
+      clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ""}
     >
-      {" "}
-      <Component {...pageProps} />{" "}
+      <Component {...pageProps} />
     </GoogleOAuthProvider>
   );
 }

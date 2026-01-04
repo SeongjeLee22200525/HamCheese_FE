@@ -1,5 +1,42 @@
 import axios from "@/api/axios";
 import { Recruiting } from "@/types/recruiting";
+import { RecruitingDetail } from "@/types/recruitingDetail";
+
+type CreateRecruitingBody = {
+  projectType: string;
+  projectSpecific: string;
+  classes: number;
+  topic: string;
+  totalPeople: number;
+  recruitPeople: number;
+  title: string;
+  context: string;
+  keyword: string[];
+};
+
+export const createRecruiting = async (
+  userId: number,
+  body: CreateRecruitingBody
+) => {
+  const res = await axios.post(
+    `/recruiting/createPost/${userId}`,
+    body
+  );
+
+  return res.data;
+};
+
+export const getRecruitingDetail = async (
+  recruitingId: number,
+  myId: number
+): Promise<RecruitingDetail> => {
+  const res = await axios.get<RecruitingDetail>(
+    `/recruiting/detail/${recruitingId}/${myId}`
+  );
+
+  return res.data;
+};
+
 
 type FilterRecruitingsParams = {
   types?: string[];

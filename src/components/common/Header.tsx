@@ -102,7 +102,7 @@ export default function Header() {
 
           {/* ================= 우측 ================= */}
           {isLoggedIn ? (
-            <div className="flex items-center gap-3">
+            <Link href="/mypage" className="flex items-center gap-3">
               {/* 프로필 */}
               <div className="w-9 h-9 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
                 <Image
@@ -115,20 +115,26 @@ export default function Header() {
 
               {/* 이름 */}
               <span className="text-sm text-[#222829] text-base font-extrabold leading-none">
-                {displayName} <span className="text-m font-medium text-[#222829]">학부생</span>
+                {displayName}{" "}
+                <span className="text-m font-medium text-[#222829]">
+                  학부생
+                </span>
               </span>
 
-              {/* 구분선 (| 대체) */}
+              {/* 구분선 */}
               <div className="w-px h-4 bg-[#E5E7EB]" />
 
               {/* 로그아웃 */}
               <button
-                onClick={handleLogout}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleLogout();
+                }}
                 className="text-sm text-red-500 font-semibold leading-none hover:underline"
               >
                 로그아웃
               </button>
-            </div>
+            </Link>
           ) : (
             /** 로그인 | 회원가입 묶음 */
             <button

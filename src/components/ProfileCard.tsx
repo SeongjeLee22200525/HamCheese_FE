@@ -10,6 +10,10 @@ type Props = {
 export default function ProfileCard({ user }: Props) {
   const router = useRouter();
   const myId = useUserStore((state) => state.user?.myId);
+  const profileImageSrc =
+    user.imageUrl && user.imageUrl.trim() !== ""
+      ? user.imageUrl
+      : "/images/default-profile.png";
 
   const handleClick = async () => {
     // 로그인 안 된 경우
@@ -46,7 +50,7 @@ export default function ProfileCard({ user }: Props) {
       {/* 상단 */}
       <div className="flex gap-4 items-start">
         <img
-          src={user.imageUrl || "/images/default-profile.png"}
+          src={profileImageSrc}
           alt={user.name}
           className="w-16 h-16 rounded-full object-cover"
         />

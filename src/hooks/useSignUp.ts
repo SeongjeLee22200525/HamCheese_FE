@@ -16,30 +16,20 @@ export function useSignUp() {
       setLoading(true);
       setError(null);
 
-      // 🔍 디버깅: payload 확인
+      // 🔍 payload 확인
       console.log("🟢 signup payload", payload);
-      console.log("🟢 email:", payload.email);
-      console.log("🟢 socialId:", payload.socialId);
 
       const formData = new FormData();
 
+      // 🔥 핵심: File일 때만 서버로 전송
       if (profileImage) {
         formData.append("profileImage", profileImage);
-      } else {
-        const defaultImageBlob = await fetch("/images/Ellipse.png").then(
-          (res) => res.blob()
-        );
-
-        formData.append(
-          "profileImage",
-          defaultImageBlob,
-          "default-profile.png"
-        );
       }
 
+      // 유저 데이터
       formData.append("data", JSON.stringify(payload));
 
-      // 🔍 FormData 내부 확인 (중요)
+      // 🔍 FormData 내부 확인
       for (const [key, value] of formData.entries()) {
         console.log("🟡 formData:", key, value);
       }
@@ -49,7 +39,7 @@ export function useSignUp() {
         formData,
         {
           headers: {
-            // ❗ axios가 boundary 자동 설정하게 두는 게 맞음
+            // boundary는 axios가 자동으로 설정
             "Content-Type": "multipart/form-data",
           },
         }
@@ -57,6 +47,7 @@ export function useSignUp() {
 
       return res.data; // { myId, name }
     } catch (e: any) {
+      console.error("❌ signup error", e);
       setError("회원가입 실패");
       throw e;
     } finally {

@@ -6,7 +6,7 @@ import { create } from "zustand";
 export interface User {
   myId: number;
   name?: string;
-  profileImageUrl?: string;
+  profileImageUrl?: string | null;
 }
 
 interface UserStore {
