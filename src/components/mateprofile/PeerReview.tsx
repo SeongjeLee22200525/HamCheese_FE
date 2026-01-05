@@ -67,7 +67,10 @@ export default function PeerReview({
       </div>
 
       {/* ===== 내용 ===== */}
-      <div className="bg-white rounded-b-lg rounded-tr-lg shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] px-20 pt-17 pb-10">
+      <div className="bg-white rounded-b-lg rounded-tr-lg shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] px-20 pt-10 pb-10">
+        <div className="mb-12 w-37 h-11.25 outline-2 outline-[#E1EDF0] rounded py-3 px-3 text-base font-medium text-[#495456]">
+          많이 받은 순
+        </div>
         <div className="flex gap-16 text-[#222829] text-xl font-extrabold">
           <ReviewColumn
             type="positive"
@@ -88,7 +91,7 @@ export default function PeerReview({
           <div className="text-right">
             <button
               onClick={() => setExpanded((prev) => !prev)}
-              className="mt-10 text-base text-[#495456] hover:text-[#00C3CC]"
+              className="mt-10.75 text-base text-[#495456] hover:text-[#00C3CC]"
             >
               {expanded ? "접기" : "더보기"}
             </button>
