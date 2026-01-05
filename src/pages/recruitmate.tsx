@@ -11,7 +11,6 @@ import { departments } from "@/constants/departments";
 import { types } from "@/constants/types";
 
 import { Recruiting } from "@/types/recruiting";
-import { getRecruitings } from "@/api/recruiting";
 import { filterRecruitings } from "@/api/recruiting";
 
 export default function RecruitMate() {
@@ -26,8 +25,10 @@ export default function RecruitMate() {
     value: string,
     setter: React.Dispatch<React.SetStateAction<string[]>>
   ) => {
-    setter((prev) =>
-      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
+    setter(prev =>
+      prev.includes(value)
+        ? prev.filter(v => v !== value)
+        : [...prev, value]
     );
   };
 
@@ -54,7 +55,9 @@ export default function RecruitMate() {
       <Header />
 
       <main className="flex-1">
-        <div className="max-w-[1280px] mx-auto px-10 py-12">
+        {/* ✅ SearchMate와 동일한 컨테이너 */}
+        <div className="w-full mx-auto px-50 py-12">
+          {/* 검색바 */}
           <SearchBar
             value={keyword}
             onChange={setKeyword}
@@ -69,138 +72,143 @@ export default function RecruitMate() {
               </>
             }
           />
-        </div>
 
-        <div className="max-w-[1280px] mx-auto px-10 flex gap-10">
-          {/* 왼쪽 필터 */}
-
-          <aside className="w-[260px] sticky top-24 self-start">
-            {/* ---------- 유형별 필터 ---------- */}
-            <div className="relative">
-              <img
-                src="/images/Rectangle.svg"
-                alt="filter header"
-                className="w-full block"
-              />
-              <h3 className="absolute left-5 top-1/2 -translate-y-1/2 text-xl font-extrabold text-white">
-                유형별 필터
-              </h3>
-            </div>
-
-            <div className="bg-white border-[#6EC6CC] border-t-0 relative rounded-bl rounded-br overflow-hidden border-2 mb-10">
-              <div className="mt-5 flex flex-col mb-5">
-                {types.map((type) => {
-                  const checked = selectedTypes.includes(type);
-
-                  return (
-                    <label
-                      key={type}
-                      className="w-full h-12 px-8 flex items-center gap-4 cursor-pointer hover:bg-[#F5F8F8]"
-                    >
-                      <input
-                        type="checkbox"
-                        className="sr-only"
-                        checked={checked}
-                        onChange={() => toggleItem(type, setSelectedTypes)}
-                      />
-
-                      <div
-                        className="w-5 h-5 rounded border-2 flex items-center justify-center"
-                        style={{
-                          borderColor: checked ? "#6EC6CC" : "#9AA4A6",
-                        }}
-                      >
-                        <div
-                          className="w-3 h-3 rounded"
-                          style={{
-                            backgroundColor: checked
-                              ? "#6EC6CC"
-                              : "transparent",
-                          }}
-                        />
-                      </div>
-
-                      <span className="text-base font-medium text-[#222829]">
-                        {type}
-                      </span>
-                    </label>
-                  );
-                })}
+          {/* 필터 + 카드 */}
+          <div className="flex gap-9.5 mt-10">
+            {/* 왼쪽 필터 */}
+            <aside className="w-[260px] shrink-0 sticky top-24 self-start">
+              {/* 유형별 필터 */}
+              <div className="relative">
+                <img
+                  src="/images/Rectangle.svg"
+                  alt="filter header"
+                  className="w-full block"
+                />
+                <h3 className="absolute left-5 top-1/2 -translate-y-1/2 text-xl font-extrabold text-white">
+                  유형별 필터
+                </h3>
               </div>
-            </div>
 
-            {/* 학부별 필터 */}
-            <div className="relative">
-              <img
-                src="/images/Rectangle.svg"
-                alt="filter header"
-                className="w-full block"
-              />
-              <h3 className="absolute left-5 top-1/2 -translate-y-1/2 text-xl font-extrabold text-white">
-                학부별 필터
-              </h3>
-            </div>
+              <div className="bg-white border-2 border-[#6EC6CC] border-t-0 rounded-b overflow-hidden mb-10">
+                <div className="mt-5 mb-5 flex flex-col">
+                  {types.map(type => {
+                    const checked = selectedTypes.includes(type);
 
-            <div className="bg-white border-2 border-[#6EC6CC] border-t-0  rounded-bl rounded-br overflow-hidden">
-              <div className="mt-5 mb-5 flex flex-col">
-                {departments.map((dept) => {
-                  const checked = selectedDepartments.includes(dept);
-
-                  return (
-                    <label
-                      key={dept}
-                      className="w-full h-12 px-8 flex items-center gap-4 cursor-pointer select-none hover:bg-[#F5F8F8]"
-                    >
-                      <input
-                        type="checkbox"
-                        className="sr-only"
-                        checked={checked}
-                        onChange={() =>
-                          toggleItem(dept, setSelectedDepartments)
-                        }
-                      />
-
-                      <div
-                        className="w-5 h-5 rounded border-2 flex items-center justify-center transition-colors"
-                        style={{
-                          borderColor: checked ? "#6EC6CC" : "#9AA4A6",
-                        }}
+                    return (
+                      <label
+                        key={type}
+                        className="w-full h-12 px-8 flex items-center gap-4 cursor-pointer hover:bg-[#F5F8F8]"
                       >
-                        <div
-                          className="w-3 h-3 rounded transition-colors"
-                          style={{
-                            backgroundColor: checked
-                              ? "#6EC6CC"
-                              : "transparent",
-                          }}
+                        <input
+                          type="checkbox"
+                          className="sr-only"
+                          checked={checked}
+                          onChange={() =>
+                            toggleItem(type, setSelectedTypes)
+                          }
                         />
-                      </div>
 
-                      <span className="text-base font-medium text-[#222829]">
-                        {dept}
-                      </span>
-                    </label>
-                  );
-                })}
+                        <div
+                          className="w-5 h-5 rounded border-2 flex items-center justify-center"
+                          style={{
+                            borderColor: checked ? "#6EC6CC" : "#9AA4A6",
+                          }}
+                        >
+                          <div
+                            className="w-3 h-3 rounded"
+                            style={{
+                              backgroundColor: checked
+                                ? "#6EC6CC"
+                                : "transparent",
+                            }}
+                          />
+                        </div>
+
+                        <span className="text-base font-medium text-[#222829]">
+                          {type}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          </aside>
 
-          <section className="flex-1 min-h-[400px] rounded-xl">
-            <div className="flex justify-end mb-4">
-              <button
-                onClick={() => router.push("/recruitmate/create")}
-                className="w-72 h-16 px-2 py-5 justify-start rounded bg-[#6EC6CC] text-[#F5F8F8] text-[16px] font-extrabold "
-              >
-                모집글 쓰기
-              </button>
-            </div>
+              {/* 학부별 필터 */}
+              <div className="relative">
+                <img
+                  src="/images/Rectangle.svg"
+                  alt="filter header"
+                  className="w-full block"
+                />
+                <h3 className="absolute left-5 top-1/2 -translate-y-1/2 text-xl font-extrabold text-white">
+                  학부별 필터
+                </h3>
+              </div>
 
-            <RecruitingList
-              items={recruitings}
-              onClickItem={(id) => router.push(`/recruitmate/${id}`)}
-            />
-          </section>
+              <div className="bg-white border-2 border-[#6EC6CC] border-t-0 rounded-b overflow-hidden">
+                <div className="mt-5 mb-5 flex flex-col">
+                  {departments.map(dept => {
+                    const checked = selectedDepartments.includes(dept);
+
+                    return (
+                      <label
+                        key={dept}
+                        className="w-full h-12 px-8 flex items-center gap-4 cursor-pointer hover:bg-[#F5F8F8]"
+                      >
+                        <input
+                          type="checkbox"
+                          className="sr-only"
+                          checked={checked}
+                          onChange={() =>
+                            toggleItem(dept, setSelectedDepartments)
+                          }
+                        />
+
+                        <div
+                          className="w-5 h-5 rounded border-2 flex items-center justify-center"
+                          style={{
+                            borderColor: checked ? "#6EC6CC" : "#9AA4A6",
+                          }}
+                        >
+                          <div
+                            className="w-3 h-3 rounded"
+                            style={{
+                              backgroundColor: checked
+                                ? "#6EC6CC"
+                                : "transparent",
+                            }}
+                          />
+                        </div>
+
+                        <span className="text-base font-medium text-[#222829]">
+                          {dept}
+                        </span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </aside>
+
+            {/* 오른쪽 카드 영역 */}
+            <section className="flex-1">
+              <div className="flex justify-end mb-4">
+                <button
+                  onClick={() => router.push("/recruitmate/create")}
+                  className="w-72 h-16 rounded bg-[#6EC6CC] text-[#F5F8F8] text-[16px] font-extrabold"
+                >
+                  모집글 쓰기
+                </button>
+              </div>
+
+              <RecruitingList
+                items={recruitings}
+                onClickItem={id =>
+                  router.push(`/recruitmate/${id}`)
+                }
+              />
+            </section>
+          </div>
         </div>
       </main>
 

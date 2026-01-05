@@ -131,7 +131,7 @@ export default function RecruitMateDetail() {
                 </div>
               ) : (
                 <button className="flex items-center gap-2 px-4 py-2 rounded bg-[#6EC6CC] text-[#222829] text-sm font-bold">
-                  조직 건너기
+                  조각 건네기
                 </button>
               )}
             </div>
