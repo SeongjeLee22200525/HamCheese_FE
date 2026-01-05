@@ -162,11 +162,25 @@ export default function PeerReviewForm({
               <div className="flex items-center gap-3">
                 <input
                   value={startedMonth}
-                  onChange={(e) => setStartedMonth(e.target.value)}
+                  onChange={(e) => {
+                    // 숫자만 입력 허용
+                    const v = e.target.value.replace(/\D/g, "");
+                    setStartedMonth(v);
+                  }}
+                  onBlur={() => {
+                    if (startedMonth === "") return;
+
+                    const monthNum = Number(startedMonth);
+                    if (monthNum >= 1 && monthNum <= 12) {
+                      // 🔥 여기서 2자리로 보정
+                      setStartedMonth(String(monthNum).padStart(2, "0"));
+                    }
+                  }}
                   className="w-20 h-[58px] px-4 border-2 border-[#E1EDF0] rounded font-medium
-                             text-[#495456] focus:border-[#00C3CC] focus:outline-none placeholder:text-[#CEDBDE]"
+             text-[#495456] focus:border-[#00C3CC] focus:outline-none placeholder:text-[#CEDBDE]"
                   placeholder="MM"
                 />
+
                 <span className="font-semibold text-[#495456]">월</span>
               </div>
             </div>

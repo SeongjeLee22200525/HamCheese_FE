@@ -54,8 +54,8 @@ export default function MyPage() {
       </div>
 
       {/* 🔥 콘텐츠 박스 (완전 분리) */}
-      <div className=" rounded-lg ">
-        <MyPosts />
+      <div className=" rounded-lg p-10 ">
+        <MyPosts/>
       </div>
     </MyPageLayout>
   );
