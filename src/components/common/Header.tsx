@@ -37,25 +37,29 @@ export default function Header() {
   if (!mounted) return null;
 
   return (
-    <header className="w-full h-50 bg-white">
-      <div className="w-full h-full px-[120px]">
-        <div className="flex items-center justify-between pt-14">
+    <header className="w-full h-[220px] bg-white">
+      <div className="w-full h-full px-[140px]">
+        <div className="flex items-center justify-between pt-16">
           {/* ================= 좌측 ================= */}
-          <div className="flex items-baseline gap-14">
+          <div className="flex items-baseline gap-16">
             <Link
               href="/"
               className="text-[#222829] text-3xl font-light leading-none"
             >
-              <img src="/images/logo.svg" alt="logo" className="w-40 h-10" />
+              <img
+                src="/images/logo.svg"
+                alt="logo"
+                className="w-[220px] h-12"
+              />
             </Link>
 
-            <nav className="flex items-baseline gap-8 text-base font-medium">
+            <nav className="flex items-baseline gap-10 font-medium">
               <Link
                 href="/searchmate"
-                className={`px-7 py-4 pb-3 inline-flex transition-all border-b-2 rounded-tl rounded-tr ${
+                className={`px-8 py-5 pb-4 inline-flex transition-all border-b-2 rounded-tl rounded-tr ${
                   isMate
-                    ? "text-[#00C3CC] border-[#00C3CC] font-semibold"
-                    : "text-[#222829] border-transparent hover:border-[#B7C4C7] hover:bg-[#F5F8F8]"
+                    ? "text-[#00C3CC] border-[#00C3CC] font-semibold text-xl"
+                    : "text-[#222829] border-transparent hover:border-[#B7C4C7] hover:bg-[#F5F8F8] text-xl"
                 }`}
               >
                 메이트 둘러보기
@@ -63,10 +67,10 @@ export default function Header() {
 
               <Link
                 href="/recruitmate"
-                className={`px-7 py-4 pb-3 inline-flex transition-all border-b-2 rounded-tl rounded-tr ${
+                className={`px-8 py-5 pb-4 inline-flex transition-all border-b-2 rounded-tl rounded-tr ${
                   isTeam
-                    ? "text-[#00C3CC] border-[#00C3CC] font-semibold"
-                    : "text-[#222829] border-transparent hover:border-[#B7C4C7] hover:bg-[#F5F8F8]"
+                    ? "text-[#00C3CC] border-[#00C3CC] font-semibold text-xl"
+                    : "text-[#222829] border-transparent hover:border-[#B7C4C7] hover:bg-[#F5F8F8] text-xl"
                 }`}
               >
                 모집하기
@@ -76,25 +80,25 @@ export default function Header() {
 
           {/* ================= 우측 ================= */}
           {user ? (
-            <Link href="/mypage" className="flex items-center gap-3">
+            <Link href="/mypage" className="flex items-center gap-4">
               {/* 프로필 이미지 */}
-              <div className="w-9 h-9 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
+              <div className="w-11 h-11 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
                 <Image
                   src={user.profileImageUrl!}
                   alt="profile"
-                  width={36}
-                  height={36}
+                  width={44}
+                  height={44}
                 />
               </div>
 
               {/* 이름 */}
-              <span className="text-base font-extrabold text-[#222829] leading-none">
+              <span className="text-lg font-extrabold text-[#222829] leading-none">
                 {user.name}
-                <span className="ml-1 text-sm font-medium">학부생</span>
+                <span className="ml-1 text-base font-medium">학부생</span>
               </span>
 
               {/* 구분선 */}
-              <div className="w-px h-4 bg-[#E5E7EB]" />
+              <div className="w-px h-5 bg-[#E5E7EB]" />
 
               {/* 로그아웃 */}
               <button
@@ -102,7 +106,7 @@ export default function Header() {
                   e.preventDefault();
                   handleLogout();
                 }}
-                className="text-sm text-red-500 font-semibold hover:underline"
+                className="text-base text-red-500 font-semibold hover:underline"
               >
                 로그아웃
               </button>
@@ -110,7 +114,7 @@ export default function Header() {
           ) : (
             <button
               onClick={() => router.push("/signin")}
-              className="text-sm text-gray-400 hover:text-black font-medium"
+              className="text-base text-gray-400 hover:text-black font-medium"
             >
               로그인 | 회원가입
             </button>
