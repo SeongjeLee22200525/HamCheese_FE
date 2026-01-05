@@ -79,9 +79,9 @@ export default function RecruitingPostCard({ item, onClick }: Props) {
         </div>
 
         {/* 오른쪽 영역 */}
-        <div className="shrink-0 mr-2">
+        <div className={`shrink-0 mr-2 ${hasKeyword ? "self-center" : ""}`}>
           {hasKeyword ? (
-            /* ✅ 해시태그 있을 때 */
+            /* ✅ 해시태그 있을 때 → 세로 중앙 */
             <div className="flex items-center gap-14">
               {/* 이름 + 해시태그 */}
               <div className="flex flex-col items-center">
@@ -94,16 +94,16 @@ export default function RecruitingPostCard({ item, onClick }: Props) {
                     <span
                       key={keyword}
                       className="
-                        px-3 py-1
-                        text-xm
-                        rounded
-                        outline
-                        outline-1
-                        outline-offset-[-1px]
-                        outline-[#CEDBDE]
-                        text-[#838F91]
-                        whitespace-nowrap
-                      "
+                px-3 py-1
+                text-xm
+                rounded
+                outline
+                outline-1
+                outline-offset-[-1px]
+                outline-[#CEDBDE]
+                text-[#838F91]
+                whitespace-nowrap
+              "
                     >
                       #{keyword}
                     </span>
@@ -111,14 +111,14 @@ export default function RecruitingPostCard({ item, onClick }: Props) {
                 </div>
               </div>
 
-              {/* 시간 (세로 중앙) */}
-              <div className="w-24 flex items-center justify-end text-[#B7C4C7] text-base font-medium">
+              {/* 날짜 */}
+              <div className="w-24 text-right text-[#B7C4C7] text-base font-medium">
                 {formatRecruitingDate(item.date)}
               </div>
             </div>
           ) : (
-            /* ✅ 해시태그 없을 때 → 이름 & 시간 동일 선상 */
-            <div className="flex items-center gap-14">
+            /* ❌ 태그 없을 때 → 기존 그대로 */
+            <div className="flex items-center gap-14 mt-5.5">
               <div className="text-xl font-medium text-[#222829] whitespace-nowrap">
                 {item.name} 학부생
               </div>
