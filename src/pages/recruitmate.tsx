@@ -55,7 +55,6 @@ export default function RecruitMate() {
       <Header />
 
       <main className="flex-1">
-        {/* ✅ SearchMate와 동일한 컨테이너 */}
         <div className="w-full mx-auto px-50 py-12">
           {/* 검색바 */}
           <SearchBar
@@ -73,7 +72,6 @@ export default function RecruitMate() {
             }
           />
 
-          {/* 필터 + 카드 */}
           <div className="flex gap-9.5 mt-10">
             {/* 왼쪽 필터 */}
             <aside className="w-[260px] shrink-0 sticky top-24 self-start">
@@ -97,7 +95,15 @@ export default function RecruitMate() {
                     return (
                       <label
                         key={type}
-                        className="w-full h-12 px-8 flex items-center gap-4 cursor-pointer hover:bg-[#F5F8F8]"
+                        className="
+                          w-full
+                          h-12
+                          px-8
+                          flex items-center
+                          gap-4
+                          cursor-pointer
+                          hover:bg-[#F5F8F8]
+                        "
                       >
                         <input
                           type="checkbox"
@@ -108,23 +114,18 @@ export default function RecruitMate() {
                           }
                         />
 
-                        <div
-                          className="w-5 h-5 rounded border-2 flex items-center justify-center"
-                          style={{
-                            borderColor: checked ? "#6EC6CC" : "#9AA4A6",
-                          }}
-                        >
-                          <div
-                            className="w-3 h-3 rounded"
-                            style={{
-                              backgroundColor: checked
-                                ? "#6EC6CC"
-                                : "transparent",
-                            }}
-                          />
-                        </div>
+                        {/* ✅ SVG 체크박스 */}
+                        <img
+                          src={
+                            checked
+                              ? "/images/checked.svg"
+                              : "/images/check.svg"
+                          }
+                          alt="checkbox"
+                          className="w-5 h-5 block"
+                        />
 
-                        <span className="text-base font-medium text-[#222829]">
+                        <span className="text-base font-medium text-[#222829] leading-none">
                           {type}
                         </span>
                       </label>
@@ -153,7 +154,15 @@ export default function RecruitMate() {
                     return (
                       <label
                         key={dept}
-                        className="w-full h-12 px-8 flex items-center gap-4 cursor-pointer hover:bg-[#F5F8F8]"
+                        className="
+                          w-full
+                          h-12
+                          px-8
+                          flex items-center
+                          gap-4
+                          cursor-pointer
+                          hover:bg-[#F5F8F8]
+                        "
                       >
                         <input
                           type="checkbox"
@@ -164,23 +173,18 @@ export default function RecruitMate() {
                           }
                         />
 
-                        <div
-                          className="w-5 h-5 rounded border-2 flex items-center justify-center"
-                          style={{
-                            borderColor: checked ? "#6EC6CC" : "#9AA4A6",
-                          }}
-                        >
-                          <div
-                            className="w-3 h-3 rounded"
-                            style={{
-                              backgroundColor: checked
-                                ? "#6EC6CC"
-                                : "transparent",
-                            }}
-                          />
-                        </div>
+                        {/* ✅ SVG 체크박스 */}
+                        <img
+                          src={
+                            checked
+                              ? "/images/checked.svg"
+                              : "/images/check.svg"
+                          }
+                          alt="checkbox"
+                          className="w-5 h-5 block"
+                        />
 
-                        <span className="text-base font-medium text-[#222829]">
+                        <span className="text-base font-medium text-[#222829] leading-none">
                           {dept}
                         </span>
                       </label>
@@ -195,7 +199,7 @@ export default function RecruitMate() {
               <div className="flex justify-end mb-4">
                 <button
                   onClick={() => router.push("/recruitmate/create")}
-                  className="w-72 h-16 rounded bg-[#6EC6CC] text-[#F5F8F8] text-[16px] font-extrabold"
+                  className="w-72 h-16 rounded bg-[#6EC6CC] text-[#F5F8F8] text-xl font-extrabold"
                 >
                   모집글 쓰기
                 </button>

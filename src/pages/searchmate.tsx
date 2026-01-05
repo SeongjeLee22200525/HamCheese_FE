@@ -9,8 +9,8 @@ import axios from "@/api/axios";
 
 export default function SearchMate() {
   const [selected, setSelected] = useState<string[]>([]);
-  const [keyword, setKeyword] = useState(""); // 입력용
-  const [searchKeyword, setSearchKeyword] = useState(""); // 실제 검색용
+  const [keyword, setKeyword] = useState("");
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(false);
@@ -27,16 +27,14 @@ export default function SearchMate() {
     );
   };
 
-  /* 검색 실행 (버튼 + Enter 공용) */
+  /* 검색 실행 */
   const handleSearch = () => {
     setPage(0);
     setUsers([]);
     setSearchKeyword(keyword.trim());
   };
 
-  /* API 호출 */
-
-  const PAGE_SIZE = 10; // 또는 8 (너가 원하는 값)
+  const PAGE_SIZE = 10;
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -59,25 +57,16 @@ export default function SearchMate() {
           params.name = searchKeyword;
         }
 
-        console.log("📡 GET", endpoint, params);
-        
-
         const res = await axios.get(endpoint, { params });
-        console.log("🧾 raw response data:", res.data);
-
         const allUsers: UserProfile[] = res.data;
 
-        // ✅ 프론트에서 페이지 처리
-        const PAGE_SIZE = 10;
         const start = page * PAGE_SIZE;
         const end = start + PAGE_SIZE;
-
         const sliced = allUsers.slice(start, end);
 
         setUsers((prev) => (page === 0 ? sliced : [...prev, ...sliced]));
         setHasMore(end < allUsers.length);
-      } catch (e: any) {
-        console.error("❌ fetchUsers error", e.response?.data || e);
+      } catch (e) {
         setError("데이터를 불러오지 못했습니다.");
         setHasMore(false);
       } finally {
@@ -125,7 +114,7 @@ export default function SearchMate() {
               </div>
 
               {/* 필터 바디 */}
-              <div className="bg-white border-[#6EC6CC] border-t-0 relative rounded-bl rounded-br overflow-hidden border-2">
+              <div className="bg-white border-[#6EC6CC] border-t-0 rounded-b overflow-hidden border-2">
                 <div className="mt-5 flex flex-col mb-5">
                   {departments.map((dept) => {
                     const checked = selected.includes(dept);
@@ -133,7 +122,15 @@ export default function SearchMate() {
                     return (
                       <label
                         key={dept}
-                        className="w-full h-12 px-8 flex items-center gap-4 cursor-pointer hover:bg-[#F5F8F8]"
+                        className="
+                          w-full
+                          h-12
+                          px-8
+                          flex items-center
+                          gap-4
+                          cursor-pointer
+                          hover:bg-[#F5F8F8]
+                        "
                       >
                         <input
                           type="checkbox"
@@ -142,23 +139,20 @@ export default function SearchMate() {
                           onChange={() => toggleDept(dept)}
                         />
 
-                        <div
-                          className="w-5 h-5 rounded border-2 flex items-center justify-center"
-                          style={{
-                            borderColor: checked ? "#6EC6CC" : "#9AA4A6",
-                          }}
-                        >
-                          <div
-                            className="w-3 h-3 rounded"
-                            style={{
-                              backgroundColor: checked
-                                ? "#6EC6CC"
-                                : "transparent",
-                            }}
-                          />
-                        </div>
+                        {/* ✅ SVG 체크박스 */}
+                        <img
+                          src={
+                            checked
+                              ? "/images/checked.svg"
+                              : "/images/check.svg"
+                          }
+                          alt="checkbox"
+                          className="w-5 h-5 block"
+                        />
 
-                        <span className="text-base text-[#222829]">{dept}</span>
+                        <span className="text-base font-medium text-[#222829] leading-none">
+                          {dept}
+                        </span>
                       </label>
                     );
                   })}
@@ -187,7 +181,7 @@ export default function SearchMate() {
               )}
 
               {!loading && users.length > 0 && (
-                <div className=" grid grid-cols-1 gap-1.5">
+                <div className="grid grid-cols-1 gap-1.5">
                   {users.map((user) => (
                     <ProfileCard key={user.userId} user={user} />
                   ))}

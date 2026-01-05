@@ -40,27 +40,28 @@ export default function RecruitingCard({ item, onClick }: Props) {
         w-full
         border border-[#E6EEF0]
         rounded-xl
-        px-8 py-10
+        px-10 py-10
         bg-white
         cursor-pointer
       "
     >
-      <div className="flex items-start justify-between gap-8">
+      {/* 🔥 핵심: items-center */}
+      <div className="flex items-center justify-between gap-8">
         {/* 왼쪽 영역 */}
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 pl-2">
           {/* 상단 메타 */}
           <div className="flex items-center gap-3 text-sm text-[#6B7280] mb-3 flex-wrap">
-            <span className="px-2 py-1 rounded bg-[#EEF7F8] text-[#0FA4AB] font-semibold whitespace-nowrap">
+            <span className="px-2 py-1 rounded bg-[#F5F8F8] text-[#0FA4AB] font-semibold whitespace-nowrap">
               모집인원 {item.recruitPeople} / {item.totalPeople}
             </span>
 
-            <span className="text-[#00AEB5] font-semibold whitespace-nowrap">
+            <span className="text-[#00AEB5] font-extrabold whitespace-nowrap">
               {item.projectType}
             </span>
 
             <img src="/images/Vector.svg" alt="arrow" className="w-3 h-3" />
 
-            <span className="whitespace-nowrap">
+            <span className="whitespace-nowrap font-medium text-[#222829]">
               {item.projectSpecific} {item.classes}분반
             </span>
 
@@ -84,16 +85,15 @@ export default function RecruitingCard({ item, onClick }: Props) {
         {/* 오른쪽 영역 */}
         <div className="shrink-0 mr-2">
           {hasKeyword ? (
-            /* ✅ 해시태그 있을 때 */
+            /* 해시태그 있을 때 */
             <div className="flex items-center gap-14">
-              {/* 이름 + 해시태그 */}
               <div className="flex flex-col items-center">
                 <div className="text-xl font-medium text-[#222829] whitespace-nowrap">
                   {item.name} 학부생
                 </div>
 
                 <div className="flex gap-2 mt-3">
-                  {(item.myKeyword ?? []).slice(0, 2).map((keyword) => (
+                  {(item.myKeyword ?? []).slice(0, 2).map(keyword => (
                     <span
                       key={keyword}
                       className="
@@ -114,19 +114,18 @@ export default function RecruitingCard({ item, onClick }: Props) {
                 </div>
               </div>
 
-              {/* 시간 (세로 중앙) */}
               <div className="w-24 flex items-center justify-end text-[#B7C4C7] text-base font-medium">
                 {formatRecruitingDate(item.date)}
               </div>
             </div>
           ) : (
-            /* ✅ 해시태그 없을 때 → 이름 & 시간 동일 선상 */
+            /* 해시태그 없을 때 */
             <div className="flex items-center gap-14">
               <div className="text-xl font-medium text-[#222829] whitespace-nowrap">
                 {item.name} 학부생
               </div>
 
-              <div className="w-24 text-right text-[#B7C4C7] text-base font-medium">
+              <div className="w-24 flex items-center justify-end text-[#B7C4C7] text-base font-medium">
                 {formatRecruitingDate(item.date)}
               </div>
             </div>
