@@ -41,11 +41,23 @@ export default function MyInfo() {
     formData.append("profileImage", file);
 
     try {
-      await axios.post(`/user/update/${myId}`, formData);
+      await axios.post(`/user/updateImage/${myId}`, formData);
       alert("프로필 사진이 변경되었습니다.");
     } catch (e) {
       console.error("❌ image upload error", e);
       alert("사진 업로드 실패");
+    }
+  };
+  const deleteProfileImage = async () => {
+    if (!myId) return;
+
+    try {
+      await axios.delete(`/user/myProfile/${myId}`);
+      setProfileImage(null); // UI 반영
+      alert("프로필 사진이 삭제되었습니다.");
+    } catch (e) {
+      console.error("❌ image delete error", e);
+      alert("사진 삭제 실패");
     }
   };
 
@@ -168,13 +180,12 @@ export default function MyInfo() {
       studentId: form.studentId,
       grade: String(form.grade),
       semester: String(form.semester),
-      imageUrl: profileImage,
       introduction: form.introduction,
       skillList: form.skillList,
       activity: form.activity.map((a) => ({
-        activityType: "CUSTOM",
-        activityName: a.title,
-        activityDetail: a.link ?? "",
+        year: String(a.year),
+        title: a.title,
+        link: a.link ?? "",
       })),
     };
 
@@ -225,9 +236,7 @@ export default function MyInfo() {
 
             <button
               type="button"
-              onClick={() => {
-                setProfileImage(null);
-              }}
+              onClick={deleteProfileImage}
               className="absolute -right-20 bottom-1 w-7.5 h-7.5"
             >
               <img src="/trash.svg" />
