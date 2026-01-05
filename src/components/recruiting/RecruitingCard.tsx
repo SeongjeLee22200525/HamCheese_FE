@@ -45,12 +45,12 @@ export default function RecruitingCard({ item, onClick }: Props) {
         cursor-pointer
       "
     >
-      {/* 🔥 핵심: items-center */}
+      {/* 핵심: items-center */}
       <div className="flex items-center justify-between gap-8">
         {/* 왼쪽 영역 */}
         <div className="flex-1 min-w-0 pl-2">
           {/* 상단 메타 */}
-          <div className="flex items-center gap-3 text-sm text-[#6B7280] mb-3 flex-wrap">
+          <div className="flex items-center gap-3 text-xl text-[#6B7280] mb-3 flex-wrap">
             <span className="px-2 py-1 rounded bg-[#F5F8F8] text-[#0FA4AB] font-semibold whitespace-nowrap">
               모집인원 {item.recruitPeople} / {item.totalPeople}
             </span>
@@ -77,13 +77,13 @@ export default function RecruitingCard({ item, onClick }: Props) {
           </div>
 
           {/* 제목 */}
-          <h3 className="text-xl font-bold text-[#111827] truncate">
+          <h3 className="text-2xl font-bold text-[#111827] truncate">
             {item.title}
           </h3>
         </div>
 
         {/* 오른쪽 영역 */}
-        <div className="shrink-0 mr-2">
+        <div className="shrink-0 mr-4">
           {hasKeyword ? (
             /* 해시태그 있을 때 */
             <div className="flex items-center gap-14">
