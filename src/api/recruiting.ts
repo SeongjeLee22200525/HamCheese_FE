@@ -5,20 +5,21 @@ import { RecruitingDetail } from "@/types/recruitingDetail";
 /**
  * 모집글 생성 body (명세 기준)
  */
-type CreateRecruitingBody = {
-  projectType: string;
-  projectSpecific: string;
-  classes: number;
-  topic: string;
+export type CreateRecruitingBody = {
+  projectType: string;         // 수업 / 졸업작품
+  projectSpecific: string;     // 과목명
+  classes: number;             // 분반
+  topic: string;               // 주제
   totalPeople: number;
   recruitPeople: number;
   title: string;
-  context: string;  
+  context: string;
   myKeyword: string[];
 };
 
 /**
  * 모집글 생성
+ * POST /recruiting/createPost/{userId}
  */
 export const createRecruiting = async (
   userId: number,
@@ -28,7 +29,6 @@ export const createRecruiting = async (
     `/recruiting/createPost/${userId}`,
     body
   );
-
   return res.data;
 };
 
@@ -43,12 +43,12 @@ export const getRecruitingDetail = async (
   const res = await axios.get<RecruitingDetail>(
     `/recruiting/detail/${recruitingId}/${myId}`
   );
-
   return res.data;
 };
 
 /**
  * 모집글 필터 조회
+ * GET /recruiting/filter
  */
 type FilterRecruitingsParams = {
   types?: string[];
@@ -69,12 +69,12 @@ export const filterRecruitings = async (
       },
     }
   );
-
   return res.data;
 };
 
 /**
  * 모집글 전체 조회
+ * GET /recruiting/findAll
  */
 type GetRecruitingsParams = {
   types?: string[];
@@ -89,6 +89,39 @@ export const getRecruitings = async (
     "/recruiting/findAll",
     { params }
   );
+  return res.data;
+};
 
+export type UpdateRecruitingBody = {
+  projectType: string;
+  projectSpecific: string;
+  classes: number;
+  topic: string;
+  totalPeople: number;
+  recruitPeople: number;
+  title: string;
+  context: string;
+  keyword: string[];
+};
+
+export const updateRecruiting = async (
+  recruitingId: number,
+  myId: number,
+  body: UpdateRecruitingBody
+) => {
+  const res = await axios.patch(
+    `/recruiting/${recruitingId}/${myId}`,
+    body
+  );
+  return res.data;
+};
+
+export const deleteRecruiting = async (
+  recruitingId: number,
+  myId: number
+) => {
+  const res = await axios.delete(
+    `/recruiting/${recruitingId}/${myId}`
+  );
   return res.data;
 };
