@@ -119,11 +119,11 @@ export default function RecruitMateCreate() {
       <Header />
 
       <main className="flex-1">
-        <div className="max-w-[920px] mx-auto px-10 py-12">
+        <div className="max-w-[1440px] mx-auto px-10 py-12">
           {/* breadcrumb */}
-          <div className="flex items-center text-m font-medium text-[#838F91] mb-3">
+          <div className="flex items-center text-lg font-medium text-[#838F91] mb-3">
             모집하기
-            <img src="/images/Vector.svg" className="w-2 h-2 mx-2" />
+            <img src="/images/Vector.svg" className="w-3 h-3 mx-2" />
             글 쓰기
           </div>
 
@@ -133,7 +133,7 @@ export default function RecruitMateCreate() {
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-6">
                   <div className="w-1 h-4 bg-[#00C3CC]" />
-                  <span className="w-20 text-sm font-bold text-[#495456]">
+                  <span className="w-20 text-lg font-bold text-[#495456]">
                     모집 유형
                   </span>
 
@@ -142,7 +142,7 @@ export default function RecruitMateCreate() {
                       name="projectType"
                       value={form.projectType}
                       onChange={handleChange}
-                      className="w-full appearance-none border border-[#E6EEF0] rounded px-4 py-2 pr-10 text-sm text-[#222829] bg-white focus:outline-none"
+                      className="w-full appearance-none border border-[#E6EEF0] rounded px-4 py-2 pr-10 text- text-[#222829] bg-white focus:outline-none"
                     >
                       {types.map((type) => (
                         <option key={type} value={type}>
@@ -269,7 +269,7 @@ export default function RecruitMateCreate() {
                         addKeyword();
                       }
                     }}
-                    className="h-10 w-36 border border-[#E6EEF0] rounded px-3 text-sm text-[#222829] placeholder:text-[#CEDBDE]"
+                    className="h-10 w-36 border border-[#E6EEF0] rounded px-3 text-sm text-[#222829] placeholder:text-[#CEDBDE] focus:outline-none"
                   />
 
                   <button
@@ -305,7 +305,7 @@ export default function RecruitMateCreate() {
           <div className="flex justify-center gap-6 mt-12">
             <button
               onClick={() => router.back()}
-              className="w-40 h-12 rounded bg-[#E5E7EB] text-[#374151]"
+              className="w-40 h-12 rounded bg-[#E5E7EB] text-[#374151] font-extrabold"
             >
               취소
             </button>

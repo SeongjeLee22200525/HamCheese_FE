@@ -171,11 +171,11 @@ export default function RecruitMateEdit() {
       <Header />
 
       <main className="flex-1">
-        <div className="max-w-[920px] mx-auto px-10 py-12">
+        <div className="max-w-[1440px] mx-auto px-10 py-12">
           {/* breadcrumb */}
-          <div className="flex items-center text-m font-medium text-[#838F91] mb-3">
+          <div className="flex items-center text-lg font-medium text-[#838F91] mb-3">
             모집하기
-            <img src="/images/Vector.svg" className="w-2 h-2 mx-2" />
+            <img src="/images/Vector.svg" className="w-3 h-3 mx-2" />
             글 수정
           </div>
 
@@ -185,7 +185,7 @@ export default function RecruitMateEdit() {
               <div className="flex flex-col gap-3">
                 <div className="flex items-center gap-6">
                   <div className="w-1 h-4 bg-[#00C3CC]" />
-                  <span className="w-20 text-sm font-bold text-[#495456]">
+                  <span className="w-20 text-lg font-bold text-[#495456]">
                     모집 유형
                   </span>
 
@@ -287,7 +287,8 @@ export default function RecruitMateEdit() {
                 <div className="flex items-center gap-6">
                   <div className="w-1 h-4 bg-[#00C3CC]" />
                   <span className="text-sm font-bold text-[#495456]">
-                    키워드 (10개 제한)
+                    이 수업에서 본인이 가장 잘 할 수 있는 키워드를 적어주세요
+                    <span className="text-[#9CA3AF]"> (10개 제한)</span>
                   </span>
                 </div>
 
@@ -310,7 +311,7 @@ export default function RecruitMateEdit() {
                         addKeyword();
                       }
                     }}
-                    className="h-10 w-36 border border-[#E6EEF0] rounded px-3 text-sm"
+                    className="h-10 w-36 border border-[#E6EEF0] rounded px-3 text-sm text-[#222829] placeholder:text-[#CEDBDE] focus:outline-none"
                   />
 
                   <button
