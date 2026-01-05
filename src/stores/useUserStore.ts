@@ -9,6 +9,9 @@ export interface User {
   profileImageUrl?: string | null;
 }
 
+/** 기본 프로필 이미지 */
+const DEFAULT_PROFILE_IMAGE = "/images/profile.svg";
+
 interface UserStore {
   user: User | null;
 
@@ -34,27 +37,37 @@ function getCookie(name: string) {
 export const useUserStore = create<UserStore>((set) => ({
   user: null,
 
-  setUser: (user) => set({ user }),
+  /** 로그인 / 회원가입 시 */
+  setUser: (user) =>
+    set({
+      user: {
+        ...user,
+        profileImageUrl:
+          user.profileImageUrl ?? DEFAULT_PROFILE_IMAGE,
+      },
+    }),
 
+  /** 로그아웃 */
   clearUser: () => set({ user: null }),
 
+  /** 새로고침 시 쿠키로 복구 */
   hydrateUser: () => {
-  const myId = getCookie("myId");
-  const name = getCookie("name");
+    const myId = getCookie("myId");
+    const name = getCookie("name");
 
-  console.log("💧 hydrateUser called", { myId, name });
+    console.log("💧 hydrateUser called", { myId, name });
 
-  if (!myId) {
-    set({ user: null });
-    return;
-  }
+    if (!myId) {
+      set({ user: null });
+      return;
+    }
 
-  set({
-    user: {
-      myId: Number(myId),
-      name: name ? decodeURIComponent(name) : undefined,
-    },
-  });
-},
-
+    set({
+      user: {
+        myId: Number(myId),
+        name: name ? decodeURIComponent(name) : undefined,
+        profileImageUrl: DEFAULT_PROFILE_IMAGE, // 🔥 기본값
+      },
+    });
+  },
 }));

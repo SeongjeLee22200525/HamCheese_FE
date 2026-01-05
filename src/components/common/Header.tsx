@@ -6,15 +6,6 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useUserStore } from "@/stores/useUserStore";
 
-/** 쿠키 유틸 */
-function getCookie(name: string) {
-  if (typeof document === "undefined") return null;
-  return document.cookie
-    .split("; ")
-    .find((row) => row.startsWith(name + "="))
-    ?.split("=")[1];
-}
-
 export default function Header() {
   const router = useRouter();
   const pathname = router.pathname.toLowerCase();
@@ -22,44 +13,27 @@ export default function Header() {
   const isMate = pathname === "/searchmate";
   const isTeam = pathname === "/recruitmate";
 
-  const { name: storeName, clearUser } = useUserStore();
+  /** zustand */
+  const { user, clearUser, hydrateUser } = useUserStore();
 
   const [mounted, setMounted] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [displayName, setDisplayName] = useState("");
 
-  /** ✅ CSR 이후 쿠키 기준 로그인 판단 */
+  /** 최초 마운트 시 쿠키 → store 복구 */
   useEffect(() => {
-    const myId = getCookie("myId");
-    const cookieName = getCookie("name");
-
-    if (myId) {
-      setIsLoggedIn(true);
-      setDisplayName(
-        storeName || (cookieName ? decodeURIComponent(cookieName) : "")
-      );
-    } else {
-      setIsLoggedIn(false);
-      setDisplayName("");
-    }
-  }, []); // 👈 의존성 제거
-  useEffect(() => {
+    hydrateUser();
     setMounted(true);
-  }, []);
+  }, [hydrateUser]);
 
-  /** ✅ 로그아웃 */
+  /** 로그아웃 */
   const handleLogout = () => {
     document.cookie = "myId=; Max-Age=0; path=/";
     document.cookie = "name=; Max-Age=0; path=/";
 
     clearUser();
-    setIsLoggedIn(false);
-    setDisplayName("");
-
     router.replace("/signin");
   };
 
-  /** ⛔ hydration 단계에서는 렌더 안 함 */
+  /** hydration 이전 렌더 방지 */
   if (!mounted) return null;
 
   return (
@@ -70,12 +44,12 @@ export default function Header() {
           <div className="flex items-baseline gap-14">
             <Link
               href="/"
-              className="text-[#222829] text-3xl font-light font-['Paperlogy'] leading-none"
+              className="text-[#222829] text-3xl font-light leading-none"
             >
               <img src="/images/logo.svg" alt="logo" className="w-40 h-10" />
             </Link>
 
-            <nav className="flex items-baseline gap-8 font-['Pretendard_Variable'] text-base font-medium">
+            <nav className="flex items-baseline gap-8 text-base font-medium">
               <Link
                 href="/searchmate"
                 className={`px-7 py-4 pb-3 inline-flex transition-all border-b-2 rounded-tl rounded-tr ${
@@ -101,12 +75,12 @@ export default function Header() {
           </div>
 
           {/* ================= 우측 ================= */}
-          {isLoggedIn ? (
+          {user ? (
             <Link href="/mypage" className="flex items-center gap-3">
-              {/* 프로필 */}
+              {/* 프로필 이미지 */}
               <div className="w-9 h-9 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
                 <Image
-                  src="/images/profile.svg"
+                  src={user.profileImageUrl!}
                   alt="profile"
                   width={36}
                   height={36}
@@ -114,11 +88,9 @@ export default function Header() {
               </div>
 
               {/* 이름 */}
-              <span className="text-sm text-[#222829] text-base font-extrabold leading-none">
-                {displayName}{" "}
-                <span className="text-m font-medium text-[#222829]">
-                  학부생
-                </span>
+              <span className="text-base font-extrabold text-[#222829] leading-none">
+                {user.name}
+                <span className="ml-1 text-sm font-medium">학부생</span>
               </span>
 
               {/* 구분선 */}
@@ -130,13 +102,12 @@ export default function Header() {
                   e.preventDefault();
                   handleLogout();
                 }}
-                className="text-sm text-red-500 font-semibold leading-none hover:underline"
+                className="text-sm text-red-500 font-semibold hover:underline"
               >
                 로그아웃
               </button>
             </Link>
           ) : (
-            /** 로그인 | 회원가입 묶음 */
             <button
               onClick={() => router.push("/signin")}
               className="text-sm text-gray-400 hover:text-black font-medium"
