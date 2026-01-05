@@ -111,7 +111,7 @@ export default function SearchMate() {
 
           <div className="flex gap-9.5 mt-10">
             {/* 왼쪽 필터 */}
-            <aside className="w-[260px] sticky top-24">
+            <aside className="w-[260px] sticky top-24 self-start">
               {/* 헤더 */}
               <div className="relative">
                 <img
