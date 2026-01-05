@@ -5,14 +5,14 @@ import ReviewColumn from "./ReviewColumn";
 import { PEER_REVIEW_VISIBLE_COUNT } from "@/constants/peerKeywords";
 
 type KeywordItem = {
-  key: string; // 키워드 문자열
-  count: number; // 받은 평가 수
+  key: string;
+  count: number;
 };
+
+type SortType = "count" | "latest";
 
 type Props = {
   name: string;
-
-  // 🔥 서버 response 그대로 받음
   peerGoodKeyword: Record<string, number>;
   goodKeywordCount: number;
   peerBadKeyword: Record<string, number>;
@@ -27,23 +27,26 @@ export default function PeerReview({
   badKeywordCount,
 }: Props) {
   const [expanded, setExpanded] = useState(false);
+  const [sortType, setSortType] = useState<SortType>("count");
 
-  // ===== 서버 데이터 → UI 데이터 변환 =====
-  const positive: KeywordItem[] = useMemo(
-    () =>
-      Object.entries(peerGoodKeyword)
-        .sort((a, b) => b[1] - a[1])
-        .map(([key, count]) => ({ key, count })),
-    [peerGoodKeyword]
-  );
+  /* ===== 정렬된 데이터 ===== */
+  const positive: KeywordItem[] = useMemo(() => {
+    const entries = Object.entries(peerGoodKeyword);
 
-  const negative: KeywordItem[] = useMemo(
-    () =>
-      Object.entries(peerBadKeyword)
-        .sort((a, b) => b[1] - a[1])
-        .map(([key, count]) => ({ key, count })),
-    [peerBadKeyword]
-  );
+    const sorted =
+      sortType === "count" ? [...entries].sort((a, b) => b[1] - a[1]) : entries; // 최신순 (서버 순서 유지)
+
+    return sorted.map(([key, count]) => ({ key, count }));
+  }, [peerGoodKeyword, sortType]);
+
+  const negative: KeywordItem[] = useMemo(() => {
+    const entries = Object.entries(peerBadKeyword);
+
+    const sorted =
+      sortType === "count" ? [...entries].sort((a, b) => b[1] - a[1]) : entries;
+
+    return sorted.map(([key, count]) => ({ key, count }));
+  }, [peerBadKeyword, sortType]);
 
   const visiblePositive = expanded
     ? positive
@@ -68,9 +71,25 @@ export default function PeerReview({
 
       {/* ===== 내용 ===== */}
       <div className="bg-white rounded-b-lg rounded-tr-lg shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] px-20 pt-10 pb-10">
-        <div className="mb-12 w-37 h-11.25 outline-2 outline-[#E1EDF0] rounded py-3 px-3 text-base font-medium text-[#495456]">
-          많이 받은 순
+        {/* ===== 드롭다운 ===== */}
+        <div className="flex justify-end mb-12">
+          <select
+            value={sortType}
+            onChange={(e) => setSortType(e.target.value as SortType)}
+            className="
+      w-37 h-11.25
+      outline-2 outline-[#E1EDF0]
+      rounded py-3 px-3
+      text-base font-medium text-[#495456]
+      bg-white cursor-pointer
+    "
+          >
+            <option value="count">많이 받은 순</option>
+            <option value="latest">최신순</option>
+          </select>
         </div>
+
+        {/* ===== 컬럼 ===== */}
         <div className="flex gap-16 text-[#222829] text-xl font-extrabold">
           <ReviewColumn
             type="positive"
@@ -87,6 +106,7 @@ export default function PeerReview({
           />
         </div>
 
+        {/* ===== 더보기 / 접기 ===== */}
         {hasMore && (
           <div className="text-right">
             <button
