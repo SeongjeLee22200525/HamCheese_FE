@@ -203,16 +203,28 @@ export default function RecruitMateDetail() {
             {/* ---------- 정보 박스 ---------- */}
             <div className="bg-[#F5F8F8] rounded-lg px-8 py-5 mb-10">
               <div className="grid grid-cols-[90px_1fr] gap-y-2">
+                {/* 과목 */}
                 <span className="text-[#00AEB5] text-xl font-bold">과목</span>
                 <span className="font-bold text-xl text-[#222829]">
                   {recruiting.projectSpecific}
                 </span>
 
-                <span className="text-[#00AEB5] text-xl font-bold">분반</span>
-                <span className="font-bold text-xl text-[#222829]">
-                  {recruiting.classes}분반
+                {/* 분반 / 지도교수 / 파트 */}
+                <span className="text-[#00AEB5] text-xl font-bold">
+                  {recruiting.projectType === "수업"
+                    ? "분반"
+                    : recruiting.projectType === "졸업작품"
+                    ? "지도교수"
+                    : "파트"}
                 </span>
 
+                <span className="font-bold text-xl text-[#222829]">
+                  {recruiting.projectType === "수업"
+                    ? `${recruiting.classes}분반`
+                    : recruiting.classes}
+                </span>
+
+                {/* 주제 */}
                 <span className="text-[#00AEB5] text-xl font-bold">주제</span>
                 <span className="font-bold text-xl text-[#222829]">
                   {recruiting.topic}

@@ -17,7 +17,7 @@ export type RecruitingFeed = {
   name: string;
   projectType: string;
   projectSpecific: string;
-  classes: number;
+  classes: string;
   topic: string;
   totalPeople: number;
   recruitPeople: number;

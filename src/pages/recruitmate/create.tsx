@@ -6,7 +6,7 @@ import Footer from "@/components/common/Footer";
 
 import { useUserStore } from "@/stores/useUserStore";
 import { createRecruiting } from "@/api/recruiting";
-import { types } from "@/constants/types";
+import { types, PROJECT_TYPE_CONFIG } from "@/constants/types";
 
 export default function RecruitMateCreate() {
   const router = useRouter();
@@ -14,8 +14,19 @@ export default function RecruitMateCreate() {
 
   const [form, setForm] = useState({
     projectType: "수업",
+
     projectSpecific: "",
     classes: "",
+
+    graduationTopic: "",
+    professor: "",
+
+    clubName: "",
+    part: "",
+
+    contestName: "",
+    contestPart: "",
+
     topic: "",
     totalPeople: "",
     recruitPeople: "",
@@ -25,6 +36,7 @@ export default function RecruitMateCreate() {
 
   const [keywordInput, setKeywordInput] = useState("");
   const [keywords, setKeywords] = useState<string[]>([]);
+  const [openType, setOpenType] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -33,6 +45,24 @@ export default function RecruitMateCreate() {
   ) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  };
+  const validateByType = () => {
+    switch (form.projectType) {
+      case "수업":
+        return form.projectSpecific.trim() && form.classes.trim();
+
+      case "졸업작품":
+        return form.graduationTopic.trim() && form.professor.trim();
+
+      case "동아리/학회":
+        return form.clubName.trim() && form.part.trim();
+
+      case "대회":
+        return form.contestName.trim() && form.contestPart.trim();
+
+      default:
+        return false;
+    }
   };
 
   const addKeyword = () => {
@@ -53,13 +83,12 @@ export default function RecruitMateCreate() {
       return;
     }
 
-    // ✅ 필수값 검증 (400 방지 핵심)
+    // 필수값 검증
     if (
-      !form.projectSpecific.trim() ||
+      !validateByType() ||
       !form.topic.trim() ||
       !form.title.trim() ||
       !form.context.trim() ||
-      !form.classes ||
       !form.totalPeople ||
       !form.recruitPeople
     ) {
@@ -67,14 +96,8 @@ export default function RecruitMateCreate() {
       return;
     }
 
-    const classesNum = Number(form.classes);
     const totalPeopleNum = Number(form.totalPeople);
     const recruitPeopleNum = Number(form.recruitPeople);
-
-    if (classesNum <= 0 || totalPeopleNum <= 0 || recruitPeopleNum <= 0) {
-      alert("숫자 항목은 1 이상이어야 합니다.");
-      return;
-    }
 
     if (recruitPeopleNum > totalPeopleNum) {
       alert("모집 인원은 전체 인원보다 클 수 없습니다.");
@@ -87,17 +110,38 @@ export default function RecruitMateCreate() {
       : keywords;
 
     try {
-      await createRecruiting(user.myId, {
+      const payload: any = {
         projectType: form.projectType,
-        projectSpecific: form.projectSpecific.trim(),
-        classes: classesNum,
         topic: form.topic.trim(),
         totalPeople: totalPeopleNum,
         recruitPeople: recruitPeopleNum,
         title: form.title.trim(),
         context: form.context.trim(),
         myKeyword: finalKeywords,
-      });
+      };
+
+      // 타입별 필드 분기
+      if (form.projectType === "수업") {
+        payload.projectSpecific = form.projectSpecific.trim(); // 과목
+        payload.classes = form.classes.trim(); // 분반
+      }
+
+      if (form.projectType === "졸업작품") {
+        payload.projectSpecific = form.graduationTopic.trim(); // 과목 칸에 졸업작품명
+        payload.classes = form.professor.trim(); // classes에 교수님
+      }
+
+      if (form.projectType === "동아리/학회") {
+        payload.projectSpecific = form.clubName.trim(); // 과목 칸
+        payload.classes = form.part.trim(); // classes에 파트
+      }
+
+      if (form.projectType === "대회") {
+        payload.projectSpecific = form.contestName.trim(); // 과목 칸
+        payload.classes = form.contestPart.trim(); // classes에 파트/역할
+      }
+
+      await createRecruiting(user.myId, payload);
 
       sessionStorage.setItem("recruitingCreated", "true");
       router.push("/recruitmate");
@@ -105,6 +149,33 @@ export default function RecruitMateCreate() {
       console.error("createRecruiting error:", e);
       alert("모집글 생성에 실패했습니다.");
     }
+  };
+
+  const renderTypeRow = () => {
+    const config = PROJECT_TYPE_CONFIG[form.projectType];
+    if (!config) return null;
+
+    return (
+      <div className="flex items-center gap-3 ml-[calc(1rem+7rem)]">
+        {config.fields.map((field) => (
+          <div key={field.name} className="flex items-center gap-2">
+            <input
+              name={field.name}
+              type={field.type ?? "text"}
+              placeholder={field.placeholder}
+              value={(form as any)[field.name] ?? ""}
+              onChange={handleChange}
+              className={`${inputBaseClass} ${field.width} px-3 py-2 ${
+                field.type === "number" ? "text-center" : ""
+              }`}
+            />
+            {field.suffix && (
+              <span className="text-sm text-[#6B7280]">{field.suffix}</span>
+            )}
+          </div>
+        ))}
+      </div>
+    );
   };
 
   const inputBaseClass = `
@@ -138,48 +209,64 @@ export default function RecruitMateCreate() {
                   </span>
 
                   <div className="relative w-40">
-                    <select
-                      name="projectType"
-                      value={form.projectType}
-                      onChange={handleChange}
-                      className="w-full appearance-none border border-[#E6EEF0] rounded px-4 py-2 pr-10 text-sm text-[#222829] bg-white focus:outline-none"
+                    {/* 닫힌 상태 (기본값 표시) */}
+                    <button
+                      type="button"
+                      onClick={() => setOpenType((v) => !v)}
+                      className="
+      w-36
+      h-10
+      px-4
+      flex items-center justify-between
+      border border-[#E6EEF0]
+      rounded
+      bg-[#FFFFFF]
+      text-sm text-[#495456]
+    "
                     >
-                      {types.map((type) => (
-                        <option key={type} value={type}>
-                          {type}
-                        </option>
-                      ))}
-                    </select>
+                      {form.projectType}
+                      <img src="/dropdownArrow.svg" className="w-4 h-4" />
+                    </button>
 
-                    <img
-                      src="/dropdownArrow.svg"
-                      className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4"
-                    />
+                    {/* 펼쳐진 옵션 */}
+                    {openType && (
+                      <ul
+                        className="
+        absolute z-20 mt-2 w-full
+        bg-white
+        border border-[#F3A6C8]   /* 분홍 테두리 */
+        rounded-lg
+        overflow-hidden
+        shadow-sm
+      "
+                      >
+                        {types.map((type) => (
+                          <li
+                            key={type}
+                            onClick={() => {
+                              setForm((prev) => ({
+                                ...prev,
+                                projectType: type,
+                              }));
+                              setOpenType(false);
+                            }}
+                            className="
+            p-2
+            text-base text-[#222829]
+            cursor-pointer
+            hover:bg-[#FFF0F7]
+          "
+                          >
+                            {type}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 </div>
 
-                {/* 수업명 + 분반 */}
-                <div className="flex items-center gap-4">
-                  <div className="w-1 h-4 opacity-0" />
-                  <span className="w-24" />
-
-                  <input
-                    name="projectSpecific"
-                    placeholder="(ex) 환경과 인간, 컴퓨터 구조"
-                    onChange={handleChange}
-                    className={`${inputBaseClass} w-72 px-3 py-2`}
-                  />
-
-                  <input
-                    name="classes"
-                    type="number"
-                    min={1}
-                    placeholder="2"
-                    onChange={handleChange}
-                    className={`${inputBaseClass} w-14 px-3 py-2 text-center`}
-                  />
-                  <span className="text-sm text-[#6B7280]">분반</span>
-                </div>
+                {/* 타입별 입력 UI */}
+                {renderTypeRow()}
               </div>
 
               {/* 주제 */}
@@ -318,7 +405,7 @@ export default function RecruitMateCreate() {
                 rows={10}
                 placeholder="내용을 입력해주세요"
                 onChange={handleChange}
-                className="border border-[#E6EEF0] rounded px-4 py-3 resize-none text-lg text-[#222829] placeholder:text-[#CEDBDE] focus:outline-none"
+                className="border border-[#E6EEF0] rounded px-7 py-6 resize-none text-lg text-[#222829] placeholder:text-[#CEDBDE] focus:outline-none"
               />
             </div>
           </div>

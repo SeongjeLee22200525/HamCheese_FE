@@ -90,7 +90,7 @@ export default function Home() {
               {profiles.slice(0, 4).map((p) => (
                 <div
                   key={p.userId}
-                  className="w-85 rounded-lg shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] outline outline-1 outline-offset-[-1px] outline-[#CEDBDE] p-14 bg-white"
+                  className="w-80 rounded-lg shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] outline outline-1 outline-offset-[-1px] outline-[#CEDBDE] p-14 bg-white"
                 >
                   {/* 상단: 사진 + 기본정보 */}
                   <div className="flex gap-4">

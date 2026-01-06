@@ -8,7 +8,7 @@ import { RecruitingDetail } from "@/types/recruitingDetail";
 export type CreateRecruitingBody = {
   projectType: string;         // 수업 / 졸업작품
   projectSpecific: string;     // 과목명
-  classes: number;             // 분반
+  classes: string;             // 분반
   topic: string;               // 주제
   totalPeople: number;
   recruitPeople: number;
@@ -95,7 +95,7 @@ export const getRecruitings = async (
 export type UpdateRecruitingBody = {
   projectType: string;
   projectSpecific: string;
-  classes: number;
+  classes: string;
   topic: string;
   totalPeople: number;
   recruitPeople: number;
