@@ -43,6 +43,10 @@ export default function RecruitMateCreate() {
     setKeywordInput("");
   };
 
+  const removeKeyword = (target: string) => {
+    setKeywords((prev) => prev.filter((k) => k !== target));
+  };
+
   const handleSubmit = async () => {
     if (!user) {
       alert("로그인이 필요합니다.");
@@ -67,11 +71,7 @@ export default function RecruitMateCreate() {
     const totalPeopleNum = Number(form.totalPeople);
     const recruitPeopleNum = Number(form.recruitPeople);
 
-    if (
-      classesNum <= 0 ||
-      totalPeopleNum <= 0 ||
-      recruitPeopleNum <= 0
-    ) {
+    if (classesNum <= 0 || totalPeopleNum <= 0 || recruitPeopleNum <= 0) {
       alert("숫자 항목은 1 이상이어야 합니다.");
       return;
     }
@@ -123,8 +123,7 @@ export default function RecruitMateCreate() {
           {/* breadcrumb */}
           <div className="flex items-center text-lg font-medium text-[#838F91] mb-3">
             모집하기
-            <img src="/images/Vector.svg" className="w-3 h-3 mx-2" />
-            글 쓰기
+            <img src="/images/Vector.svg" className="w-3 h-3 mx-2" />글 쓰기
           </div>
 
           <div className="bg-white border border-[#E6EEF0] rounded p-10">
@@ -142,7 +141,7 @@ export default function RecruitMateCreate() {
                       name="projectType"
                       value={form.projectType}
                       onChange={handleChange}
-                      className="w-full appearance-none border border-[#E6EEF0] rounded px-4 py-2 pr-10 text- text-[#222829] bg-white focus:outline-none"
+                      className="w-full appearance-none border border-[#E6EEF0] rounded px-4 py-2 pr-10 text-sm text-[#222829] bg-white focus:outline-none"
                     >
                       {types.map((type) => (
                         <option key={type} value={type}>
@@ -186,7 +185,7 @@ export default function RecruitMateCreate() {
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-6">
                   <div className="w-1 h-4 bg-[#00C3CC]" />
-                  <span className="w-20 text-sm font-bold text-[#495456]">
+                  <span className="w-20 text-lg font-bold text-[#495456]">
                     주제
                   </span>
 
@@ -206,7 +205,7 @@ export default function RecruitMateCreate() {
               {/* 전체 인원 */}
               <div className="flex items-center gap-6">
                 <div className="w-1 h-4 bg-[#00C3CC]" />
-                <span className="w-20 text-sm font-bold text-[#495456]">
+                <span className="w-20 text-lg font-bold text-[#495456]">
                   전체 인원
                 </span>
 
@@ -224,7 +223,7 @@ export default function RecruitMateCreate() {
               {/* 모집 인원 */}
               <div className="flex items-center gap-6">
                 <div className="w-1 h-4 bg-[#00C3CC]" />
-                <span className="w-20 text-sm font-bold text-[#495456]">
+                <span className="w-20 text-lg font-bold text-[#495456]">
                   모집 인원
                 </span>
 
@@ -243,42 +242,64 @@ export default function RecruitMateCreate() {
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-6">
                   <div className="w-1 h-4 bg-[#00C3CC]" />
-                  <span className="text-sm font-bold text-[#495456]">
+                  <span className="text-lg font-bold text-[#495456]">
                     이 수업에서 본인이 가장 잘 할 수 있는 키워드를 적어주세요
-                    <span className="text-[#9CA3AF]"> (10개 제한)</span>
+                    <span className="text-[#9CA3AF] font-medium">
+                      {" "}
+                      (10개 제한)
+                    </span>
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center gap-2 flex-wrap ml-7">
                   {keywords.map((k) => (
                     <div
                       key={k}
-                      className="h-10 px-3 flex items-center border border-[#E6EEF0] rounded text-sm text-[#0FA4AB] bg-[#EEF7F8]"
+                      className="
+        h-10
+        px-3
+        flex
+        items-center
+        gap-1
+        rounded outline outline-2 outline-offset-[-2px] outline-[#E1EDF0]
+        text-sm
+        text-[#495456]
+      "
                     >
                       #{k}
+                      <button
+                        type="button"
+                        onClick={() => removeKeyword(k)}
+                        className="ml-1 text-[#9CA3AF] hover:text-[#EF4444]"
+                      >
+                        <img src="/images/cancel.svg" className="w-5 h-5" />
+                      </button>
                     </div>
                   ))}
 
-                  <input
-                    value={keywordInput}
-                    onChange={(e) => setKeywordInput(e.target.value)}
-                    placeholder="(ex) 자료조사"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        addKeyword();
-                      }
-                    }}
-                    className="h-10 w-36 border border-[#E6EEF0] rounded px-3 text-sm text-[#222829] placeholder:text-[#CEDBDE] focus:outline-none"
-                  />
+                  {/* 입력창 */}
+                  <div className="flex items-center gap-2">
+                    <input
+                      value={keywordInput}
+                      onChange={(e) => setKeywordInput(e.target.value)}
+                      placeholder="(ex) 자료조사"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          addKeyword();
+                        }
+                      }}
+                      className="h-10 w-36 border border-[#E6EEF0] rounded px-3 text-sm text-[#222829] placeholder:text-[#CEDBDE] focus:outline-none"
+                    />
 
-                  <button
-                    type="button"
-                    onClick={addKeyword}
-                    className="h-10 w-10 flex items-center justify-center"
-                  >
-                    <img src="/images/add.svg" className="w-4 h-4" />
-                  </button>
+                    <button
+                      type="button"
+                      onClick={addKeyword}
+                      className="h-10 w-10 flex items-center justify-center"
+                    >
+                      <img src="/images/add.svg" className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -296,7 +317,7 @@ export default function RecruitMateCreate() {
                 rows={10}
                 placeholder="내용을 입력해주세요"
                 onChange={handleChange}
-                className="border border-[#E6EEF0] rounded px-4 py-3 resize-none text-sm text-[#222829] placeholder:text-[#CEDBDE] focus:outline-none"
+                className="border border-[#E6EEF0] rounded px-4 py-3 resize-none text-lg text-[#222829] placeholder:text-[#CEDBDE] focus:outline-none"
               />
             </div>
           </div>

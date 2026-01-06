@@ -199,7 +199,7 @@ export default function RecruitMate() {
               <div className="flex justify-end mb-4">
                 <button
                   onClick={() => router.push("/recruitmate/create")}
-                  className="w-72 h-16 rounded bg-[#6EC6CC] text-[#F5F8F8] text-xl font-extrabold"
+                  className="w-72 h-16 rounded bg-[#00C3CC] text-[#F5F8F8] text-xl font-extrabold"
                 >
                   모집글 쓰기
                 </button>

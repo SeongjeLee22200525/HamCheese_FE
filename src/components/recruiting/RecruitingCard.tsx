@@ -70,9 +70,7 @@ export default function RecruitingCard({ item, onClick }: Props) {
             <span className="whitespace-nowrap">
               <span className="font-bold text-[#222829]">주제</span>
               <span className="mx-1 font-medium text-[#B7C4C7]">|</span>
-              <span className="font-medium text-[#222829]">
-                {item.topic}
-              </span>
+              <span className="font-medium text-[#222829]">{item.topic}</span>
             </span>
           </div>
 
@@ -83,53 +81,43 @@ export default function RecruitingCard({ item, onClick }: Props) {
         </div>
 
         {/* 오른쪽 영역 */}
-        <div className="shrink-0 mr-4">
-          {hasKeyword ? (
-            /* 해시태그 있을 때 */
-            <div className="flex items-center gap-14">
-              <div className="flex flex-col items-center">
-                <div className="text-xl font-medium text-[#222829] whitespace-nowrap">
-                  {item.name} 학부생
-                </div>
+        <div className="shrink-0 w-[420px] mr-4">
+          <div className="grid grid-cols-[1fr_96px] items-center">
+            {/* 이름 + 해시태그 */}
+            <div className="flex flex-col items-center">
+              <div className="text-xl font-medium text-[#222829] whitespace-nowrap">
+                {item.name} 학부생
+              </div>
 
+              {hasKeyword && (
                 <div className="flex gap-2 mt-3">
-                  {(item.myKeyword ?? []).slice(0, 2).map(keyword => (
+                  {(item.myKeyword ?? []).slice(0, 2).map((keyword) => (
                     <span
                       key={keyword}
                       className="
-                        px-3 py-1
-                        text-xm
-                        rounded
-                        outline
-                        outline-1
-                        outline-offset-[-1px]
-                        outline-[#CEDBDE]
-                        text-[#838F91]
-                        whitespace-nowrap
-                      "
+                px-3 py-1
+                text-xm
+                rounded
+                outline
+                outline-1
+                outline-offset-[-1px]
+                outline-[#CEDBDE]
+                text-[#838F91]
+                whitespace-nowrap
+              "
                     >
                       #{keyword}
                     </span>
                   ))}
                 </div>
-              </div>
-
-              <div className="w-24 flex items-center justify-end text-[#B7C4C7] text-base font-medium">
-                {formatRecruitingDate(item.date)}
-              </div>
+              )}
             </div>
-          ) : (
-            /* 해시태그 없을 때 */
-            <div className="flex items-center gap-14">
-              <div className="text-xl font-medium text-[#222829] whitespace-nowrap">
-                {item.name} 학부생
-              </div>
 
-              <div className="w-24 flex items-center justify-end text-[#B7C4C7] text-base font-medium">
-                {formatRecruitingDate(item.date)}
-              </div>
+            {/* 날짜 */}
+            <div className="text-right text-[#B7C4C7] text-base font-medium">
+              {formatRecruitingDate(item.date)}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
