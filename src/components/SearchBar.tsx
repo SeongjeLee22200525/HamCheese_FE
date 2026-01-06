@@ -1,3 +1,11 @@
+type Props = {
+  value: string;
+  onChange: (value: string) => void;
+  onSearch: () => void;
+  placeholder: string;
+  title: string;
+};
+
 export default function SearchBar({
   value,
   onChange,

@@ -1,13 +1,18 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import { getFirstPage } from "@/api/home";
+import { useRouter } from "next/router";
+
+
 
 export default function Home() {
   const [profiles, setProfiles] = useState<any[]>([]);
   const [recruitings, setRecruitings] = useState<any[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,6 +58,7 @@ export default function Home() {
                 src="/images/search-icon.svg"
                 alt="search"
                 className="w-7 h-7 cursor-pointer"
+                onClick={() => router.push("/signin")}
               />
             </div>
           </div>
@@ -67,37 +73,63 @@ export default function Home() {
           <section className="mb-32">
             <div className="flex justify-between items-center mb-6 text-[#222829]">
               <div className="text-3xl font-light">메이트 프로필</div>
-              <button className="text-lg text-[#222829]">
+              <Link
+                href="/signin"
+                className="inline-flex items-center text-lg text-[#222829]"
+              >
                 더보기
                 <img
                   src="/images/more.svg"
                   alt="arrow"
-                  className="w-7 h-7 ml-1 inline-block"
+                  className="w-7 h-7 ml-1"
                 />
-              </button>
+              </Link>
             </div>
 
             <div className="flex gap-7">
               {profiles.slice(0, 4).map((p) => (
                 <div
                   key={p.userId}
-                  className="w-80 rounded-lg shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] outline outline-1 outline-offset-[-1px] outline-[#CEDBDE] p-12 bg-white"
+                  className="w-85 rounded-lg shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] outline outline-1 outline-offset-[-1px] outline-[#CEDBDE] p-14 bg-white"
                 >
-                  <img
-                    src={p.imageUrl || "/images/profile.svg"}
-                    className="w-18 h-18 rounded-full mb-3"
-                  />
+                  {/* 상단: 사진 + 기본정보 */}
+                  <div className="flex gap-4">
+                    {/* 프로필 이미지 */}
+                    <img
+                      src={p.imageUrl || "/images/profile.svg"}
+                      className="w-16 h-16 rounded-full object-cover"
+                    />
 
-                  <p className="font-bold text-lg text-[#222829]">{p.name} 학생</p>
-                  <p className="p-2 rounded bg-[#F5F8F8] text-[#838F91] font-semibold">{p.firstMajor}</p>
-                  <p className="text-xs line-clamp-2">{p.introduction}</p>
+                    {/* 이름 / 학번 / 전공 */}
+                    <div className="flex flex-col gap-1">
+                      <span className="font-bold text-lg text-[#222829]">
+                        {p.name} <span className="font-medium">학부생</span>
+                      </span>
 
-                  <div className="flex flex-wrap gap-1 mt-3">
-                    {Array.isArray(p.peerGoodKeywords) &&
-                      p.peerGoodKeywords.slice(0, 4).map((k: string) => (
+                      <div className="flex flex-wrap gap-2 text-sm">
+                        <span className="p-2 rounded bg-[#F5F8F8] text-[#838F91] font-semibold">
+                          {p.studentId}학번
+                        </span>
+
+                        <span className="p-2 rounded bg-[#F5F8F8] text-[#0FA4AB] font-semibold">
+                          {p.firstMajor}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 자기소개 */}
+                  <p className="text-base font-medium text-[#495456] line-clamp-2 mt-3">
+                    {p.introduction}
+                  </p>
+
+                  {/* 키워드 */}
+                  <div className="flex flex-wrap gap-2 mt-3">
+                    {Array.isArray(p.skillList) &&
+                      p.skillList.slice(0, 3).map((k: string) => (
                         <span
                           key={k}
-                          className="text-[10px] px-2 py-1 bg-[#EEF7F8] text-[#0FA4AB] rounded"
+                          className="text-sm px-3 py-2 rounded outline outline-offset-[-1px] outline-[#CEDBDE] inline-flex justify-center gap-2.5 text-[#838F91] font-medium"
                         >
                           #{k}
                         </span>
@@ -109,26 +141,62 @@ export default function Home() {
           </section>
 
           {/* ================= RECRUITING ================= */}
-          <section>
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="font-bold">현재 모집중인 팀플</h2>
-              <button className="text-sm text-gray-400">더보기 →</button>
+          <section className="mb-32">
+            <div className="flex justify-between items-center mb-6 text-[#222829]">
+              <div className="text-3xl font-light">현재 모집 중인 팀플</div>
+              <Link
+                href="/signin"
+                className="inline-flex items-center text-lg text-[#222829]"
+              >
+                더보기
+                <img
+                  src="/images/more.svg"
+                  alt="arrow"
+                  className="w-7 h-7 ml-1"
+                />
+              </Link>
             </div>
 
-            <div className="flex gap-6">
+            <div className="flex gap-7">
               {recruitings.slice(0, 4).map((r) => (
                 <div
                   key={r.recruitingId}
-                  className="w-[260px] border rounded-xl p-4 bg-white"
+                  className="w-85 rounded-lg shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] outline outline-1 outline-offset-[-1px] outline-[#CEDBDE] p-14 bg-white"
                 >
-                  <span className="text-xs text-[#00AEB5] font-semibold">
-                    모집중 {r.recruitPeople}/{r.totalPeople}
-                  </span>
+                  <div className="flex flex-col gap-4">
+                    <span className="inline-block w-fit px-3 py-2 text-sm font-bold text-[#0FA4AB] bg-[#F5F8F8] rounded gap-2 whitespace-nowrap">
+                      모집인원 {r.recruitPeople}/{r.totalPeople}
+                    </span>
+                    <p className="flex items-center gap-2 text-sm mt-1 text-[#00C3CC] font-bold whitespace-nowrap">
+                      <span>{r.projectType}</span>
 
-                  <p className="font-bold text-sm mt-2 line-clamp-2">
-                    {r.title}
-                  </p>
-                  <p className="text-xs text-gray-400 mt-1">{r.projectType}</p>
+                      <img
+                        src="/images/Vector.svg"
+                        alt="arrow"
+                        className="w-3 h-3"
+                      />
+
+                      <span className="text-[#222829] font-medium">
+                        {r.projectSpecific}
+                      </span>
+
+                      {r.classes !== 0 && (
+                        <>
+                          <span className="text-[#CEDBDE] font-medium">|</span>
+                          <span className="text-[#222829] font-medium">
+                            {r.classes}분반
+                          </span>
+                        </>
+                      )}
+                    </p>
+
+                    <p className="self-stretch justify-start text-[#222829] text-lg font-bold">
+                      {r.title}
+                    </p>
+                    <p className="self-stretch justify-start text-[#838F91] text-sm font-medium">
+                      {r.name}
+                    </p>
+                  </div>
                 </div>
               ))}
             </div>
