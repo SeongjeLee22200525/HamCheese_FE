@@ -10,7 +10,7 @@ import Profile from "@/components/mateprofile/Profile";
 import ProfileSection from "@/components/mateprofile/ProfileSection";
 import PeerReview from "@/components/mateprofile/PeerReview";
 import PeerReviewModal from "@/components/mateprofile/peerReviewModal/PeerReviewModal";
-import ReviewSuccessSnackbar from "@/components/mateprofile/peerReviewModal/ReviewSuccessSnackbar";
+import Snackbar from "@/components/common/Snackbar";
 
 import { MetaTag } from "@/types/user";
 import { checkUserEqual, getMateProfile } from "@/api/profile";
@@ -131,9 +131,14 @@ export default function MateProfilePage() {
           />
         )}
 
-        {/* ===== 성공 스낵바 ===== */}
+        {/* ===== 성공 스낵바 (공용 Snackbar 사용) ===== */}
         {showReviewSuccess && (
-          <ReviewSuccessSnackbar onClose={() => setShowReviewSuccess(false)} />
+          <Snackbar
+            message="동료평가가 완료되었어요!"
+            actionText="확인"
+            duration={3000}
+            onClose={() => setShowReviewSuccess(false)}
+          />
         )}
 
         {/* ===== RIGHT ===== */}

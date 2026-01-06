@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "@/api/axios";
 import { useUserStore } from "@/stores/useUserStore";
 import { departments } from "@/constants/departments";
+import Snackbar from "@/components/common/Snackbar";
 
 type Activity = {
   year: number;
@@ -67,6 +68,8 @@ export default function MyInfo() {
 
   //키워드 상태관리
   const [keywordInput, setKeywordInput] = useState("");
+  //스낵바 상태관리
+  const [showSaveSnackbar, setShowSaveSnackbar] = useState(false);
 
   const addKeyword = () => {
     const value = keywordInput.trim();
@@ -191,7 +194,7 @@ export default function MyInfo() {
 
     try {
       await axios.patch(`/user/update/${myId}`, payload);
-      alert("프로필 정보가 저장되었습니다.");
+      setShowSaveSnackbar(true);
     } catch (e) {
       console.error("❌ update profile error", e);
       alert("저장에 실패했습니다.");
@@ -574,6 +577,14 @@ export default function MyInfo() {
           저장하기
         </button>
       </div>
+      {showSaveSnackbar && (
+        <Snackbar
+          message="내 정보가 저장되었습니다."
+          actionText="확인"
+          duration={3000}
+          onClose={() => setShowSaveSnackbar(false)}
+        />
+      )}
     </div>
   );
 }

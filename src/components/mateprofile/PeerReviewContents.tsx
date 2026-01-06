@@ -95,7 +95,7 @@ export default function PeerReviewContents(props: Props) {
         className={`
           overflow-y-auto pr-2
           transition-[max-height] duration-300 ease-in-out
-          ${sortType === "count" ? "max-h-[420px]" : "max-h-[520px]"}
+          ${sortType === "count" ? "max-h-100vh" : "max-h-[520px]"}
         `}
       >
         {sortType === "count" ? (

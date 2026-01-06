@@ -99,6 +99,7 @@ export default function RecruitMateCreate() {
         myKeyword: finalKeywords,
       });
 
+      sessionStorage.setItem("recruitingCreated", "true");
       router.push("/recruitmate");
     } catch (e) {
       console.error("createRecruiting error:", e);

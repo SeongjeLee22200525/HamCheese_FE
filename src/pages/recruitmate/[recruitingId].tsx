@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Snackbar from "@/components/common/Snackbar";
 
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
@@ -26,8 +27,7 @@ export default function RecruitMateDetail() {
   const { recruitingId } = router.query;
   const user = useUserStore((state) => state.user);
 
-  const [recruiting, setRecruiting] =
-    useState<RecruitingDetail | null>(null);
+  const [recruiting, setRecruiting] = useState<RecruitingDetail | null>(null);
   const [loading, setLoading] = useState(true);
 
   /* 수정 / 삭제 핸들러 */
@@ -35,16 +35,24 @@ export default function RecruitMateDetail() {
     Number(recruitingId),
     user?.myId ?? 0
   );
+  //수정후 스낵바
+  const [showEditSnackbar, setShowEditSnackbar] = useState(false);
+
+  useEffect(() => {
+    const edit = sessionStorage.getItem("recruitingEdit");
+
+    if (edit === "true") {
+      setShowEditSnackbar(true);
+      sessionStorage.removeItem("recruitingEdit");
+    }
+  }, []);
 
   useEffect(() => {
     if (!recruitingId || !user) return;
 
     const fetchDetail = async () => {
       try {
-        const data = await getRecruitingDetail(
-          Number(recruitingId),
-          user.myId
-        );
+        const data = await getRecruitingDetail(Number(recruitingId), user.myId);
         setRecruiting(data);
       } finally {
         setLoading(false);
@@ -91,11 +99,7 @@ export default function RecruitMateDetail() {
           {/* breadcrumb */}
           <div className="flex items-center text-sm text-[#838F91] mb-4">
             모집하기
-            <img
-              src="/images/Vector.svg"
-              className="w-2 h-2 mx-2"
-              alt=""
-            />
+            <img src="/images/Vector.svg" className="w-2 h-2 mx-2" alt="" />
             <span>{recruiting.projectType}</span>
           </div>
 
@@ -177,16 +181,18 @@ export default function RecruitMateDetail() {
                     onDelete={handleDelete}
                   />
                 )}
+                {showEditSnackbar && (
+                  <Snackbar
+                    message="글이 수정되었습니다."
+                    onClose={() => setShowEditSnackbar(false)}
+                  />
+                )}
               </div>
 
               {/* 오른쪽 버튼 (본인 글 아닐 때) */}
               {!recruiting.canEdit && (
                 <button className="ml-6 flex items-center gap-2 px-5 py-3 rounded-lg bg-[#6EC6CC] text-[#F5F8F8] font-extrabold h-fit">
-                  <img
-                    src="/images/chat.svg"
-                    alt=""
-                    className="w-6 h-6"
-                  />
+                  <img src="/images/chat.svg" alt="" className="w-6 h-6" />
                   조각 건네기
                 </button>
               )}
@@ -237,9 +243,7 @@ export default function RecruitMateDetail() {
                 목록
               </button>
               <button
-                onClick={() =>
-                  window.scrollTo({ top: 0, behavior: "smooth" })
-                }
+                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                 className="px-5 py-3 rounded bg-[#E6EEF0] text-[#495456] font-extrabold"
               >
                 TOP

@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import PeerReviewForm, { PeerReviewSubmitPayload } from "./PeerReviewForm";
 import ConfirmExitModal from "./ConfirmExitModal";
-import ReviewSuccessSnackbar from "./ReviewSuccessSnackbar";
+import Snackbar from "@/components/common/Snackbar";
 
 import type { MetaTag } from "@/types/user";
 
@@ -26,8 +26,6 @@ export default function PeerReviewModal({
   onSubmit,
 }: Props) {
   const [step, setStep] = useState<Step>("FORM");
-  const [submittedPayload, setSubmittedPayload] =
-    useState<PeerReviewSubmitPayload | null>(null);
   const [showSuccess, setShowSuccess] = useState(false);
 
   /* ===== ESC 키 처리 ===== */
@@ -58,9 +56,8 @@ export default function PeerReviewModal({
   };
 
   const handleSubmit = (payload: PeerReviewSubmitPayload) => {
-    setSubmittedPayload(payload);
+    onSubmit(payload); // ✅ 서버 전송
     setShowSuccess(true); // ✅ 스낵바 표시
-    onSubmit(payload); // ✅ 즉시 서버 전송
     onClose(); // ✅ 모달 닫기
   };
 
@@ -91,7 +88,6 @@ export default function PeerReviewModal({
               onSubmit={handleSubmit}
             />
 
-            {/* confirm exit */}
             {step === "CONFIRM_EXIT" && (
               <ConfirmExitModal
                 onExit={onClose}
@@ -104,7 +100,12 @@ export default function PeerReviewModal({
 
       {/* ================= SUCCESS SNACKBAR ================= */}
       {showSuccess && (
-        <ReviewSuccessSnackbar onClose={() => setShowSuccess(false)} />
+        <Snackbar
+          message="동료평가가 완료되었어요!"
+          actionText="확인"
+          duration={3000}
+          onClose={() => setShowSuccess(false)}
+        />
       )}
     </>
   );

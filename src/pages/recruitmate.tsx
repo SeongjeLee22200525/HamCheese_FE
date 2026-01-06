@@ -12,6 +12,7 @@ import { types } from "@/constants/types";
 
 import { Recruiting } from "@/types/recruiting";
 import { filterRecruitings } from "@/api/recruiting";
+import Snackbar from "@/components/common/Snackbar";
 
 export default function RecruitMate() {
   const router = useRouter();
@@ -21,14 +22,35 @@ export default function RecruitMate() {
   const [keyword, setKeyword] = useState("");
   const [recruitings, setRecruitings] = useState<Recruiting[]>([]);
 
+  //모집글 쓰기 후 스낵바
+  const [showSnackbar, setShowSnackbar] = useState(false);
+
+  useEffect(() => {
+    const created = sessionStorage.getItem("recruitingCreated");
+
+    if (created === "true") {
+      setShowSnackbar(true);
+      sessionStorage.removeItem("recruitingCreated"); // ✅ 1회성
+    }
+  }, []);
+  //모집글 삭제 후 스낵바
+  const [showDeleteSnackbar, setShowDeleteSnackbar] = useState(false);
+
+  useEffect(() => {
+    const deleted = sessionStorage.getItem("recruitingDeleted");
+
+    if (deleted === "true") {
+      setShowDeleteSnackbar(true);
+      sessionStorage.removeItem("recruitingDeleted"); // ✅ 1회성
+    }
+  }, []);
+
   const toggleItem = (
     value: string,
     setter: React.Dispatch<React.SetStateAction<string[]>>
   ) => {
-    setter(prev =>
-      prev.includes(value)
-        ? prev.filter(v => v !== value)
-        : [...prev, value]
+    setter((prev) =>
+      prev.includes(value) ? prev.filter((v) => v !== value) : [...prev, value]
     );
   };
 
@@ -89,7 +111,7 @@ export default function RecruitMate() {
 
               <div className="bg-white border-2 border-[#6EC6CC] border-t-0 rounded-b overflow-hidden mb-10">
                 <div className="mt-5 mb-5 flex flex-col">
-                  {types.map(type => {
+                  {types.map((type) => {
                     const checked = selectedTypes.includes(type);
 
                     return (
@@ -109,9 +131,7 @@ export default function RecruitMate() {
                           type="checkbox"
                           className="sr-only"
                           checked={checked}
-                          onChange={() =>
-                            toggleItem(type, setSelectedTypes)
-                          }
+                          onChange={() => toggleItem(type, setSelectedTypes)}
                         />
 
                         {/* ✅ SVG 체크박스 */}
@@ -148,7 +168,7 @@ export default function RecruitMate() {
 
               <div className="bg-white border-2 border-[#6EC6CC] border-t-0 rounded-b overflow-hidden">
                 <div className="mt-5 mb-5 flex flex-col">
-                  {departments.map(dept => {
+                  {departments.map((dept) => {
                     const checked = selectedDepartments.includes(dept);
 
                     return (
@@ -207,14 +227,28 @@ export default function RecruitMate() {
 
               <RecruitingList
                 items={recruitings}
-                onClickItem={id =>
-                  router.push(`/recruitmate/${id}`)
-                }
+                onClickItem={(id) => router.push(`/recruitmate/${id}`)}
               />
             </section>
           </div>
         </div>
       </main>
+      {showSnackbar && (
+        <Snackbar
+          message="모집글에 게시되었습니다."
+          actionText="확인"
+          duration={5000}
+          onClose={() => setShowSnackbar(false)}
+        />
+      )}
+      {showDeleteSnackbar && (
+        <Snackbar
+          message="글이 삭제되었어요."
+          actionText="확인"
+          duration={5000}
+          onClose={() => setShowDeleteSnackbar(false)}
+        />
+      )}
 
       <Footer />
     </div>
