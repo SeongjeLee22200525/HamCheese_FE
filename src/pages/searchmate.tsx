@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import SearchBar from "@/components/SearchBar";
@@ -18,7 +18,9 @@ export default function SearchMate() {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  /* 학부 토글 */
+  const PAGE_SIZE = 10;
+
+  /* ================= 학부 토글 ================= */
   const toggleDept = (dept: string) => {
     setPage(0);
     setUsers([]);
@@ -27,15 +29,14 @@ export default function SearchMate() {
     );
   };
 
-  /* 검색 실행 */
+  /* ================= 검색 실행 ================= */
   const handleSearch = () => {
     setPage(0);
     setUsers([]);
     setSearchKeyword(keyword.trim());
   };
 
-  const PAGE_SIZE = 10;
-
+  /* ================= 사용자 조회 ================= */
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -77,6 +78,14 @@ export default function SearchMate() {
     fetchUsers();
   }, [selected, searchKeyword, page]);
 
+  /* ================= 🔥 goodKeywordCount 기준 정렬 ================= */
+  const sortedUsers = useMemo(() => {
+    return [...users].sort(
+      (a, b) => (b.goodKeywordCount ?? 0) - (a.goodKeywordCount ?? 0)
+    );
+  }, [users]);
+
+  /* ================= UI ================= */
   return (
     <div className="min-h-screen flex flex-col bg-white">
       <Header />
@@ -99,9 +108,8 @@ export default function SearchMate() {
           />
 
           <div className="flex gap-9.5 mt-10">
-            {/* 왼쪽 필터 */}
+            {/* ================= 왼쪽 필터 ================= */}
             <aside className="w-[260px] sticky top-24 self-start">
-              {/* 헤더 */}
               <div className="relative">
                 <img
                   src="/images/Rectangle.svg"
@@ -113,7 +121,6 @@ export default function SearchMate() {
                 </h3>
               </div>
 
-              {/* 필터 바디 */}
               <div className="bg-white border-[#6EC6CC] border-t-0 rounded-b overflow-hidden border-2">
                 <div className="mt-5 flex flex-col mb-5">
                   {departments.map((dept) => {
@@ -122,15 +129,7 @@ export default function SearchMate() {
                     return (
                       <label
                         key={dept}
-                        className="
-                          w-full
-                          h-12
-                          px-8
-                          flex items-center
-                          gap-4
-                          cursor-pointer
-                          hover:bg-[#F5F8F8]
-                        "
+                        className="w-full h-12 px-8 flex items-center gap-4 cursor-pointer hover:bg-[#F5F8F8]"
                       >
                         <input
                           type="checkbox"
@@ -139,7 +138,6 @@ export default function SearchMate() {
                           onChange={() => toggleDept(dept)}
                         />
 
-                        {/* ✅ SVG 체크박스 */}
                         <img
                           src={
                             checked
@@ -150,7 +148,7 @@ export default function SearchMate() {
                           className="w-5 h-5 block"
                         />
 
-                        <span className="text-base font-medium text-[#222829] leading-none">
+                        <span className="text-base font-medium text-[#222829]">
                           {dept}
                         </span>
                       </label>
@@ -160,7 +158,7 @@ export default function SearchMate() {
               </div>
             </aside>
 
-            {/* 결과 영역 */}
+            {/* ================= 결과 영역 ================= */}
             <section className="flex-1">
               {loading && (
                 <p className="text-center text-sm text-gray-400 mt-20">
@@ -180,9 +178,9 @@ export default function SearchMate() {
                 </p>
               )}
 
-              {!loading && users.length > 0 && (
+              {!loading && sortedUsers.length > 0 && (
                 <div className="grid grid-cols-1 gap-1.5">
-                  {users.map((user) => (
+                  {sortedUsers.map((user) => (
                     <ProfileCard key={user.userId} user={user} />
                   ))}
                 </div>

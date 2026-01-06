@@ -5,6 +5,7 @@ import axios from "@/api/axios";
 import { useUserStore } from "@/stores/useUserStore";
 import { departments } from "@/constants/departments";
 import Snackbar from "@/components/common/Snackbar";
+import { MateProfileInfo } from "@/types/user";
 
 type Activity = {
   year: number;
@@ -12,7 +13,12 @@ type Activity = {
   link?: string;
 };
 
-export default function MyInfo() {
+type Props = {
+  profile: MateProfileInfo; // ✅ 부모가 들고있는 좌측용 profile
+  setProfile: React.Dispatch<React.SetStateAction<MateProfileInfo | null>>; // ✅ 좌측 즉시 갱신용
+};
+
+export default function MyInfo({ profile, setProfile }: Props) {
   const myId = useUserStore((state) => state.user?.myId);
 
   /* ================= 상태 ================= */

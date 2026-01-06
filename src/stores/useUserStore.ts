@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import axios from "@/api/axios";
 
 /**
  * 전역에서 사용할 유저 타입
@@ -42,8 +43,7 @@ export const useUserStore = create<UserStore>((set) => ({
     set({
       user: {
         ...user,
-        profileImageUrl:
-          user.profileImageUrl ?? DEFAULT_PROFILE_IMAGE,
+        profileImageUrl: user.profileImageUrl ?? DEFAULT_PROFILE_IMAGE,
       },
     }),
 
@@ -51,7 +51,7 @@ export const useUserStore = create<UserStore>((set) => ({
   clearUser: () => set({ user: null }),
 
   /** 새로고침 시 쿠키로 복구 */
-  hydrateUser: () => {
+  hydrateUser: async () => {
     const myId = getCookie("myId");
     const name = getCookie("name");
 
@@ -62,12 +62,29 @@ export const useUserStore = create<UserStore>((set) => ({
       return;
     }
 
-    set({
-      user: {
-        myId: Number(myId),
-        name: name ? decodeURIComponent(name) : undefined,
-        profileImageUrl: DEFAULT_PROFILE_IMAGE, // 🔥 기본값
-      },
-    });
+    try {
+      // ✅ 서버에서 최신 프로필 정보 조회
+      const res = await axios.get(`/user/myProfile/${myId}`);
+      const data = res.data;
+
+      set({
+        user: {
+          myId: Number(myId),
+          name: data.name ?? (name ? decodeURIComponent(name) : undefined),
+          profileImageUrl: data.imageUrl || DEFAULT_PROFILE_IMAGE,
+        },
+      });
+    } catch (e) {
+      console.error("❌ hydrateUser profile fetch error", e);
+
+      // ❗ 서버 오류 시에도 최소 정보는 유지
+      set({
+        user: {
+          myId: Number(myId),
+          name: name ? decodeURIComponent(name) : undefined,
+          profileImageUrl: DEFAULT_PROFILE_IMAGE,
+        },
+      });
+    }
   },
 }));

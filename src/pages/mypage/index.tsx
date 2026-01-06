@@ -5,8 +5,8 @@ import { useRouter } from "next/router";
 import MyPageLayout from "@/components/mypage/MyPageLayout";
 import MyPageTabs from "@/components/mypage/MyPageTabs";
 import MyInfo from "@/components/mypage/MyInfo";
-import { useUserStore } from "@/stores/useUserStore";
 import axios from "@/api/axios";
+import { useUserStore } from "@/stores/useUserStore";
 import { MateProfileInfo } from "@/types/user";
 
 export default function MyPage() {
@@ -26,8 +26,6 @@ export default function MyPage() {
       try {
         const res = await axios.get<MateProfileInfo>(`/user/myProfile/${myId}`);
         setProfile(res.data);
-      } catch (e) {
-        console.error("❌ myProfile fetch error", e);
       } finally {
         setLoading(false);
       }
@@ -36,27 +34,12 @@ export default function MyPage() {
     fetchMyProfile();
   }, [myId, router]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-sm text-gray-400">
-        프로필을 불러오는 중입니다...
-      </div>
-    );
-  }
-
-  if (!profile) return null;
+  if (loading || !profile) return null;
 
   return (
     <MyPageLayout profile={profile}>
-      {/* 🔥 탭 영역 (완전 분리) */}
-      <div className=" z-10">
-        <MyPageTabs />
-      </div>
-
-      {/* 🔥 콘텐츠 박스 (완전 분리) */}
-      <div className=" rounded-lg ">
-        <MyInfo />
-      </div>
+      <MyPageTabs />
+      <MyInfo profile={profile} setProfile={setProfile} />
     </MyPageLayout>
   );
 }

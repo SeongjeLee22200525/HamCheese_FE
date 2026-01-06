@@ -50,11 +50,7 @@ export default function Header() {
               href="/"
               className="text-[#222829] text-3xl font-light leading-none"
             >
-              <img
-                src="/images/logo.svg"
-                alt="logo"
-                className="w-32 h-8"
-              />
+              <img src="/images/logo.svg" alt="logo" className="w-32 h-8" />
             </Link>
 
             <nav className="flex items-baseline font-medium pl-8">
@@ -86,12 +82,13 @@ export default function Header() {
           {user ? (
             <Link href="/mypage" className="flex items-center gap-4">
               {/* 프로필 이미지 */}
-              <div className="w-11 h-11 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center">
+              <div className="relative w-11 h-11 rounded-full overflow-hidden bg-gray-200">
                 <Image
                   src={user.profileImageUrl!}
                   alt="profile"
-                  width={44}
-                  height={44}
+                  fill
+                  className="object-cover"
+                  sizes="44px"
                 />
               </div>
 
@@ -102,7 +99,9 @@ export default function Header() {
               </span>
 
               {/* 구분선 */}
-              <div className="justify-start text-[#B7C4C7] text-base font-medium">|</div>
+              <div className="justify-start text-[#B7C4C7] text-base font-medium">
+                |
+              </div>
 
               {/* 로그아웃 */}
               <button

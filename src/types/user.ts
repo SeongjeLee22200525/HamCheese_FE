@@ -53,6 +53,7 @@ export interface UserProfile {
   skillList: string[];
   peerGoodKeywords: Record<string, number>; // 🔥 여기
   imageUrl?: string | null;
+  goodKeywordCount: number;
 }
 
 /* =========================

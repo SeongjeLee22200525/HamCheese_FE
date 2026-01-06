@@ -1,4 +1,7 @@
 "use client";
+
+import { useRouter } from "next/router";
+import { useUserStore } from "@/stores/useUserStore";
 import { MateProfileInfo } from "@/types/user";
 
 type Props = {
@@ -6,6 +9,9 @@ type Props = {
 };
 
 export default function Profile({ profile }: Props) {
+  const router = useRouter();
+  const myId = useUserStore((state) => state.user?.myId);
+
   const {
     name,
     email,
@@ -19,8 +25,12 @@ export default function Profile({ profile }: Props) {
     imageUrl,
   } = profile;
 
+  const handleGoToMateProfile = () => {
+    if (!myId) return;
+    router.push(`/mateprofile/${myId}`);
+  };
+
   return (
-    // 전체 블럭
     <div>
       <div className="w-[350px] bg-[#F5F8F8]">
         <div className="p-10 text-[#222829]">
@@ -31,9 +41,14 @@ export default function Profile({ profile }: Props) {
                 <img
                   src={imageUrl}
                   alt={`${name} profile`}
+                  className="w-48 h-48 rounded-full object-cover"
+                />
+              ) : (
+                <img
+                  src="/profile.svg"
                   className="w-full h-full object-cover"
                 />
-              ) : null}
+              )}
             </div>
 
             <h2 className="text-2xl font-extrabold mb-2">
@@ -43,7 +58,7 @@ export default function Profile({ profile }: Props) {
           </div>
 
           {/* ===== 기본 정보 ===== */}
-          <div className="mt-8 space-y-4 text-base ">
+          <div className="mt-8 space-y-4 text-base">
             <InfoRow label="학번" value={studentId} />
             <InfoRow label="학년" value={`${grade}학년`} />
             <InfoRow label="학기수" value={`${semester}학기`} />
@@ -56,10 +71,15 @@ export default function Profile({ profile }: Props) {
             {gpa && !isNaN(Number(gpa)) && (
               <InfoRow label="학점" value={Number(gpa).toFixed(2)} />
             )}
-
             <InfoRow label="이메일" value={email} />
+
             {/* ===== 버튼 영역 ===== */}
-            <button className="w-72 h-16 mt-4 bg-[#00C3CC] rounded text-white text-xl font-extrabold">프로필 확인하기</button>
+            <button
+              onClick={handleGoToMateProfile}
+              className="w-72 h-16 mt-4 bg-[#00C3CC] rounded text-white text-xl font-extrabold"
+            >
+              프로필 확인하기
+            </button>
           </div>
         </div>
       </div>
@@ -70,7 +90,7 @@ export default function Profile({ profile }: Props) {
 /* ===== 내부 전용 컴포넌트 ===== */
 function InfoRow({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="flex ">
+    <div className="flex">
       <span className="text-[#222829] font-extrabold w-14 mr-4">{label}</span>
       <span className="font-medium text-[#222829]">{value}</span>
     </div>

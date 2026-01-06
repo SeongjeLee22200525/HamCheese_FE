@@ -34,8 +34,8 @@ export default function MateProfilePage() {
    * ========================= */
 
   useEffect(() => {
-    if (typeof userId !== "string") return;
     if (!myId) return;
+    if (typeof userId !== "string") return;
 
     const targetUserId = Number(userId);
     if (Number.isNaN(targetUserId)) return;
@@ -44,23 +44,17 @@ export default function MateProfilePage() {
       try {
         setLoading(true);
 
-        const isMine = await checkUserEqual(myId, targetUserId);
-        if (isMine) {
-          router.replace("/mypage");
-          return;
-        }
-
         const data = await getMateProfile(targetUserId);
         setProfile(data);
       } catch (e) {
-        console.error("메이트 프로필 조회 실패", e);
+        console.error("❌ 메이트 프로필 조회 실패", e);
       } finally {
         setLoading(false);
       }
     };
 
     fetchProfile();
-  }, [myId, userId, router]);
+  }, [myId, userId]);
 
   /* =========================
    * 메타 태그
@@ -114,6 +108,7 @@ export default function MateProfilePage() {
         </div>
 
         {/* ===== 동료평가 모달 ===== */}
+        {/* ===== 동료평가 모달 ===== */}
         {isPeerReviewOpen && profile && myId && (
           <PeerReviewModal
             targetName={profile.name}
@@ -121,12 +116,27 @@ export default function MateProfilePage() {
             targetMetaTags={targetMetaTags}
             onClose={() => setIsPeerReviewOpen(false)}
             onSubmit={async (payload) => {
-              const targetUserId = Number(userId);
-              if (!myId || Number.isNaN(targetUserId)) return;
+              if (typeof userId !== "string") return;
 
-              await submitPeerReview(myId, targetUserId, payload);
-              setIsPeerReviewOpen(false);
-              setShowReviewSuccess(true);
+              const targetUserId = Number(userId);
+              if (Number.isNaN(targetUserId)) return;
+
+              try {
+                // 1️⃣ 동료평가 제출
+                await submitPeerReview(myId, targetUserId, payload);
+
+                // 2️⃣ 최신 프로필 즉시 반영
+                await getMateProfile(targetUserId).then(setProfile);
+                // ⬆️ 또는 fetchProfile() 사용 중이면 그걸로 교체
+
+                // 3️⃣ 성공 UX
+                setShowReviewSuccess(true);
+              } catch (e) {
+                console.error("❌ 동료평가 제출 실패", e);
+              } finally {
+                // 4️⃣ 모달 닫기
+                setIsPeerReviewOpen(false);
+              }
             }}
           />
         )}

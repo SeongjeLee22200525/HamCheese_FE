@@ -35,7 +35,7 @@ export default function Profile({ profile, onGivePiece, onPeerReview }: Props) {
                   alt={`${name} profile`}
                   className="w-full h-full object-cover"
                 />
-              ) : null}
+              ) : <img src="/profile.svg" className="w-full h-full object-cover"/>}
             </div>
 
             <h2 className="text-2xl font-extrabold mb-2">
