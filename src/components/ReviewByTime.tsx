@@ -1,12 +1,32 @@
 "use client";
 
+import {
+  POSITIVE_PEER_KEYWORDS,
+  NEGATIVE_PEER_KEYWORDS,
+} from "@/constants/peerKeywords";
+
 type Props = {
   peerReviewRecent: {
-    startDate: string;
+    startDate: string; // "2026-02"
     meetSpecific: string;
     goodKeywordList: string[];
     badKeywordList: string[];
   }[];
+};
+
+/* 🔥 날짜 포맷: 2026-02 → 2026.02 */
+const formatYearMonth = (value: string) => {
+  const [year, month] = value.split("-");
+  if (!year || !month) return value;
+  return `${year}.${month}`;
+};
+
+/* 🔥 키워드 → 이모지 */
+const getEmoji = (keyword: string, type: "positive" | "negative") => {
+  if (type === "positive") {
+    return POSITIVE_PEER_KEYWORDS[keyword]?.emoji ?? "";
+  }
+  return NEGATIVE_PEER_KEYWORDS[keyword]?.emoji ?? "";
 };
 
 export default function ReviewByTime({ peerReviewRecent }: Props) {
@@ -17,26 +37,30 @@ export default function ReviewByTime({ peerReviewRecent }: Props) {
   }
 
   return (
-    <ul className="space-y-6">
+    <div className="">
       {peerReviewRecent.map((review, idx) => (
-        <li key={idx} className="border border-[#E1EDF0] rounded-lg p-6">
+        <div key={idx}>
           {/* 날짜 + 만난 곳 */}
-          <div className="flex justify-between mb-4 text-sm text-[#495456]">
-            <span>{review.startDate}</span>
-            <span>{review.meetSpecific}</span>
+          <div className="flex mb-5">
+            <div className="w-14 pt-1 h-4.25 text-sm font-medium text-[#838F91]">
+              {formatYearMonth(review.startDate)}
+            </div>
+            <div className="ml-4 text-lg font-bold text-[#222829]">
+              {review.meetSpecific}
+            </div>
           </div>
 
           {/* 좋은 점 */}
           {review.goodKeywordList.length > 0 && (
-            <div className="mb-3">
-              <p className="font-semibold text-[#00C3CC] mb-1">좋았던 점</p>
-              <div className="flex flex-wrap gap-2">
+            <div className="ml-16.75 pb-5 text-[#222829]">
+              <p className="font-medium text-base mb-2">강점 키워드</p>
+              <div className="flex flex-wrap">
                 {review.goodKeywordList.map((k) => (
                   <span
                     key={k}
-                    className="px-3 py-1 rounded bg-[#EEF7F8] text-sm text-[#0FA4AB]"
+                    className="h-11 px-5 py-3.25 rounded text-sm bg-[#F5F8F8] mr-3 mb-2"
                   >
-                    #{k}
+                    {getEmoji(k, "positive")} {k}
                   </span>
                 ))}
               </div>
@@ -45,22 +69,23 @@ export default function ReviewByTime({ peerReviewRecent }: Props) {
 
           {/* 아쉬운 점 */}
           {review.badKeywordList.length > 0 && (
-            <div>
-              <p className="font-semibold text-[#F87171] mb-1">아쉬운 점</p>
-              <div className="flex flex-wrap gap-2">
+            <div className="ml-16.75">
+              <p className="font-medium text-[#222829] mb-1">약점 키워드</p>
+              <div className="flex flex-wrap">
                 {review.badKeywordList.map((k) => (
                   <span
                     key={k}
-                    className="px-3 py-1 rounded bg-[#FEF2F2] text-sm text-[#DC2626]"
+                    className="h-11 px-5 py-3.25 rounded mr-3 bg-[#F5F8F8] text-sm text-[#222829] mb-2"
                   >
-                    #{k}
+                    {getEmoji(k, "negative")} {k}
                   </span>
                 ))}
               </div>
             </div>
           )}
-        </li>
+          <div className="w-full border my-9 border-[#E1EDF0]"></div>
+        </div>
       ))}
-    </ul>
+    </div>
   );
 }
