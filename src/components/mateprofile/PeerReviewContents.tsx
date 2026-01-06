@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import ReviewByCount from "@/components/ReviewByCount";
-import ReviewByTime from "@/components/ReviewByTime";
+import ReviewByCount from "../ReviewByCount";
+import ReviewByTime from "../ReviewByTime";
 
 type Props = {
   name: string;
@@ -21,15 +21,16 @@ type Props = {
   }[];
 };
 
-export default function MyReviews(props: Props) {
+export default function PeerReviewContents(props: Props) {
   const [sortType, setSortType] = useState<"count" | "recent">("count");
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="bg-white px-20 pt-10">
-      {/* ===== 상단 헤더 (드롭다운) ===== */}
+    <div className="bg-white rounded-b-lg rounded-tr-lg shadow px-20 py-10">
+      {/* ===== 상단 헤더 ===== */}
       <div className="flex justify-end mb-8 relative">
         <div className="relative w-36">
+          {/* 버튼 */}
           <button
             type="button"
             onClick={() => setOpen((prev) => !prev)}
@@ -41,26 +42,28 @@ export default function MyReviews(props: Props) {
               bg-white
               text-sm text-[#495456]
               shadow-sm
-              active:border-black
             "
           >
             <span>{sortType === "count" ? "많이 받은 순" : "최신순"}</span>
             <img
               src="/dropdownArrow.svg"
+              alt="toggle"
               className={`w-4 h-4 transition-transform ${
                 open ? "rotate-180" : ""
               }`}
             />
           </button>
 
+          {/* 드롭다운 */}
           {open && (
             <div
               className="
-              absolute right-0 top-full mt-2
-              w-full bg-white rounded-lg
-              shadow-[0px_8px_24px_rgba(0,0,0,0.12)]
-              z-30 overflow-hidden
-            "
+                absolute right-0 top-full mt-2
+                w-full bg-white
+                rounded-lg
+                shadow-[0px_8px_24px_rgba(0,0,0,0.12)]
+                z-30 overflow-hidden
+              "
             >
               <ul className="text-sm text-[#495456]">
                 <li
@@ -68,7 +71,7 @@ export default function MyReviews(props: Props) {
                     setSortType("count");
                     setOpen(false);
                   }}
-                  className="px-4 py-3 cursor-pointer hover:bg-[#F5F8F8] focus:bg-black"
+                  className="px-4 py-3 cursor-pointer hover:bg-[#F5F8F8]"
                 >
                   많이 받은 순
                 </li>
@@ -91,9 +94,9 @@ export default function MyReviews(props: Props) {
       <div
         className={`
           overflow-y-auto pr-2
-          ${sortType === "count" ? "max-h-100vh" : "max-h-[520px]"}
+          transition-[max-height] duration-300 ease-in-out
+          ${sortType === "count" ? "max-h-[420px]" : "max-h-[520px]"}
         `}
-        style={{ scrollbarGutter: "stable" }}
       >
         {sortType === "count" ? (
           <ReviewByCount
