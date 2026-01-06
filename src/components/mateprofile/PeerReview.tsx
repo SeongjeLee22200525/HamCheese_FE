@@ -1,64 +1,28 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import ReviewColumn from "./ReviewColumn";
-import { PEER_REVIEW_VISIBLE_COUNT } from "@/constants/peerKeywords";
-
-type KeywordItem = {
-  key: string;
-  count: number;
-};
-
-type SortType = "count" | "latest";
+import { useState } from "react";
+import ReviewByCount from "../ReviewByCount";
+import ReviewByTime from "../ReviewByTime";
 
 type Props = {
   name: string;
+
   peerGoodKeyword: Record<string, number>;
   goodKeywordCount: number;
+
   peerBadKeyword: Record<string, number>;
   badKeywordCount: number;
+
+  peerReviewRecent: {
+    startDate: string;
+    meetSpecific: string;
+    goodKeywordList: string[];
+    badKeywordList: string[];
+  }[];
 };
 
-export default function PeerReview({
-  name,
-  peerGoodKeyword,
-  goodKeywordCount,
-  peerBadKeyword,
-  badKeywordCount,
-}: Props) {
-  const [expanded, setExpanded] = useState(false);
-  const [sortType, setSortType] = useState<SortType>("count");
-
-  /* ===== 정렬된 데이터 ===== */
-  const positive: KeywordItem[] = useMemo(() => {
-    const entries = Object.entries(peerGoodKeyword);
-
-    const sorted =
-      sortType === "count" ? [...entries].sort((a, b) => b[1] - a[1]) : entries; // 최신순 (서버 순서 유지)
-
-    return sorted.map(([key, count]) => ({ key, count }));
-  }, [peerGoodKeyword, sortType]);
-
-  const negative: KeywordItem[] = useMemo(() => {
-    const entries = Object.entries(peerBadKeyword);
-
-    const sorted =
-      sortType === "count" ? [...entries].sort((a, b) => b[1] - a[1]) : entries;
-
-    return sorted.map(([key, count]) => ({ key, count }));
-  }, [peerBadKeyword, sortType]);
-
-  const visiblePositive = expanded
-    ? positive
-    : positive.slice(0, PEER_REVIEW_VISIBLE_COUNT);
-
-  const visibleNegative = expanded
-    ? negative
-    : negative.slice(0, PEER_REVIEW_VISIBLE_COUNT);
-
-  const hasMore =
-    positive.length > PEER_REVIEW_VISIBLE_COUNT ||
-    negative.length > PEER_REVIEW_VISIBLE_COUNT;
+export default function PeerReview(props: Props) {
+  const [sortType, setSortType] = useState<"count" | "recent">("count");
 
   return (
     <section className="relative">
@@ -69,53 +33,36 @@ export default function PeerReview({
         </div>
       </div>
 
-      {/* ===== 내용 ===== */}
-      <div className="bg-white rounded-b-lg rounded-tr-lg shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] px-20 pt-10 pb-10">
-        {/* ===== 드롭다운 ===== */}
-        <div className="flex justify-end mb-12">
+      {/* ===== 콘텐츠 ===== */}
+      <div className="bg-white rounded-b-lg rounded-tr-lg shadow px-20 pt-10 pb-10">
+        {/* 상단 헤더 */}
+        <div className="flex justify-between items-center mb-10">
+          <span className="text-base font-medium text-[#495456]">
+            {sortType === "count" ? "많이 받은 순" : "최신순"}
+          </span>
+
+          {/* 드롭다운 */}
           <select
             value={sortType}
-            onChange={(e) => setSortType(e.target.value as SortType)}
-            className="
-      w-37 h-11.25
-      outline-2 outline-[#E1EDF0]
-      rounded py-3 px-3
-      text-base font-medium text-[#495456]
-      bg-white cursor-pointer
-    "
+            onChange={(e) => setSortType(e.target.value as any)}
+            className="border border-[#E1EDF0] rounded px-3 py-2 text-sm text-[#495456]"
           >
             <option value="count">많이 받은 순</option>
-            <option value="latest">최신순</option>
+            <option value="recent">최신순</option>
           </select>
         </div>
 
-        {/* ===== 컬럼 ===== */}
-        <div className="flex gap-16 text-[#222829] text-xl font-extrabold">
-          <ReviewColumn
-            type="positive"
-            title={`${name}님의 강점`}
-            subtitle={`${goodKeywordCount}명에게 동료평가를 받았어요.`}
-            items={visiblePositive}
+        {/* ===== 분기 렌더링 ===== */}
+        {sortType === "count" ? (
+          <ReviewByCount
+            name={props.name}
+            peerGoodKeyword={props.peerGoodKeyword}
+            goodKeywordCount={props.goodKeywordCount}
+            peerBadKeyword={props.peerBadKeyword}
+            badKeywordCount={props.badKeywordCount}
           />
-
-          <ReviewColumn
-            type="negative"
-            title={`${name}님의 약점`}
-            subtitle={`${badKeywordCount}명에게 동료평가를 받았어요.`}
-            items={visibleNegative}
-          />
-        </div>
-
-        {/* ===== 더보기 / 접기 ===== */}
-        {hasMore && (
-          <div className="text-right">
-            <button
-              onClick={() => setExpanded((prev) => !prev)}
-              className="mt-10.75 text-base text-[#495456] hover:text-[#00C3CC]"
-            >
-              {expanded ? "접기" : "더보기"}
-            </button>
-          </div>
+        ) : (
+          <ReviewByTime peerReviewRecent={props.peerReviewRecent} />
         )}
       </div>
     </section>

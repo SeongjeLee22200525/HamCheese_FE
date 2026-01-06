@@ -218,6 +218,7 @@ export default function MateProfilePage() {
               goodKeywordCount={profile.goodKeywordCount}
               peerBadKeyword={profile.peerBadKeyword}
               badKeywordCount={profile.badKeywordCount}
+              peerReviewRecent={profile.peerReviewRecent}
             />
           </div>
         </section>

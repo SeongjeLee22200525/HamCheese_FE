@@ -53,7 +53,7 @@ export default function Header() {
               />
             </Link>
 
-            <nav className="flex items-baseline gap-10 font-medium">
+            <nav className="flex items-baseline  font-medium pl-8">
               <Link
                 href="/searchmate"
                 className={`px-8 py-5 pb-4 inline-flex transition-all border-b-2 rounded-tl rounded-tr ${
