@@ -236,7 +236,7 @@ export default function RecruitMateDetail() {
                         setShowAlreadyPoked(true);
                       }
                     }}
-                    className="h-12.5 ml-6 mt-40 flex items-center gap-2 px-3 py-2.5 rounded-lg bg-[#00C3CC] text-[#F5F8F8] font-extrabold"
+                    className="h-12.5 ml-6 mt-40 flex items-center gap-2 px-3 py-2.5 rounded-lg bg-[#00C3CC] text-[#F5F8F8] font-extrabold hover:bg-[#0FA4AB] active:bg-[#1A858A]"
                   >
                     <img src="/images/chat.svg" alt="" className="w-6 h-6" />
                     조각 건네기

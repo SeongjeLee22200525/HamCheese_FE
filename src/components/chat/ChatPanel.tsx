@@ -7,17 +7,14 @@ import { getGroupChannel } from "@/lib/sendbird/channel";
 import { useChatWidget } from "@/hooks/chat/useChatWidget";
 
 type Props = {
-  channel: GroupChannel | null;
-  onSelect: (c: GroupChannel) => void;
   onClose: () => void;
 };
 
 export default function ChatPanel({ onClose }: Props) {
   const { currentChannelUrl, closeChat } = useChatWidget();
-
   const [channel, setChannel] = useState<GroupChannel | null>(null);
 
-  // 🔥 핵심: channelUrl → GroupChannel 변환
+  /* channelUrl → GroupChannel */
   useEffect(() => {
     if (!currentChannelUrl) {
       setChannel(null);
@@ -25,7 +22,6 @@ export default function ChatPanel({ onClose }: Props) {
     }
 
     let alive = true;
-
     getGroupChannel(currentChannelUrl).then((ch) => {
       if (alive) setChannel(ch);
     });
@@ -36,38 +32,50 @@ export default function ChatPanel({ onClose }: Props) {
   }, [currentChannelUrl]);
 
   return (
-    <div className="fixed bottom-px right-42 w-100 h-140 bg-white rounded-tl-lg rounded-tr-lg shadow-[0px_-2px_20px_0px_rgba(225,237,240,1.00)] z-9999 flex flex-col">
-      {/* ===== Header ===== */}
-      <header className="rounded-tl-lg rounded-tr-lg h-15.5 border-b flex justify-between items-center bg-[#00C3CC]">
-        <span className="font-bold text-lg pl-6 text-white">대화</span>
-        <button
-          onClick={() => {
-            closeChat();
-            onClose();
-          }}
-          className="pr-6"
-        >
-          <img src="chathide.png" />
-        </button>
-      </header>
+    <div className="fixed right-0 bottom-0 w-225 h-full bg-white rounded-tl-[20px] rounded-bl-[20px] shadow-[0px_-2px_20px_0px_rgba(225,237,240,1.00)] z-9999 flex text-[#222829]">
+      {/* ================= 왼쪽 영역 ================= */}
+      <div className="w-84 bg-[#F5F8F8] h-full flex flex-col">
+        {/* 헤더 */}
+        <div className="mt-10 mx-10">
+          <button
+            onClick={() => {
+              closeChat();
+              onClose();
+            }}
+          >
+            <img src="chatclose.svg" />
+          </button>
 
-      {/* ===== Content ===== */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="text-lg font-bold mt-6 mb-10">나의 채팅 내역</div>
+
+          <div className="bg-[#E1EDF0] py-4 px-3 rounded text-sm">
+            <span className="font-bold">서예진 학부생</span>이 대화를 거절했어요
+          </div>
+        </div>
+
+        {/* 찌르기 */}
+        <div className="mt-10 ">
+          <ChatPokingSection />
+        </div>
+
+        {/* 채팅 리스트 */}
+        <div className="flex-1 overflow-y-auto mt-6">
+          <ChatList
+            onSelect={(c) => {
+              useChatWidget.getState().openChat(c.url);
+            }}
+          />
+        </div>
+      </div>
+
+      {/* ================= 오른쪽 영역 ================= */}
+      <div className="flex-1 h-full border-l border-[#E1EDF0]">
         {channel ? (
           <ChatRoom channel={channel} />
         ) : (
-          <>
-            <ChatPokingSection />
-
-            <div className="h-px bg-[#E1EDF0]" />
-
-            <ChatList
-              onSelect={(c) => {
-                // 리스트 클릭 시도 동일하게 channelUrl로 통일
-                useChatWidget.getState().openChat(c.url);
-              }}
-            />
-          </>
+          <div className="h-full flex items-center justify-center text-[#B7C4C7] font-medium">
+            대화를 선택해주세요
+          </div>
         )}
       </div>
     </div>

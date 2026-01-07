@@ -10,7 +10,7 @@ export default function ChatInput({
   const [text, setText] = useState("");
 
   return (
-    <div className="border-t px-4 py-3 flex items-center gap-2">
+    <div className="w-[563px] flex px-10 py-4 fixed bottom-0 right-0 border-t border-[#E1EDF0]">
       <input
         value={text}
         onChange={(e) => setText(e.target.value)}
@@ -30,7 +30,7 @@ export default function ChatInput({
         }}
         className="text-[#00C3CC] font-bold"
       >
-        전송
+        <img src="/send.svg" alt="send" />
       </button>
     </div>
   );

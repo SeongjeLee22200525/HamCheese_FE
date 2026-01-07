@@ -62,38 +62,40 @@ export default function ChatPokingSection() {
   return (
     <div>
       {list.map((p) => (
-        <div key={p.pokingId} className="flex px-5 pt-4 pb-6 border-b-2">
+        <div key={p.pokingId} className="flex px-10 mb-5 ">
           <img
             src={p.imageUrl || "/profile.svg"}
             alt="profile"
-            className="w-17 h-17 rounded-full object-cover"
+            className="w-11 h-11 rounded-full object-cover"
           />
 
-          <div className="ml-4.5 flex-1">
+          <div className="ml-4">
             {p.recruitingId && (
               <div className="text-xs text-[#00C3CC] font-bold">
                 [{p.recruitingTitle}]
               </div>
             )}
-
-            <div className="text-[#222829] text-base font-bold">
-              {p.senderName} 학부생
-              <span className="font-medium">이 함께 하고 싶어해요.</span>
+            <div className="font-bold">
+              <div className="flex justify-between">
+                {p.senderName} 학부생
+                <div className="text-sm font-medium text-[#838F91] ">
+                  {p.date}
+                </div>
+              </div>
+              <div className="font-medium mt-2">대화 신청이 왔어요.</div>
             </div>
 
-            <div className="text-base text-[#838F91] my-2">{p.date}</div>
-
-            <div className="flex gap-2 font-bold">
+            <div className="flex font-bold mt-4">
               <button
                 onClick={() => handleReject(p.pokingId)}
-                className="w-28 px-4 py-3 text-base bg-[#E1EDF0] rounded text-[#495456]"
+                className="w-23 px- py-3 text-sm mr-2 bg-[#E1EDF0] rounded text-[#495456]"
               >
                 다음 기회에!
               </button>
 
               <button
                 onClick={() => handleAccept(p)}
-                className="w-28 px-4 py-3 text-base bg-[#00C3CC] text-white rounded"
+                className="w-23 px-2 py-3 text-sm bg-[#00C3CC] text-white rounded"
               >
                 대화해보기
               </button>

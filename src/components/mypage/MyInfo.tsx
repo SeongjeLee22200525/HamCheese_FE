@@ -6,6 +6,7 @@ import { useUserStore } from "@/stores/useUserStore";
 import { departments } from "@/constants/departments";
 import Snackbar from "@/components/common/Snackbar";
 import { MateProfileInfo } from "@/types/user";
+import { sb } from "@/lib/sendbird/sendbird";
 
 type Activity = {
   year: number;
@@ -48,19 +49,39 @@ export default function MyInfo({ profile, setProfile }: Props) {
     formData.append("profileImage", file);
 
     try {
-      await axios.post(`/user/updateImage/${myId}`, formData);
+      const res = await axios.post(`/user/updateImage/${myId}`, formData);
+
+      const imageUrl = res.data.imageUrl; // 🔥 서버에서 받은 실제 URL
+
+      setProfileImage(imageUrl); // UI 반영
+
+      // ✅ Sendbird 즉시 동기화
+      await sb.updateCurrentUserInfo({
+        profileUrl: imageUrl,
+      });
+
       alert("프로필 사진이 변경되었습니다.");
     } catch (e) {
       console.error("❌ image upload error", e);
       alert("사진 업로드 실패");
     }
   };
+
   const deleteProfileImage = async () => {
     if (!myId) return;
 
     try {
+      // 1️⃣ 서버에서 프로필 이미지 삭제
       await axios.delete(`/user/myProfile/${myId}`);
-      setProfileImage(null); // UI 반영
+
+      // 2️⃣ UI 상태 반영
+      setProfileImage(null);
+
+      // 3️⃣ 🔥 Sendbird 프로필 이미지 제거
+      await sb.updateCurrentUserInfo({
+        profileUrl: "/profile.svg", // ← 이게 핵심
+      });
+
       alert("프로필 사진이 삭제되었습니다.");
     } catch (e) {
       console.error("❌ image delete error", e);
@@ -200,6 +221,14 @@ export default function MyInfo({ profile, setProfile }: Props) {
 
     try {
       await axios.patch(`/user/update/${myId}`, payload);
+      await sb.updateCurrentUserInfo({
+        nickname: payload.name,
+      });
+      await sb.currentUser?.updateMetaData({
+        studentId: payload.studentId,
+        major1: payload.firstMajor,
+        ...(payload.secondMajor ? { major2: payload.secondMajor } : {}),
+      });
       setShowSaveSnackbar(true);
     } catch (e) {
       console.error("❌ update profile error", e);
