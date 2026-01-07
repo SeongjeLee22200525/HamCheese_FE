@@ -59,8 +59,6 @@ export default function RecruitingCard({ item, onClick }: Props) {
               {item.projectType}
             </span>
 
-            <img src="/images/Vector.svg" alt="arrow" className="w-3 h-3" />
-
             {/* 🔥 여기 핵심 수정 */}
             <span className="whitespace-nowrap font-medium text-[#222829]">
               {item.projectSpecific}
@@ -114,7 +112,7 @@ export default function RecruitingCard({ item, onClick }: Props) {
                     <span
                       key={keyword}
                       className="
-                        px-3 py-1
+                        px-3 py-1.5
                         text-sm
                         rounded
                         outline
