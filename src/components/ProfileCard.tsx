@@ -52,7 +52,7 @@ export default function ProfileCard({ user }: Props) {
   return (
     <article
       onClick={handleClick}
-      className="rounded-lg p-15 outline-1 outline-offset-[-1px] outline-[#E1EDF0] bg-white shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] hover:shadow-md transition cursor-pointer"
+      className="rounded-lg p-15 outline-1 outline-offset-[-1px] outline-[#E1EDF0] bg-white  hover:shadow-md transition cursor-pointer"
     >
       <div className="flex items-start gap-6">
         {/* ================= 이미지 블록 ================= */}

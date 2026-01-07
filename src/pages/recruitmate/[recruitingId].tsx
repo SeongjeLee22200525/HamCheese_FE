@@ -10,6 +10,7 @@ import { useUserStore } from "@/stores/useUserStore";
 import { getRecruitingDetail } from "@/api/recruiting";
 import { RecruitingDetail } from "@/types/recruitingDetail";
 import { useRecruitingActions } from "@/hooks/useRecruitingActions";
+import { sendPokingInRecruiting, checkCanPokeInRecruiting } from "@/api/poking";
 
 /* 날짜 포맷 */
 const formatDateTime = (dateString: string) => {
@@ -29,6 +30,10 @@ export default function RecruitMateDetail() {
 
   const [recruiting, setRecruiting] = useState<RecruitingDetail | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // 조각건네기 관련
+  const [showPokingSuccess, setShowPokingSuccess] = useState(false);
+  const [showAlreadyPoked, setShowAlreadyPoked] = useState(false);
 
   /* 수정 / 삭제 핸들러 */
   const { handleEdit, handleDelete } = useRecruitingActions(
@@ -202,7 +207,37 @@ export default function RecruitMateDetail() {
                   <div className="flex w-36 h-12.5 text-[#1A858A]">
                     팀원으로 고민중이신가요? 한 번 찔러보세요!
                   </div>
-                  <button className="h-12.5 ml-6 mt-40 flex items-center gap-2 px-3 py-2.5 rounded-lg bg-[#00C3CC] text-[#F5F8F8] font-extrabold">
+                  <button
+                    onClick={async () => {
+                      if (!user?.myId || !recruitingId) return;
+
+                      const myId = user.myId;
+                      const rid = Number(recruitingId);
+                      if (Number.isNaN(rid)) return;
+
+                      try {
+                        // ✅ 모집글 기준 찌르기 가능 여부 (유일하게 안전)
+                        const { canPoke } = await checkCanPokeInRecruiting(
+                          rid,
+                          myId
+                        );
+
+                        if (!canPoke) {
+                          setShowAlreadyPoked(true);
+                          return;
+                        }
+
+                        // ✅ 찌르기 생성
+                        await sendPokingInRecruiting(rid, myId);
+
+                        setShowPokingSuccess(true);
+                      } catch (e) {
+                        console.error("❌ 조각 건네기 실패", e);
+                        setShowAlreadyPoked(true);
+                      }
+                    }}
+                    className="h-12.5 ml-6 mt-40 flex items-center gap-2 px-3 py-2.5 rounded-lg bg-[#00C3CC] text-[#F5F8F8] font-extrabold"
+                  >
                     <img src="/images/chat.svg" alt="" className="w-6 h-6" />
                     조각 건네기
                   </button>
@@ -276,6 +311,23 @@ export default function RecruitMateDetail() {
           </div>
         </div>
       </main>
+      {showPokingSuccess && (
+        <Snackbar
+          message="상대방을 찔렀어요!"
+          actionText="확인"
+          duration={3000}
+          onClose={() => setShowPokingSuccess(false)}
+        />
+      )}
+
+      {showAlreadyPoked && (
+        <Snackbar
+          message="이미 이 모집글 작성자를 찔렀어요!"
+          actionText="확인"
+          duration={3000}
+          onClose={() => setShowAlreadyPoked(false)}
+        />
+      )}
 
       <Footer />
     </div>

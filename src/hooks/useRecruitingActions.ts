@@ -17,10 +17,10 @@ export const useRecruitingActions = (recruitingId: number, myId: number) => {
 
     await deleteRecruiting(recruitingId, myId);
 
-    // ✅ 삭제 성공 스낵바 플래그
+    //  삭제 성공 스낵바 플래그
     sessionStorage.setItem("recruitingDeleted", "true");
 
-    // ✅ 목록으로 이동
+    //  목록으로 이동
     router.replace("/recruitmate");
   };
 

@@ -18,7 +18,8 @@ import { useUserStore } from "@/stores/useUserStore";
 import { submitPeerReview } from "@/api/peerReview";
 
 import PokingConfirmModal from "@/components/poking/PokingConfirmModal";
-import { sendPoking } from "@/components/poking/usePoking";
+import { sendPoking } from "@/api/poking";
+import { checkCanPoke } from "@/api/poking";
 
 export default function MateProfilePage() {
   const router = useRouter();
@@ -33,6 +34,10 @@ export default function MateProfilePage() {
   const [showReviewSuccess, setShowReviewSuccess] = useState(false);
   //조각건네기 모달 상태관리
   const [isgivePieceOpen, setIsGivePieceOpen] = useState(false);
+  //조각건네기 성공 스낵바
+  const [showPokingSuccess, setShowPokingSuccess] = useState(false);
+  //찔렀는지 여부
+  const [showAlreadyPoked, setShowAlreadyPoked] = useState(false);
 
   /* =========================
    * 프로필 조회
@@ -107,7 +112,26 @@ export default function MateProfilePage() {
         <div className="pl-50">
           <Profile
             profile={profile}
-            onGivePiece={() => setIsGivePieceOpen(true)}
+            onGivePiece={async () => {
+              if (!myId || typeof userId !== "string") return;
+
+              const targetUserId = Number(userId);
+              if (Number.isNaN(targetUserId)) return;
+
+              try {
+                const { canPoke } = await checkCanPoke(targetUserId, myId);
+
+                if (!canPoke) {
+                  setShowAlreadyPoked(true);
+                  return;
+                }
+
+                // ✅ 찌르기 가능 → 기존 로직
+                setIsGivePieceOpen(true);
+              } catch (e) {
+                console.error("❌ 찌르기 가능 여부 조회 실패", e);
+              }
+            }}
             onPeerReview={() => setIsPeerReviewOpen(true)}
           />
         </div>
@@ -155,14 +179,13 @@ export default function MateProfilePage() {
                 const targetUserId = Number(userId);
                 if (Number.isNaN(targetUserId)) return;
 
-                // 1️⃣ 조각 건네기
+                //조각 건네기
                 await sendPoking(targetUserId, myId);
 
-                // 2️⃣ 모달 닫기
+                // 모달 닫기
                 setIsGivePieceOpen(false);
 
-                // 3️⃣ 스낵바 or UX (원하면)
-                // 예: setShowPokingSuccess(true);
+                setShowPokingSuccess(true);
               } catch (e) {
                 console.error("❌ 조각 건네기 실패", e);
                 alert("조각 건네기에 실패했습니다.");
@@ -178,6 +201,24 @@ export default function MateProfilePage() {
             actionText="확인"
             duration={3000}
             onClose={() => setShowReviewSuccess(false)}
+          />
+        )}
+
+        {showPokingSuccess && (
+          <Snackbar
+            message="상대방을 찔렀어요!"
+            actionText="확인"
+            duration={3000}
+            onClose={() => setShowPokingSuccess(false)}
+          />
+        )}
+
+        {showAlreadyPoked && (
+          <Snackbar
+            message="이미 이 유저를 찔렀어요!"
+            actionText="확인"
+            duration={3000}
+            onClose={() => setShowAlreadyPoked(false)}
           />
         )}
 
