@@ -52,7 +52,11 @@ export default function ProfileCard({ user }: Props) {
   return (
     <article
       onClick={handleClick}
+<<<<<<< HEAD
       className="rounded-lg p-15 outline-1 outline-offset-[-1px] outline-[#CEDBDE] bg-white hover:shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] transition cursor-pointer"
+=======
+      className="rounded-lg p-15 outline-1 outline-offset-[-1px] outline-[#E1EDF0] bg-white hover:shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] transition cursor-pointer"
+>>>>>>> main
     >
       <div className="flex items-start gap-6">
         {/* ================= 이미지 블록 ================= */}
@@ -69,7 +73,11 @@ export default function ProfileCard({ user }: Props) {
           <div className="flex items-center pb-2">
             <p className="text-xl font-bold text-[#222729]">
               {user.name}
+<<<<<<< HEAD
               <span>{" "}학부생</span>
+=======
+              <span className="font-bold ml-1.25">학부생</span>
+>>>>>>> main
             </p>
           </div>
 
@@ -90,7 +98,11 @@ export default function ProfileCard({ user }: Props) {
               ))}
           </div>
 
+<<<<<<< HEAD
           <p className="mt-5 mb-6 text-lg font-medium text-[#222829] max-w-[520px] truncate leading-relaxed">
+=======
+          <p className="mt-5 mb-6 text-lg font-medium text-[#222829] max-w-[550px] truncate leading-relaxed">
+>>>>>>> main
             {user.introduction || "자기소개가 아직 작성되지 않았어요."}
           </p>
 

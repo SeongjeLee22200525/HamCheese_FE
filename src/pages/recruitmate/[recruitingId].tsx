@@ -104,9 +104,9 @@ export default function RecruitMateDetail() {
           </div>
 
           {/* ================= 카드 ================= */}
-          <div className="border border-[#E6EEF0] rounded-xl bg-white px-12 py-10">
+          <div className="border border-[#E6EEF0] rounded-xl bg-white px-20 pt-17 pb-25">
             {/* ---------- 상단 ---------- */}
-            <div className="flex mb-8">
+            <div className="flex mb-10">
               {/* 왼쪽 전체 영역 */}
               <div className="flex-1">
                 {/* 모집 정보 */}
@@ -198,10 +198,15 @@ export default function RecruitMateDetail() {
 
               {/* 오른쪽 버튼 (본인 글 아닐 때) */}
               {!recruiting.canEdit && (
-                <button className="ml-6 flex items-center gap-2 px-5 py-3 rounded-lg bg-[#6EC6CC] text-[#F5F8F8] font-extrabold h-fit">
-                  <img src="/images/chat.svg" alt="" className="w-6 h-6" />
-                  조각 건네기
-                </button>
+                <div className="flex-col">
+                  <div className="flex w-36 h-12.5 text-[#1A858A]">
+                    팀원으로 고민중이신가요? 한 번 찔러보세요!
+                  </div>
+                  <button className="h-12.5 ml-6 mt-40 flex items-center gap-2 px-3 py-2.5 rounded-lg bg-[#00C3CC] text-[#F5F8F8] font-extrabold">
+                    <img src="/images/chat.svg" alt="" className="w-6 h-6" />
+                    조각 건네기
+                  </button>
+                </div>
               )}
             </div>
 

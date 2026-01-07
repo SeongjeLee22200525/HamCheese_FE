@@ -24,7 +24,7 @@ export function useChat(channel: GroupChannel | null) {
       })
       .then((msgs) => {
         // 오래된 → 최신 순으로 정렬
-        setMessages(msgs.reverse());
+        setMessages(msgs);
       });
 
     // 2️⃣ 실시간 메시지 핸들러

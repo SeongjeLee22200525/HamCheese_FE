@@ -115,7 +115,7 @@ export default function SearchMate() {
                   alt="filter header"
                   className="w-60 block"
                 />
-                <h3 className="absolute left-5 top-1/2 -translate-y-1/2 text-xl font-extrabold text-white">
+                <h3 className="absolute left-5 top-1/2 -translate-y-1/2 text-lg font-extrabold text-white">
                   학부별 필터
                 </h3>
               </div>
@@ -128,7 +128,7 @@ export default function SearchMate() {
                     return (
                       <label
                         key={dept}
-                        className="w-full h-12 px-8 flex items-center gap-4 cursor-pointer hover:bg-[#F5F8F8]"
+                        className="w-full h-12 px-8 flex items-center gap-4 cursor-pointer hover:bg-[#F5F8F8] active:bg-[#E1EDF0]"
                       >
                         <input
                           type="checkbox"
