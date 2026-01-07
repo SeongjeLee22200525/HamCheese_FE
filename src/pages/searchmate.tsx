@@ -106,9 +106,9 @@ export default function SearchMate() {
             }
           />
 
-          <div className="flex gap-9.5 mt-10">
+          <div className="flex gap-9.5 mt-20">
             {/* ================= 왼쪽 필터 ================= */}
-            <aside className="w-80 sticky top-24 self-start">
+            <aside className="w-80 top-24 self-start">
               <div className="relative">
                 <img
                   src="/images/Rectangle.svg"
@@ -178,7 +178,7 @@ export default function SearchMate() {
               )}
 
               {!loading && sortedUsers.length > 0 && (
-                <div className="grid grid-cols-1 gap-1.5">
+                <div className="grid grid-cols-1 gap-2.5">
                   {sortedUsers.map((user) => (
                     <ProfileCard key={user.userId} user={user} />
                   ))}

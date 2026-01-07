@@ -93,7 +93,7 @@ export default function RecruitMate() {
             }
           />
 
-          <div className="flex gap-9.5 mt-10">
+          <div className="flex gap-9.5 mt-20">
             {/* 왼쪽 필터 */}
             <aside className="w-80 shrink-0 top-24 self-start">
               {/* 유형별 필터 */}

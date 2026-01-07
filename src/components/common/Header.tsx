@@ -58,7 +58,7 @@ export default function Header() {
                 href="/searchmate"
                 className={`px-8 py-5 pb-4 inline-flex transition-all border-b-3 rounded-tl rounded-tr ${
                   isMate
-                    ? "text-[#00C3CC] border-[#00C3CC] border-b-3 font-semibold text-xl"
+                    ? "text-[#00C3CC] border-[#00C3CC] border-b-3 font-semibold text-lg"
                     : "text-[#222829] border-transparent hover:border-[#B7C4C7] hover:border-b-3 hover:bg-[#F5F8F8] text-lg"
                 }`}
               >
@@ -69,7 +69,7 @@ export default function Header() {
                 href="/recruitmate"
                 className={`px-8 py-5 pb-4 inline-flex transition-all border-b-3 rounded-tl rounded-tr ${
                   isTeam
-                    ? "text-[#00C3CC] border-[#00C3CC] border-b-3 font-semibold text-xl"
+                    ? "text-[#00C3CC] border-[#00C3CC] border-b-3 font-semibold text-lg"
                     : "text-[#222829] border-transparent hover:border-[#B7C4C7] hover:border-b-3 hover:bg-[#F5F8F8] text-lg"
                 }`}
               >

@@ -13,6 +13,12 @@ export interface User {
 /** 기본 프로필 이미지 */
 const DEFAULT_PROFILE_IMAGE = "/images/profile.svg";
 
+console.log(
+  "🌍 API BASE URL:",
+  process.env.NEXT_PUBLIC_API_BASE_URL
+);
+
+
 interface UserStore {
   user: User | null;
 
