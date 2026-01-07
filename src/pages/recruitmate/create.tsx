@@ -177,24 +177,28 @@ export default function RecruitMateCreate() {
 
     return (
       <div className="flex items-center gap-3 ml-[calc(1rem+7rem)]">
-        {config.fields.map((field) => (
-          <div key={field.name} className="flex items-center gap-2">
-            <input
-              name={field.name}
-              type={field.type ?? "text"}
-              placeholder={field.placeholder}
-              value={form[field.name]}
-              onChange={handleChange}
-              className={`${inputBaseClass} ${field.width} px-3 py-2 ${
-                field.type === "number" ? "text-center" : ""
-              }`}
-            />
+        {config.fields.map((field) => {
+          const name = field.name as ProjectFieldName; // ⭐ 핵심 추가
 
-            {field.suffix && (
-              <span className="text-sm text-[#6B7280]">{field.suffix}</span>
-            )}
-          </div>
-        ))}
+          return (
+            <div key={name} className="flex items-center gap-2">
+              <input
+                name={name}
+                type={field.type ?? "text"}
+                placeholder={field.placeholder}
+                value={form[name]}
+                onChange={handleChange}
+                className={`${inputBaseClass} ${field.width} px-3 py-2 ${
+                  field.type === "number" ? "text-center" : ""
+                }`}
+              />
+
+              {field.suffix && (
+                <span className="text-sm text-[#6B7280]">{field.suffix}</span>
+              )}
+            </div>
+          );
+        })}
       </div>
     );
   };
