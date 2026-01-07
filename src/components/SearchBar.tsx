@@ -15,9 +15,9 @@ export default function SearchBar({
 }: Props) {
   return (
     <div className="w-full px-12 py-10 bg-[#F5F8F8] rounded-lg inline-flex justify-between items-center">
-      <p className="text-[24px] font-extrabold text-[#222729]">{title}</p>
+      <p className="text-2xl font-extrabold text-[#222729]">{title}</p>
 
-      <div className="gap-2 w-96 p-3 border-b-2 border-[#B7C4C7] inline-flex items-center">
+      <div className="gap-2 w-96 p-2 border-b-2 border-[#B7C4C7] inline-flex items-center">
         <input
           value={value}
           onChange={(e) => onChange(e.target.value)}
@@ -27,7 +27,7 @@ export default function SearchBar({
             }
           }}
           placeholder={placeholder}
-          className="w-full outline-none text-[16px] py-1 text-[#222729] placeholder:text-[#838F91]"
+          className="w-full outline-none text-base py-1 text-[#222729] placeholder:text-[#838F91]"
         />
 
         {/* 검색 버튼 */}

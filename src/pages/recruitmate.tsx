@@ -103,7 +103,7 @@ export default function RecruitMate() {
                   alt="filter header"
                   className="w-60 block"
                 />
-                <h3 className="absolute left-5 top-1/2 -translate-y-1/2 text-xl font-extrabold text-white">
+                <h3 className="absolute left-5 top-1/2 -translate-y-1/2 text-lg font-extrabold text-white">
                   유형별 필터
                 </h3>
               </div>
@@ -124,6 +124,7 @@ export default function RecruitMate() {
                           gap-4
                           cursor-pointer
                           hover:bg-[#F5F8F8]
+                          active:bg-[#E1EDF0]
                         "
                       >
                         <input
@@ -160,7 +161,7 @@ export default function RecruitMate() {
                   alt="filter header"
                   className="w-60 block"
                 />
-                <h3 className="absolute left-5 top-1/2 -translate-y-1/2 text-xl font-extrabold text-white">
+                <h3 className="absolute left-5 top-1/2 -translate-y-1/2 text-lg font-extrabold text-white">
                   학부별 필터
                 </h3>
               </div>
@@ -181,6 +182,7 @@ export default function RecruitMate() {
                           gap-4
                           cursor-pointer
                           hover:bg-[#F5F8F8]
+                          active:bg-[#E1EDF0]
                         "
                       >
                         <input
@@ -218,7 +220,7 @@ export default function RecruitMate() {
               <div className="flex justify-end mb-4">
                 <button
                   onClick={() => router.push("/recruitmate/create")}
-                  className="w-72 h-16 rounded bg-[#00C3CC] text-[#F5F8F8] text-xl font-extrabold hover:bg-[#0FA4AB] active:bg-[#1A858A]"
+                  className="w-60 h-14 rounded bg-[#00C3CC] text-[#F5F8F8] text-lg font-extrabold hover:bg-[#0FA4AB] active:bg-[#1A858A]"
                 >
                   모집글 쓰기
                 </button>
