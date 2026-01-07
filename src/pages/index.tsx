@@ -70,7 +70,7 @@ export default function Home() {
         {/* 공통 기준 컨테이너 */}
         <div className="w-full mx-auto px-[240px] py-40">
           {/* ================= PROFILE ================= */}
-          <section className="mb-32">
+          <section className="mb-12">
             <div className="flex justify-between items-center mb-6 text-[#222829]">
               <div className="text-3xl font-light">메이트 프로필</div>
               <Link
