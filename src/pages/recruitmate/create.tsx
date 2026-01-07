@@ -12,7 +12,26 @@ export default function RecruitMateCreate() {
   const router = useRouter();
   const user = useUserStore((state) => state.user);
 
-  const [form, setForm] = useState({
+  type ProjectFieldName =
+    | "projectSpecific"
+    | "classes"
+    | "graduationTopic"
+    | "professor"
+    | "clubName"
+    | "part"
+    | "contestName"
+    | "contestPart"
+    | "topic"
+    | "totalPeople"
+    | "recruitPeople"
+    | "title"
+    | "context";
+
+  const [form, setForm] = useState<
+    Record<ProjectFieldName, string> & {
+      projectType: (typeof types)[number];
+    }
+  >({
     projectType: "수업",
 
     projectSpecific: "",
@@ -152,7 +171,8 @@ export default function RecruitMateCreate() {
   };
 
   const renderTypeRow = () => {
-    const config = PROJECT_TYPE_CONFIG[form.projectType as keyof typeof PROJECT_TYPE_CONFIG];
+    const config =
+      PROJECT_TYPE_CONFIG[form.projectType as keyof typeof PROJECT_TYPE_CONFIG];
     if (!config) return null;
 
     return (
@@ -161,14 +181,15 @@ export default function RecruitMateCreate() {
           <div key={field.name} className="flex items-center gap-2">
             <input
               name={field.name}
-              type={field.types ?? "text"}
+              type={field.type ?? "text"}
               placeholder={field.placeholder}
-              value={(form as any)[field.name] ?? ""}
+              value={form[field.name]}
               onChange={handleChange}
               className={`${inputBaseClass} ${field.width} px-3 py-2 ${
-                field.types === "number" ? "text-center" : ""
+                field.type === "number" ? "text-center" : ""
               }`}
             />
+
             {field.suffix && (
               <span className="text-sm text-[#6B7280]">{field.suffix}</span>
             )}
