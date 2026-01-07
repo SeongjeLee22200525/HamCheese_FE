@@ -52,11 +52,7 @@ export default function ProfileCard({ user }: Props) {
   return (
     <article
       onClick={handleClick}
-<<<<<<< HEAD
-      className="rounded-lg p-15 outline-1 outline-offset-[-1px] outline-[#CEDBDE] bg-white hover:shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] transition cursor-pointer"
-=======
       className="rounded-lg p-15 outline-1 outline-offset-[-1px] outline-[#E1EDF0] bg-white hover:shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] transition cursor-pointer"
->>>>>>> main
     >
       <div className="flex items-start gap-6">
         {/* ================= 이미지 블록 ================= */}
@@ -73,11 +69,7 @@ export default function ProfileCard({ user }: Props) {
           <div className="flex items-center pb-2">
             <p className="text-xl font-bold text-[#222729]">
               {user.name}
-<<<<<<< HEAD
-              <span>{" "}학부생</span>
-=======
               <span className="font-bold ml-1.25">학부생</span>
->>>>>>> main
             </p>
           </div>
 
@@ -98,11 +90,7 @@ export default function ProfileCard({ user }: Props) {
               ))}
           </div>
 
-<<<<<<< HEAD
-          <p className="mt-5 mb-6 text-lg font-medium text-[#222829] max-w-[520px] truncate leading-relaxed">
-=======
           <p className="mt-5 mb-6 text-lg font-medium text-[#222829] max-w-[550px] truncate leading-relaxed">
->>>>>>> main
             {user.introduction || "자기소개가 아직 작성되지 않았어요."}
           </p>
 
@@ -111,7 +99,7 @@ export default function ProfileCard({ user }: Props) {
               {user.skillList.map((skill) => (
                 <span
                   key={skill}
-                  className="p-2 h-7.5 flex items-center outline-1 outline-offset-[-1px] outline-[#CEDBDE] text-xs font-semibold rounded text-[#838F91]"
+                  className="px-3 py-2 outline-1 outline-offset-[-1px] outline-[#CEDBDE] text-sm font-medium rounded text-[#838F91]"
                 >
                   #{skill}
                 </span>
@@ -123,7 +111,7 @@ export default function ProfileCard({ user }: Props) {
         {/* ================= 평가 블록 ================= */}
         {topPeerKeywords.length > 0 && (
           <div>
-            <p className="mb-3 text-base font-bold text-[#838F91]">
+            <p className="mb-3 text-base font-extrabold text-[#838F91]">
               저는 이런 평가를 받았어요
             </p>
 
@@ -140,11 +128,11 @@ export default function ProfileCard({ user }: Props) {
                     className="relative w-[370px] h-11 rounded bg-[#F5F8F8] px-4 flex items-center justify-between overflow-hidden"
                   >
                     <div
-                      className="absolute left-0 top-0 h-full rounded bg-[#E1EDF0]"
+                      className="absolute left-0 top-0 h-full bg-[#E1EDF0]"
                       style={{ width: `${barWidth}px` }}
                     />
 
-                    <span className="relative z-10 flex items-center gap-2 text-sm font-semibold text-[#222829]">
+                    <span className="relative z-10 flex items-center gap-2 text-sm font-medium text-[#222829]">
                       <span>{meta.emoji}</span>
                       {keyword}
                     </span>
