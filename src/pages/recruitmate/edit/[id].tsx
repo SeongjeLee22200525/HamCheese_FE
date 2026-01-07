@@ -5,10 +5,7 @@ import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 
 import { useUserStore } from "@/stores/useUserStore";
-import {
-  getRecruitingDetail,
-  updateRecruiting,
-} from "@/api/recruiting";
+import { getRecruitingDetail, updateRecruiting } from "@/api/recruiting";
 import { RecruitingDetail } from "@/types/recruitingDetail";
 import { types } from "@/constants/types";
 
@@ -108,11 +105,7 @@ export default function RecruitMateEdit() {
     const totalPeopleNum = Number(form.totalPeople);
     const recruitPeopleNum = Number(form.recruitPeople);
 
-    if (
-      classesNum <= 0 ||
-      totalPeopleNum <= 0 ||
-      recruitPeopleNum <= 0
-    ) {
+    if (classesNum <= 0 || totalPeopleNum <= 0 || recruitPeopleNum <= 0) {
       alert("숫자 항목은 1 이상이어야 합니다.");
       return;
     }
@@ -175,8 +168,7 @@ export default function RecruitMateEdit() {
           {/* breadcrumb */}
           <div className="flex items-center text-lg font-medium text-[#838F91] mb-3">
             모집하기
-            <img src="/images/Vector.svg" className="w-3 h-3 mx-2" />
-            글 수정
+            <img src="/images/Vector.svg" className="w-3 h-3 mx-2" />글 수정
           </div>
 
           <div className="bg-white border border-[#E6EEF0] rounded p-10">
