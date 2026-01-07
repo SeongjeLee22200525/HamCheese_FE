@@ -6,6 +6,7 @@ import Footer from "@/components/common/Footer";
 import SearchBar from "@/components/SearchBar";
 
 import RecruitingList from "@/components/recruiting/RecruitingList";
+import { useRecruitingPagination } from "@/hooks/useRecruitingPagination";
 
 import { departments } from "@/constants/departments";
 import { types } from "@/constants/types";
@@ -16,6 +17,17 @@ import Snackbar from "@/components/common/Snackbar";
 
 export default function RecruitMate() {
   const router = useRouter();
+  const { items, hasMore, init, loadMore } = useRecruitingPagination();
+
+  const fetchRecruitings = async (searchName?: string) => {
+    const data = await filterRecruitings({
+      types: selectedTypes,
+      departments: selectedDepartments,
+      name: searchName,
+    });
+
+    init(data);
+  };
 
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [selectedDepartments, setSelectedDepartments] = useState<string[]>([]);
@@ -54,16 +66,6 @@ export default function RecruitMate() {
     );
   };
 
-  const fetchRecruitings = async (searchName?: string) => {
-    const data = await filterRecruitings({
-      types: selectedTypes,
-      departments: selectedDepartments,
-      name: searchName,
-    });
-
-    setRecruitings(data);
-  };
-
   const handleSearch = () => {
     fetchRecruitings(keyword.trim());
   };
@@ -93,7 +95,7 @@ export default function RecruitMate() {
             }
           />
 
-          <div className="flex gap-9.5 mt-10">
+          <div className="flex gap-9.5 mt-20">
             {/* 왼쪽 필터 */}
             <aside className="w-80 shrink-0 top-24 self-start">
               {/* 유형별 필터 */}
@@ -217,19 +219,40 @@ export default function RecruitMate() {
 
             {/* 오른쪽 카드 영역 */}
             <section className="flex-1">
+              {/* 모집글 쓰기 버튼 */}
               <div className="flex justify-end mb-4">
                 <button
                   onClick={() => router.push("/recruitmate/create")}
-                  className="w-60 h-14 rounded bg-[#00C3CC] text-[#F5F8F8] text-lg font-extrabold hover:bg-[#0FA4AB] active:bg-[#1A858A]"
+                  className="w-60 h-14 rounded bg-[#00C3CC] text-[#F5F8F8] text-lg font-extrabold"
                 >
                   모집글 쓰기
                 </button>
               </div>
 
+              {/* 카드 리스트 */}
               <RecruitingList
-                items={recruitings}
+                items={items}
                 onClickItem={(id) => router.push(`/recruitmate/${id}`)}
               />
+
+              {/* ✅ 여기! 리스트 바로 아래 */}
+              <div className="mt-12 flex justify-center">
+                {hasMore ? (
+                  <div className="w-80 px-2 py-5 bg-[#FFFFFF] rounded outline outline-2 outline-offset-[-2px] outline-[#00C3CC] inline-flex justify-center items-center gap-5 
+                  hover:bg-[#F5F8F8] active:bg-[#E1EDF0]">
+                    <button
+                      onClick={loadMore}
+                      className="justify-start text-[#00C3CC] text-lg font-bold"
+                    >
+                      더보기
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-right text-[#B7C4C7] text-base font-medium">
+                    더 이상 불러올 내용이 없습니다
+                  </p>
+                )}
+              </div>
             </section>
           </div>
         </div>

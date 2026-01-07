@@ -6,24 +6,20 @@ import ProfileCard from "@/components/ProfileCard";
 import { departments } from "@/constants/departments";
 import { UserProfile } from "@/types/user";
 import axios from "@/api/axios";
+import { useUserPagination } from "@/hooks/useUserPagination";
 
 export default function SearchMate() {
   const [selected, setSelected] = useState<string[]>([]);
   const [keyword, setKeyword] = useState("");
   const [searchKeyword, setSearchKeyword] = useState("");
+  const { items, hasMore, init, loadMore } = useUserPagination();
 
-  const [users, setUsers] = useState<UserProfile[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-
   const PAGE_SIZE = 10;
 
   /* ================= 학부 토글 ================= */
   const toggleDept = (dept: string) => {
-    setPage(0);
-    setUsers([]);
     setSelected((prev) =>
       prev.includes(dept) ? prev.filter((d) => d !== dept) : [...prev, dept]
     );
@@ -31,8 +27,6 @@ export default function SearchMate() {
 
   /* ================= 검색 실행 ================= */
   const handleSearch = () => {
-    setPage(0);
-    setUsers([]);
     setSearchKeyword(keyword.trim());
   };
 
@@ -59,31 +53,23 @@ export default function SearchMate() {
         }
 
         const res = await axios.get(endpoint, { params });
-        const allUsers: UserProfile[] = res.data;
-
-        const start = page * PAGE_SIZE;
-        const end = start + PAGE_SIZE;
-        const sliced = allUsers.slice(start, end);
-
-        setUsers((prev) => (page === 0 ? sliced : [...prev, ...sliced]));
-        setHasMore(end < allUsers.length);
-      } catch (e) {
+        init(res.data); // ✅ 여기만 남김
+      } catch {
         setError("데이터를 불러오지 못했습니다.");
-        setHasMore(false);
       } finally {
         setLoading(false);
       }
     };
 
     fetchUsers();
-  }, [selected, searchKeyword, page]);
+  }, [selected, searchKeyword]);
 
   /* ================= 🔥 goodKeywordCount 기준 정렬 ================= */
   const sortedUsers = useMemo(() => {
-    return [...users].sort(
+    return [...items].sort(
       (a, b) => (b.goodKeywordCount ?? 0) - (a.goodKeywordCount ?? 0)
     );
-  }, [users]);
+  }, [items]);
 
   /* ================= UI ================= */
   return (
@@ -106,9 +92,9 @@ export default function SearchMate() {
             }
           />
 
-          <div className="flex gap-9.5 mt-10">
+          <div className="flex gap-9.5 mt-20">
             {/* ================= 왼쪽 필터 ================= */}
-            <aside className="w-80 sticky top-24 self-start">
+            <aside className="w-80 top-24 self-start">
               <div className="relative">
                 <img
                   src="/images/Rectangle.svg"
@@ -157,7 +143,8 @@ export default function SearchMate() {
               </div>
             </aside>
 
-            {/* ================= 결과 영역 ================= */}
+            {/*  메이트 리스트 */}
+
             <section className="flex-1">
               {loading && (
                 <p className="text-center text-sm text-gray-400 mt-20">
@@ -171,30 +158,39 @@ export default function SearchMate() {
                 </p>
               )}
 
-              {!loading && !error && users.length === 0 && (
+              {!loading && !error && items.length === 0 && (
                 <p className="text-center text-sm text-gray-400 mt-20">
                   검색 결과가 없습니다.
                 </p>
               )}
 
               {!loading && sortedUsers.length > 0 && (
-                <div className="grid grid-cols-1 gap-1.5">
+                <div className="grid grid-cols-1 gap-2.5">
                   {sortedUsers.map((user) => (
                     <ProfileCard key={user.userId} user={user} />
                   ))}
                 </div>
               )}
 
-              {hasMore && !loading && (
-                <div className="flex justify-center mt-8">
-                  <button
-                    onClick={() => setPage((prev) => prev + 1)}
-                    className="px-6 py-2 rounded-lg border border-[#6EC6CC] text-[#6EC6CC]"
+              <div className="flex justify-center mt-8">
+                {hasMore ? (
+                  <div
+                    className="w-80 px-2 py-5 bg-[#FFFFFF] rounded outline outline-2 outline-offset-[-2px] outline-[#00C3CC] inline-flex justify-center items-center gap-5 
+                  hover:bg-[#F5F8F8] active:bg-[#E1EDF0]"
                   >
-                    더보기
-                  </button>
-                </div>
-              )}
+                    <button
+                      onClick={loadMore}
+                      className="justify-start text-[#00C3CC] text-lg font-bold"
+                    >
+                      더보기
+                    </button>
+                  </div>
+                ) : (
+                  <p className="text-right text-[#B7C4C7] text-base font-medium">
+                    더 이상 불러올 메이트가 없습니다
+                  </p>
+                )}
+              </div>
             </section>
           </div>
         </div>
