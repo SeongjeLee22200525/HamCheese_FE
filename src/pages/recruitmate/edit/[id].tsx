@@ -5,10 +5,7 @@ import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 
 import { useUserStore } from "@/stores/useUserStore";
-import {
-  getRecruitingDetail,
-  updateRecruiting,
-} from "@/api/recruiting";
+import { getRecruitingDetail, updateRecruiting } from "@/api/recruiting";
 import { RecruitingDetail } from "@/types/recruitingDetail";
 import { types, PROJECT_TYPE_CONFIG } from "@/constants/types";
 
@@ -80,7 +77,7 @@ export default function RecruitMateEdit() {
       setForm((prev) => {
         const base = {
           ...prev,
-          projectType: data.projectType,
+          projectType: data.projectType as (typeof types)[number],
           topic: data.topic,
           totalPeople: String(data.totalPeople),
           recruitPeople: String(data.recruitPeople),
@@ -259,9 +256,7 @@ export default function RecruitMateEdit() {
                 }`}
               />
               {field.suffix && (
-                <span className="text-sm text-[#6B7280]">
-                  {field.suffix}
-                </span>
+                <span className="text-sm text-[#6B7280]">{field.suffix}</span>
               )}
             </div>
           );
@@ -302,8 +297,7 @@ export default function RecruitMateEdit() {
         <div className="max-w-[1440px] mx-auto px-10 py-12">
           <div className="flex items-center text-lg font-medium text-[#838F91] mb-3">
             모집하기
-            <img src="/images/Vector.svg" className="w-3 h-3 mx-2" />
-            글 수정
+            <img src="/images/Vector.svg" className="w-3 h-3 mx-2" />글 수정
           </div>
 
           <div className="bg-white border border-[#E6EEF0] rounded p-10">
