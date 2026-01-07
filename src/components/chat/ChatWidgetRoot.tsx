@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {sb} from "@/lib/sendbird/sendbird";
+import { sb } from "@/lib/sendbird/sendbird";
 import { useUserStore } from "@/stores/useUserStore";
 import ChatFab from "./ChatFab";
 import ChatPanel from "./ChatPanel";

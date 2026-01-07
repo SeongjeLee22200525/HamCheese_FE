@@ -17,6 +17,9 @@ import { checkUserEqual, getMateProfile } from "@/api/profile";
 import { useUserStore } from "@/stores/useUserStore";
 import { submitPeerReview } from "@/api/peerReview";
 
+import PokingConfirmModal from "@/components/poking/PokingConfirmModal";
+import { sendPoking } from "@/components/poking/usePoking";
+
 export default function MateProfilePage() {
   const router = useRouter();
   const { userId } = router.query;
@@ -25,9 +28,11 @@ export default function MateProfilePage() {
 
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-
+  //동료평가 모달 상태관리
   const [isPeerReviewOpen, setIsPeerReviewOpen] = useState(false);
   const [showReviewSuccess, setShowReviewSuccess] = useState(false);
+  //조각건네기 모달 상태관리
+  const [isgivePieceOpen, setIsGivePieceOpen] = useState(false);
 
   /* =========================
    * 프로필 조회
@@ -102,12 +107,11 @@ export default function MateProfilePage() {
         <div className="pl-50">
           <Profile
             profile={profile}
-            onGivePiece={() => console.log("조각 건네기")}
+            onGivePiece={() => setIsGivePieceOpen(true)}
             onPeerReview={() => setIsPeerReviewOpen(true)}
           />
         </div>
 
-        {/* ===== 동료평가 모달 ===== */}
         {/* ===== 동료평가 모달 ===== */}
         {isPeerReviewOpen && profile && myId && (
           <PeerReviewModal
@@ -136,6 +140,32 @@ export default function MateProfilePage() {
               } finally {
                 // 4️⃣ 모달 닫기
                 setIsPeerReviewOpen(false);
+              }
+            }}
+          />
+        )}
+
+        {/* ===== 조각건네기 모달 ===== */}
+        {isgivePieceOpen && myId && typeof userId === "string" && (
+          <PokingConfirmModal
+            open={isgivePieceOpen}
+            onClose={() => setIsGivePieceOpen(false)}
+            onConfirm={async () => {
+              try {
+                const targetUserId = Number(userId);
+                if (Number.isNaN(targetUserId)) return;
+
+                // 1️⃣ 조각 건네기
+                await sendPoking(targetUserId, myId);
+
+                // 2️⃣ 모달 닫기
+                setIsGivePieceOpen(false);
+
+                // 3️⃣ 스낵바 or UX (원하면)
+                // 예: setShowPokingSuccess(true);
+              } catch (e) {
+                console.error("❌ 조각 건네기 실패", e);
+                alert("조각 건네기에 실패했습니다.");
               }
             }}
           />
