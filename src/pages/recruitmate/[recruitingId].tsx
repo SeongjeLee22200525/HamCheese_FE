@@ -127,60 +127,67 @@ export default function RecruitMateDetail() {
 
                 {/* 작성자 영역 */}
                 <div className="flex items-start gap-4">
+                  {/* 프로필 이미지 */}
                   <img
                     src={recruiting.imageUrl || "/images/profile.svg"}
                     alt="profile"
                     className="w-20 h-20 rounded-full object-cover"
                   />
 
-                  <div className="flex flex-col gap-2">
-                    {/* 이름 + 정보 pill */}
-                    <div className="flex items-center gap-2.5 flex-wrap">
-                      <span className="text-xl font-extrabold text-[#222829]">
-                        {recruiting.name} 학부생
-                      </span>
-
-                      <span className="p-2 rounded bg-[#F5F8F8] text-[#838F91] font-semibold">
-                        {recruiting.studentId}학번
-                      </span>
-
-                      <span className="p-2 rounded bg-[#F5F8F8] text-[#0FA4AB] font-semibold">
-                        {recruiting.firstMajor}
-                      </span>
-
-                      {recruiting.secondMajor && (
-                        <span className="px-4 py-2 rounded bg-[#F5F8F8] text-[#0FA4AB] font-semibold">
-                          {recruiting.secondMajor}
+                  {/* 오른쪽 전체 영역 (flex-1 중요) */}
+                  <div className="flex-1">
+                    {/* 이름 / 전공 / 해시태그 */}
+                    <div className="flex flex-col gap-2">
+                      {/* 이름 + 정보 pill */}
+                      <div className="flex items-center gap-2.5 flex-wrap">
+                        <span className="text-xl font-extrabold text-[#222829]">
+                          {recruiting.name} 학부생
                         </span>
+
+                        <span className="p-2 rounded bg-[#F5F8F8] text-[#838F91] font-semibold">
+                          {recruiting.studentId}학번
+                        </span>
+
+                        <span className="p-2 rounded bg-[#F5F8F8] text-[#0FA4AB] font-semibold">
+                          {recruiting.firstMajor}
+                        </span>
+
+                        {recruiting.secondMajor && (
+                          <span className="px-4 py-2 rounded bg-[#F5F8F8] text-[#0FA4AB] font-semibold">
+                            {recruiting.secondMajor}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* 해시태그 */}
+                      <div className="flex gap-2 flex-wrap">
+                        {recruiting.myKeyword.map((k) => (
+                          <span
+                            key={k}
+                            className="px-2 py-1 text-sm text-[#838F91] rounded border border-[#CEDBDE]"
+                          >
+                            #{k}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* 🔥 날짜 + 수정/삭제 (같은 줄, 카드 양끝) */}
+                    <div className="flex items-center justify-between w-full mt-1">
+                      <span className="text-base text-[#838F91]">
+                        {formatDateTime(recruiting.date)}
+                      </span>
+
+                      {recruiting.canEdit && (
+                        <RecruitingActions
+                          onEdit={handleEdit}
+                          onDelete={handleDelete}
+                        />
                       )}
                     </div>
-
-                    {/* 해시태그 */}
-                    <div className="flex gap-2 flex-wrap">
-                      {recruiting.myKeyword.map((k) => (
-                        <span
-                          key={k}
-                          className="px-2 py-1 text-sm text-[#838F91] rounded border border-[#CEDBDE]"
-                        >
-                          #{k}
-                        </span>
-                      ))}
-                    </div>
-
-                    {/* 날짜 */}
-                    <span className="text-base text-[#838F91]">
-                      {formatDateTime(recruiting.date)}
-                    </span>
                   </div>
                 </div>
 
-                {/* 수정 / 삭제 */}
-                {recruiting.canEdit && (
-                  <RecruitingActions
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                  />
-                )}
                 {showEditSnackbar && (
                   <Snackbar
                     message="글이 수정되었습니다."

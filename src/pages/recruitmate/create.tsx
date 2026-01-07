@@ -12,7 +12,26 @@ export default function RecruitMateCreate() {
   const router = useRouter();
   const user = useUserStore((state) => state.user);
 
-  const [form, setForm] = useState({
+  type ProjectFieldName =
+    | "projectSpecific"
+    | "classes"
+    | "graduationTopic"
+    | "professor"
+    | "clubName"
+    | "part"
+    | "contestName"
+    | "contestPart"
+    | "topic"
+    | "totalPeople"
+    | "recruitPeople"
+    | "title"
+    | "context";
+
+  const [form, setForm] = useState<
+    Record<ProjectFieldName, string> & {
+      projectType: (typeof types)[number];
+    }
+  >({
     projectType: "수업",
 
     projectSpecific: "",
@@ -49,16 +68,16 @@ export default function RecruitMateCreate() {
   const validateByType = () => {
     switch (form.projectType) {
       case "수업":
-        return form.projectSpecific.trim() && form.classes.trim();
+        return form.projectSpecific.trim();
 
       case "졸업작품":
-        return form.graduationTopic.trim() && form.professor.trim();
+        return form.graduationTopic.trim();
 
       case "동아리/학회":
-        return form.clubName.trim() && form.part.trim();
+        return form.clubName.trim();
 
       case "대회":
-        return form.contestName.trim() && form.contestPart.trim();
+        return form.contestName.trim();
 
       default:
         return false;
@@ -152,28 +171,34 @@ export default function RecruitMateCreate() {
   };
 
   const renderTypeRow = () => {
-    const config = PROJECT_TYPE_CONFIG[form.projectType];
+    const config =
+      PROJECT_TYPE_CONFIG[form.projectType as keyof typeof PROJECT_TYPE_CONFIG];
     if (!config) return null;
 
     return (
       <div className="flex items-center gap-3 ml-[calc(1rem+7rem)]">
-        {config.fields.map((field) => (
-          <div key={field.name} className="flex items-center gap-2">
-            <input
-              name={field.name}
-              type={field.type ?? "text"}
-              placeholder={field.placeholder}
-              value={(form as any)[field.name] ?? ""}
-              onChange={handleChange}
-              className={`${inputBaseClass} ${field.width} px-3 py-2 ${
-                field.type === "number" ? "text-center" : ""
-              }`}
-            />
-            {field.suffix && (
-              <span className="text-sm text-[#6B7280]">{field.suffix}</span>
-            )}
-          </div>
-        ))}
+        {config.fields.map((field) => {
+          const name = field.name as ProjectFieldName; // ⭐ 핵심 추가
+
+          return (
+            <div key={name} className="flex items-center gap-2">
+              <input
+                name={name}
+                type={field.type ?? "text"}
+                placeholder={field.placeholder}
+                value={form[name]}
+                onChange={handleChange}
+                className={`${inputBaseClass} ${field.width} px-3 py-2 ${
+                  field.type === "number" ? "text-center" : ""
+                }`}
+              />
+
+              {field.suffix && (
+                <span className="text-sm text-[#6B7280]">{field.suffix}</span>
+              )}
+            </div>
+          );
+        })}
       </div>
     );
   };

@@ -97,7 +97,6 @@ export default function SearchMate() {
             value={keyword}
             onChange={setKeyword}
             onSearch={handleSearch}
-            onEnter={handleSearch}
             placeholder="원하는 메이트의 이름을 검색해보세요."
             title={
               <>
@@ -109,19 +108,19 @@ export default function SearchMate() {
 
           <div className="flex gap-9.5 mt-10">
             {/* ================= 왼쪽 필터 ================= */}
-            <aside className="w-[260px] sticky top-24 self-start">
+            <aside className="w-80 sticky top-24 self-start">
               <div className="relative">
                 <img
                   src="/images/Rectangle.svg"
                   alt="filter header"
-                  className="w-full block"
+                  className="w-60 block"
                 />
                 <h3 className="absolute left-5 top-1/2 -translate-y-1/2 text-xl font-extrabold text-white">
                   학부별 필터
                 </h3>
               </div>
 
-              <div className="bg-white border-[#6EC6CC] border-t-0 rounded-b overflow-hidden border-2">
+              <div className="bg-white border-[#6EC6CC] rounded-tr-lg rounded-br-lg rounded-bl-lg overflow-hidden border-2">
                 <div className="mt-5 flex flex-col mb-5">
                   {departments.map((dept) => {
                     const checked = selected.includes(dept);

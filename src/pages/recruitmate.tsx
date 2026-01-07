@@ -83,7 +83,6 @@ export default function RecruitMate() {
             value={keyword}
             onChange={setKeyword}
             onSearch={handleSearch}
-            onEnter={handleSearch}
             placeholder="원하는 팀플을 검색해보세요."
             title={
               <>
@@ -96,20 +95,20 @@ export default function RecruitMate() {
 
           <div className="flex gap-9.5 mt-10">
             {/* 왼쪽 필터 */}
-            <aside className="w-[260px] shrink-0 sticky top-24 self-start">
+            <aside className="w-80 shrink-0 top-24 self-start">
               {/* 유형별 필터 */}
               <div className="relative">
                 <img
                   src="/images/Rectangle.svg"
                   alt="filter header"
-                  className="w-full block"
+                  className="w-60 block"
                 />
                 <h3 className="absolute left-5 top-1/2 -translate-y-1/2 text-xl font-extrabold text-white">
                   유형별 필터
                 </h3>
               </div>
 
-              <div className="bg-white border-2 border-[#6EC6CC] border-t-0 rounded-b overflow-hidden mb-10">
+              <div className="bg-white border-[#6EC6CC] rounded-tr-lg rounded-br-lg rounded-bl-lg overflow-hidden border-2 mb-10">
                 <div className="mt-5 mb-5 flex flex-col">
                   {types.map((type) => {
                     const checked = selectedTypes.includes(type);
@@ -159,14 +158,14 @@ export default function RecruitMate() {
                 <img
                   src="/images/Rectangle.svg"
                   alt="filter header"
-                  className="w-full block"
+                  className="w-60 block"
                 />
                 <h3 className="absolute left-5 top-1/2 -translate-y-1/2 text-xl font-extrabold text-white">
                   학부별 필터
                 </h3>
               </div>
 
-              <div className="bg-white border-2 border-[#6EC6CC] border-t-0 rounded-b overflow-hidden">
+              <div className="bg-white border-[#6EC6CC] rounded-tr-lg rounded-br-lg rounded-bl-lg overflow-hidden border-2">
                 <div className="mt-5 mb-5 flex flex-col">
                   {departments.map((dept) => {
                     const checked = selectedDepartments.includes(dept);
@@ -219,7 +218,7 @@ export default function RecruitMate() {
               <div className="flex justify-end mb-4">
                 <button
                   onClick={() => router.push("/recruitmate/create")}
-                  className="w-72 h-16 rounded bg-[#00C3CC] text-[#F5F8F8] text-xl font-extrabold"
+                  className="w-72 h-16 rounded bg-[#00C3CC] text-[#F5F8F8] text-xl font-extrabold hover:bg-[#0FA4AB] active:bg-[#1A858A]"
                 >
                   모집글 쓰기
                 </button>

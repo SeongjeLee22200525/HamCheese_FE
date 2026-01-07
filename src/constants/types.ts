@@ -1,11 +1,17 @@
-export const types = [
-  "수업",
-  "졸업작품",
-  "동아리/학회",
-  "대회",
-] as const;
+export const types = ["수업", "졸업작품", "동아리/학회", "대회"] as const;
 
-export const PROJECT_TYPE_CONFIG = {
+export type ProjectTypeField = {
+  name: string;
+  placeholder: string;
+  width: string;
+  type?: "text" | "number"; // ⭐ 핵심
+  suffix?: string;
+};
+
+export const PROJECT_TYPE_CONFIG: Record<
+  (typeof types)[number],
+  { fields: readonly ProjectTypeField[] }
+> = {
   수업: {
     fields: [
       {
@@ -70,4 +76,4 @@ export const PROJECT_TYPE_CONFIG = {
       },
     ],
   },
-} as const;
+};
