@@ -90,7 +90,7 @@ export default function Home() {
               {profiles.slice(0, 4).map((p) => (
                 <div
                   key={p.userId}
-                  className="w-80 rounded-lg shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] outline outline-1 outline-offset-[-1px] outline-[#CEDBDE] p-14 bg-white"
+                  className="w-85 rounded-lg hover:shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] outline outline-1 outline-offset-[-1px] outline-[#CEDBDE] p-14 bg-white"
                 >
                   {/* 상단: 사진 + 기본정보 */}
                   <div className="flex gap-4">
@@ -161,7 +161,7 @@ export default function Home() {
               {recruitings.slice(0, 4).map((r) => (
                 <div
                   key={r.recruitingId}
-                  className="w-85 rounded-lg shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] outline outline-1 outline-offset-[-1px] outline-[#CEDBDE] p-14 bg-white"
+                  className="w-85 rounded-lg hover:shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] outline outline-1 outline-offset-[-1px] outline-[#CEDBDE] p-14 bg-white"
                 >
                   <div className="flex flex-col gap-4">
                     <span className="inline-block w-fit px-3 py-2 text-sm font-bold text-[#0FA4AB] bg-[#F5F8F8] rounded gap-2 whitespace-nowrap">

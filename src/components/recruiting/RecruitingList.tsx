@@ -16,7 +16,7 @@ export default function RecruitingList({ items, onClickItem }: Props) {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-2.5">
       {items.map(item => (
         <RecruitingCard
           key={item.recruitingId}

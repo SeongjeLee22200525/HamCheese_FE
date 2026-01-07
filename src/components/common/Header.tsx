@@ -34,7 +34,7 @@ export default function Header() {
 
     clearUser();
     alert("로그아웃 되었습니다.");
-    router.replace("/signin");
+    router.replace("/");
   };
 
   /** hydration 이전 렌더 방지 */

@@ -9,7 +9,7 @@ export interface RecruitingDetail {
   // 모집글 정보
   projectType: string;          // 수업 / 졸업작품
   projectSpecific: string;      // 과목명
-  classes: number;              // 분반
+  classes: string;              // 분반
   topic: string;                // 주제
   totalPeople: number;
   recruitPeople: number;

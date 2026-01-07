@@ -49,16 +49,16 @@ export default function RecruitMateCreate() {
   const validateByType = () => {
     switch (form.projectType) {
       case "수업":
-        return form.projectSpecific.trim() && form.classes.trim();
+        return form.projectSpecific.trim();
 
       case "졸업작품":
-        return form.graduationTopic.trim() && form.professor.trim();
+        return form.graduationTopic.trim();
 
       case "동아리/학회":
-        return form.clubName.trim() && form.part.trim();
+        return form.clubName.trim();
 
       case "대회":
-        return form.contestName.trim() && form.contestPart.trim();
+        return form.contestName.trim();
 
       default:
         return false;
@@ -152,7 +152,7 @@ export default function RecruitMateCreate() {
   };
 
   const renderTypeRow = () => {
-    const config = PROJECT_TYPE_CONFIG[form.projectType];
+    const config = PROJECT_TYPE_CONFIG[form.projectType as keyof typeof PROJECT_TYPE_CONFIG];
     if (!config) return null;
 
     return (
@@ -161,12 +161,12 @@ export default function RecruitMateCreate() {
           <div key={field.name} className="flex items-center gap-2">
             <input
               name={field.name}
-              type={field.type ?? "text"}
+              type={field.types ?? "text"}
               placeholder={field.placeholder}
               value={(form as any)[field.name] ?? ""}
               onChange={handleChange}
               className={`${inputBaseClass} ${field.width} px-3 py-2 ${
-                field.type === "number" ? "text-center" : ""
+                field.types === "number" ? "text-center" : ""
               }`}
             />
             {field.suffix && (
