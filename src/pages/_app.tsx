@@ -4,6 +4,7 @@ import Head from "next/head";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useEffect } from "react";
 import { useUserStore } from "@/stores/useUserStore";
+import ChatWidgetRoot from "@/components/chat/ChatWidgetRoot";
 
 export default function App({ Component, pageProps }: AppProps) {
   const hydrateUser = useUserStore((state) => state.hydrateUser);
@@ -26,6 +27,7 @@ export default function App({ Component, pageProps }: AppProps) {
         clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ""}
       >
         <Component {...pageProps} />
+        <ChatWidgetRoot />
       </GoogleOAuthProvider>
     </>
   );
