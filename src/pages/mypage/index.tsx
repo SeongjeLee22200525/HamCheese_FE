@@ -17,11 +17,6 @@ export default function MyPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!myId) {
-      router.replace("/signin");
-      return;
-    }
-
     const fetchMyProfile = async () => {
       try {
         const res = await axios.get<MateProfileInfo>(`/user/myProfile/${myId}`);
