@@ -1,35 +1,25 @@
 import { create } from "zustand";
 import axios from "@/api/axios";
 
-/**
- * 전역에서 사용할 유저 타입
- */
 export interface User {
   myId: number;
   name?: string;
   profileImageUrl?: string | null;
 }
 
-/** 기본 프로필 이미지 */
 const DEFAULT_PROFILE_IMAGE = "/images/profile.svg";
-
-console.log(
-  "🌍 API BASE URL:",
-  process.env.NEXT_PUBLIC_API_BASE_URL
-);
-
 
 interface UserStore {
   user: User | null;
 
-  /** 로그인 / 회원가입 완료 시 */
-  setUser: (user: User) => void;
+  /** ✅ hydration 완료 여부 */
+  hydrated: boolean;
 
-  /** 로그아웃 시 */
+  setUser: (user: User) => void;
   clearUser: () => void;
 
   /** 새로고침 시 쿠키로부터 복구 */
-  hydrateUser: () => void;
+  hydrateUser: () => Promise<void>;
 }
 
 /** 쿠키 유틸 */
@@ -43,32 +33,31 @@ function getCookie(name: string) {
 
 export const useUserStore = create<UserStore>((set) => ({
   user: null,
+  hydrated: false,
 
-  /** 로그인 / 회원가입 시 */
   setUser: (user) =>
     set({
       user: {
         ...user,
         profileImageUrl: user.profileImageUrl ?? DEFAULT_PROFILE_IMAGE,
       },
+      hydrated: true, // ✅ 로그인 직후도 hydrated 처리
     }),
 
-  /** 로그아웃 */
-  clearUser: () => set({ user: null }),
+  clearUser: () => set({ user: null, hydrated: true }), // ✅ 로그아웃도 판단 완료 상태
 
-  /** 새로고침 시 쿠키로 복구 */
   hydrateUser: async () => {
-    const myId = getCookie("myId");
-    const name = getCookie("name");
-
-    console.log("💧 hydrateUser called", { myId, name });
-
-    if (!myId) {
-      set({ user: null });
-      return;
-    }
-
     try {
+      const myId = getCookie("myId");
+      const name = getCookie("name");
+
+      console.log("💧 hydrateUser called", { myId, name });
+
+      if (!myId) {
+        set({ user: null, hydrated: true }); // ✅ 여기서도 hydrated true
+        return;
+      }
+
       // ✅ 서버에서 최신 프로필 정보 조회
       const res = await axios.get(`/user/myProfile/${myId}`);
       const data = res.data;
@@ -79,17 +68,24 @@ export const useUserStore = create<UserStore>((set) => ({
           name: data.name ?? (name ? decodeURIComponent(name) : undefined),
           profileImageUrl: data.imageUrl || DEFAULT_PROFILE_IMAGE,
         },
+        hydrated: true,
       });
     } catch (e) {
       console.error("❌ hydrateUser profile fetch error", e);
 
       // ❗ 서버 오류 시에도 최소 정보는 유지
+      const myId = getCookie("myId");
+      const name = getCookie("name");
+
       set({
-        user: {
-          myId: Number(myId),
-          name: name ? decodeURIComponent(name) : undefined,
-          profileImageUrl: DEFAULT_PROFILE_IMAGE,
-        },
+        user: myId
+          ? {
+              myId: Number(myId),
+              name: name ? decodeURIComponent(name) : undefined,
+              profileImageUrl: DEFAULT_PROFILE_IMAGE,
+            }
+          : null,
+        hydrated: true,
       });
     }
   },

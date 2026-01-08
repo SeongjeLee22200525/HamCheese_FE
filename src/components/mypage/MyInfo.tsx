@@ -18,6 +18,14 @@ type Props = {
   profile: MateProfileInfo; // ✅ 부모가 들고있는 좌측용 profile
   setProfile: React.Dispatch<React.SetStateAction<MateProfileInfo | null>>; // ✅ 좌측 즉시 갱신용
 };
+function isValidUrl(url: string) {
+  try {
+    new URL(url.startsWith("http") ? url : `https://${url}`);
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 export default function MyInfo({ profile, setProfile }: Props) {
   const sb = getSendbird();
@@ -147,13 +155,17 @@ export default function MyInfo({ profile, setProfile }: Props) {
     }));
   };
 
+  //연도별 정렬
+  const sortByYearDesc = (activity: Activity[]) =>
+    [...activity].sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
+
   const addActivity = () => {
     setForm((p) => ({
       ...p,
-      activity: [
+      activity: sortByYearDesc([
         ...p.activity,
         { year: new Date().getFullYear(), title: "", link: "" },
-      ],
+      ]),
     }));
   };
 
@@ -162,17 +174,36 @@ export default function MyInfo({ profile, setProfile }: Props) {
     field: "year" | "title" | "link",
     value: string
   ) => {
-    setForm((p) => ({
-      ...p,
-      activity: p.activity.map((a, i) =>
+    setForm((p) => {
+      let newValue: any = value;
+
+      if (field === "link" && value) {
+        const normalized = value.startsWith("http")
+          ? value
+          : `https://${value}`;
+
+        if (!isValidUrl(normalized)) {
+          alert("유효하지 않은 링크입니다.");
+          return p; // ❌ 상태 변경 안 함
+        }
+
+        newValue = normalized;
+      }
+
+      const updated = p.activity.map((a, i) =>
         i === index
           ? {
               ...a,
-              [field]: field === "year" ? Number(value) : value,
+              [field]: field === "year" ? Number(newValue) : newValue,
             }
           : a
-      ),
-    }));
+      );
+
+      return {
+        ...p,
+        activity: sortByYearDesc(updated),
+      };
+    });
   };
 
   const removeActivity = (index: number) => {
@@ -232,11 +263,23 @@ export default function MyInfo({ profile, setProfile }: Props) {
       semester: String(form.semester),
       introduction: form.introduction,
       skillList: form.skillList,
-      activity: form.activity.map((a) => ({
-        year: String(a.year),
-        title: a.title,
-        link: a.link ?? "",
-      })),
+      activity: form.activity
+        // ❌ 제목 없는 항목 제거 (선택)
+        .filter((a) => a.title.trim() !== "")
+        // ❌ 링크가 있다면 유효한 것만 통과
+        .filter((a) => !a.link || isValidUrl(a.link))
+        // 🔽 년도 내림차순 정렬
+        .sort((a, b) => (b.year ?? 0) - (a.year ?? 0))
+        // 🔽 서버 payload 변환
+        .map((a) => ({
+          year: String(a.year),
+          title: a.title,
+          link: a.link
+            ? a.link.startsWith("http")
+              ? a.link
+              : `https://${a.link}`
+            : "",
+        })),
     };
 
     try {

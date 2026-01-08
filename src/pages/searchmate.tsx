@@ -7,6 +7,8 @@ import { departments } from "@/constants/departments";
 import { UserProfile } from "@/types/user";
 import axios from "@/api/axios";
 import { useUserPagination } from "@/hooks/useUserPagination";
+import { useUserStore } from "@/stores/useUserStore";
+import { useRouter } from "next/router";
 
 export default function SearchMate() {
   const [selected, setSelected] = useState<string[]>([]);
@@ -17,6 +19,9 @@ export default function SearchMate() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const PAGE_SIZE = 10;
+  const { user, hydrated } = useUserStore();
+  const myId = user?.myId;
+  const router = useRouter();
 
   /* ================= 학부 토글 ================= */
   const toggleDept = (dept: string) => {
@@ -32,6 +37,14 @@ export default function SearchMate() {
 
   /* ================= 사용자 조회 ================= */
   useEffect(() => {
+    if (!hydrated) return;
+
+    // ✅ hydrate 끝났는데 로그인 정보 없으면 signin
+    if (!myId) {
+      router.replace("/signin");
+      return;
+    }
+
     const fetchUsers = async () => {
       try {
         setLoading(true);
@@ -62,7 +75,13 @@ export default function SearchMate() {
     };
 
     fetchUsers();
-  }, [selected, searchKeyword]);
+  }, [
+    hydrated, // ✅ 필수
+    myId, // ✅ 필수
+    router,
+    selected,
+    searchKeyword,
+  ]);
 
   /*  goodKeywordCount 기준 정렬 */
   const sortedUsers = useMemo(() => {

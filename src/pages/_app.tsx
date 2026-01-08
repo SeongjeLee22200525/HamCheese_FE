@@ -7,10 +7,7 @@ import { useRouter } from "next/router";
 import { useUserStore } from "@/stores/useUserStore";
 import ChatWidgetRoot from "@/components/chat/ChatWidgetRoot";
 
-const PROTECTED_ROUTES = [
-  "/searchmate",
-  "/recruitmate",
-];
+const PROTECTED_ROUTES = ["/searchmate", "/recruitmate"];
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -19,7 +16,10 @@ export default function App({ Component, pageProps }: AppProps) {
 
   /* 1️⃣ 최초 유저 복원 */
   useEffect(() => {
-    hydrateUser();
+    const run = async () => {
+      await hydrateUser();
+    };
+    run();
   }, []);
 
   /* 2️⃣ 로그인 필요한 페이지만 가드 */

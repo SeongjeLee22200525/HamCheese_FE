@@ -31,13 +31,16 @@ export default function MyReviewPage() {
   const [profile, setProfile] = useState<MateProfileInfo | null>(null);
   const [review, setReview] = useState<MyPeerReviewResponse | null>(null);
   const [loading, setLoading] = useState(true);
+  const { user, hydrated } = useUserStore();
 
   useEffect(() => {
+    if (!hydrated) return;
+
+    // 🔥 hydration 끝났는데 로그인 안 돼 있으면
     if (!myId) {
       router.replace("/signin");
       return;
     }
-
     const fetchData = async () => {
       try {
         const [profileRes, reviewRes] = await Promise.all([

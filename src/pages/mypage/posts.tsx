@@ -15,8 +15,10 @@ export default function MyPage() {
 
   const [profile, setProfile] = useState<MateProfileInfo | null>(null);
   const [loading, setLoading] = useState(true);
+  const { user, hydrated } = useUserStore();
 
   useEffect(() => {
+    if (!hydrated) return;
     if (!myId) {
       router.replace("/signin");
       return;
@@ -55,7 +57,7 @@ export default function MyPage() {
 
       {/* 🔥 콘텐츠 박스 (완전 분리) */}
       <div className=" rounded-lg p-10 ">
-        <MyPosts/>
+        <MyPosts />
       </div>
     </MyPageLayout>
   );
