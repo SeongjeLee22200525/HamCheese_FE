@@ -6,7 +6,7 @@ import { useUserStore } from "@/stores/useUserStore";
 import { departments } from "@/constants/departments";
 import Snackbar from "@/components/common/Snackbar";
 import { MateProfileInfo } from "@/types/user";
-import { sb } from "@/lib/sendbird/sendbird";
+import { getSendbird } from "@/lib/sendbird/sendbird";
 
 type Activity = {
   year: number;
@@ -20,6 +20,7 @@ type Props = {
 };
 
 export default function MyInfo({ profile, setProfile }: Props) {
+  const sb = getSendbird();
   const myId = useUserStore((state) => state.user?.myId);
 
   /* ================= 상태 ================= */

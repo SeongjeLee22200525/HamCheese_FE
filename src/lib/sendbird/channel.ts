@@ -1,4 +1,4 @@
-import { sb } from "./sendbird";
+import { getSendbird } from "./sendbird";
 import type { GroupChannel } from "@sendbird/chat/groupChannel";
 
 /**
@@ -13,6 +13,7 @@ export async function getOrCreateChannel(
 ): Promise<GroupChannel> {
   // 1️⃣ 현재 유저로 Sendbird 연결
   // (이미 연결되어 있어도 안전)
+  const sb = getSendbird();
   await sb.connect(myId);
 
   // 2️⃣ 1:1 채널 생성 or 재사용
@@ -32,6 +33,7 @@ export async function getOrCreateChannel(
 export async function getGroupChannel(
   channelUrl: string
 ): Promise<GroupChannel> {
+  const sb = getSendbird();
   const channel = await sb.groupChannel.getChannel(channelUrl);
   return channel;
 }
@@ -41,6 +43,7 @@ export async function getGroupChannel(
  * - 카톡 "채팅 리스트" 용
  */
 export async function getMyChannels(limit = 20): Promise<GroupChannel[]> {
+  const sb = getSendbird();
   const query = sb.groupChannel.createMyGroupChannelListQuery({
     includeEmpty: true,
     limit,
@@ -61,6 +64,7 @@ export async function createGroupChannel(
   invitedUserIds: string[],
   name?: string
 ): Promise<GroupChannel> {
+  const sb = getSendbird();
   await sb.connect(myId);
 
   const channel = await sb.groupChannel.createChannel({

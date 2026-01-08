@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { sb } from "@/lib/sendbird/sendbird";
+import { getSendbird } from "@/lib/sendbird/sendbird";
 import type { GroupChannel } from "@sendbird/chat/groupChannel";
 import { GroupChannelHandler } from "@sendbird/chat/groupChannel";
 import { useUserStore } from "@/stores/useUserStore";
 
 export function useChannelList(connected: boolean) {
   const [channels, setChannels] = useState<GroupChannel[]>([]);
-
+  const sb = getSendbird();
   useEffect(() => {
     if (!connected) return;
 

@@ -5,7 +5,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useUserStore } from "@/stores/useUserStore";
-import { sb } from "@/lib/sendbird/sendbird";
+import { getSendbird } from "@/lib/sendbird/sendbird";
 
 export default function Home() {
   const router = useRouter();
@@ -33,6 +33,7 @@ export default function Home() {
         document.cookie = `myId=${data.myId}; path=/`;
         document.cookie = `name=${encodeURIComponent(data.name)}; path=/`;
         try {
+          const sb = getSendbird();
           try {
             await sb.disconnect();
           } catch {}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { sb } from "@/lib/sendbird/sendbird";
+import { getSendbird } from "@/lib/sendbird/sendbird";
 import { useUserStore } from "@/stores/useUserStore";
 import ChatFab from "./ChatFab";
 import ChatPanel from "./ChatPanel";
@@ -23,6 +23,7 @@ export default function ChatWidgetRoot() {
   const hasUnread = channels.some((ch) => ch.unreadMessageCount > 0);
 
   useEffect(() => {
+    const sb = getSendbird();
     if (!myId) return;
     sb.connect(String(myId));
   }, [myId]);
