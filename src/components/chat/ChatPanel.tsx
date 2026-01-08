@@ -5,6 +5,7 @@ import ChatPokingSection from "./ChatPokingSection";
 import type { GroupChannel } from "@sendbird/chat/groupChannel";
 import { getGroupChannel } from "@/lib/sendbird/channel";
 import { useChatWidget } from "@/hooks/chat/useChatWidget";
+import AlarmHandler from "./AlarmHandler";
 
 type Props = {
   onClose: () => void;
@@ -49,9 +50,10 @@ export default function ChatPanel({ onClose }: Props) {
 
           <div className="text-lg font-bold mt-6 mb-10">나의 채팅 내역</div>
         </div>
-        <div className="bg-[#E1EDF0] py-4 px-3 text-sm border-b border-[#CEDBDE]">
-          <span className="font-bold">서예진 학부생</span> 과 대화가 성사되지
-          못했어요 ㅠ
+        <div className="bg-[#E1EDF0] py-5 px-10 text-sm border-b border-[#CEDBDE]">
+          {/* <span className="font-bold">서예진 학부생</span> 과 대화가 성사되지
+          못했어요 ㅠ */}
+          <AlarmHandler />
         </div>
 
         {/* 찌르기 */}

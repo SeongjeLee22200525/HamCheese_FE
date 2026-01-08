@@ -7,8 +7,6 @@ import { useUserStore } from "@/stores/useUserStore";
 
 export function useChat(channel: GroupChannel | null) {
   const [messages, setMessages] = useState<BaseMessage[]>([]);
-
-  // 🔑 현재 채널 ref (비동기 핸들러 안정화)
   const channelRef = useRef<GroupChannel | null>(null);
 
   useEffect(() => {
@@ -16,11 +14,11 @@ export function useChat(channel: GroupChannel | null) {
 
     let alive = true;
     channelRef.current = channel;
-    setMessages([]); // 채널 바뀔 때 메시지 초기화
+    setMessages([]);
 
     const init = async () => {
       try {
-        // 🔥 1️⃣ Sendbird 연결 보장
+        /* 1️⃣ Sendbird 연결 보장 */
         if (!sb.currentUser) {
           const myId = useUserStore.getState().user?.myId;
           if (!myId) return;
@@ -29,10 +27,22 @@ export function useChat(channel: GroupChannel | null) {
 
         if (!alive) return;
 
-        // 🔥 2️⃣ unread 즉시 제거
+        /* 2️⃣ 채널 멤버 여부 확인 */
+        const isMember = channel.members.some(
+          (m) => m.userId === sb.currentUser?.userId
+        );
+
+        /* 3️⃣ 멤버 아니면 join */
+        if (!isMember) {
+          await channel.join();
+        }
+
+        if (!alive) return;
+
+        /* 4️⃣ unread 즉시 제거 */
         channel.markAsRead();
 
-        // 🔥 3️⃣ 이전 메시지 로드
+        /* 5️⃣ 이전 메시지 로드 */
         const msgs = await channel.getMessagesByTimestamp(Date.now(), {
           prevResultSize: 50,
           nextResultSize: 0,
@@ -47,9 +57,8 @@ export function useChat(channel: GroupChannel | null) {
 
     init();
 
-    // 🔥 4️⃣ 실시간 메시지 핸들러
+    /* 6️⃣ 실시간 메시지 핸들러 */
     const handlerId = `chat-${channel.url}`;
-
     const handler = new GroupChannelHandler({
       onMessageReceived: (_, message) => {
         if (channelRef.current?.url !== channel.url) return;
@@ -70,7 +79,7 @@ export function useChat(channel: GroupChannel | null) {
     };
   }, [channel]);
 
-  // ================= 메시지 전송 =================
+  /* ================= 메시지 전송 ================= */
   const sendMessage = (text: string) => {
     if (!channelRef.current) return;
     if (!text.trim()) return;

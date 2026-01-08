@@ -18,7 +18,7 @@ export function useChannelList(connected: boolean) {
 
     const handler = new GroupChannelHandler({
       onChannelChanged: (updated) => {
-        const updatedChannel = updated as GroupChannel; // 🔥 핵심
+        const updatedChannel = updated as GroupChannel;
 
         setChannels((prev) => {
           const exists = prev.find((ch) => ch.url === updatedChannel.url);
@@ -29,6 +29,7 @@ export function useChannelList(connected: boolean) {
             );
           }
 
+          // 새 메시지 온 채널 위로
           return [updatedChannel, ...prev];
         });
       },

@@ -11,7 +11,7 @@ type Poking = {
   senderId: number;
   senderName: string;
   recruitingId: number | null;
-  recruitingTitle?: string;
+  projectSpecific?: string;
   date: string;
   imageUrl?: string | null;
 };
@@ -32,7 +32,10 @@ export default function ChatPokingSection() {
   }, [myId]);
 
   const handleReject = async (pokingId: number) => {
-    await axios.delete(`/poking/${pokingId}`);
+    await axios.delete(`/poking/${pokingId}`, {
+      data: { ok: false },
+    });
+
     setList((prev) => prev.filter((p) => p.pokingId !== pokingId));
   };
 
@@ -40,17 +43,20 @@ export default function ChatPokingSection() {
     if (!myId) return;
 
     try {
-      // 1️⃣ Sendbird 1:1 채널 생성 or 재사용
+      // 1️⃣ 채널 생성
       const channel = await getOrCreateChannel(
         String(myId),
         String(p.senderId)
       );
 
-      // 2️⃣ 콕 찌르기 삭제
-      await axios.delete(`/poking/${p.pokingId}`);
+      // 2️⃣ 찌르기 삭제 + 수락 처리
+      await axios.delete(`/poking/${p.pokingId}`, {
+        data: { ok: true },
+      });
+
       setList((prev) => prev.filter((item) => item.pokingId !== p.pokingId));
 
-      // 3️⃣ 채팅 위젯 열기 (🔥 핵심)
+      // 3️⃣ 채팅 열기
       openChat(channel.url);
     } catch (err) {
       console.error("채팅 연결 실패", err);
@@ -62,7 +68,10 @@ export default function ChatPokingSection() {
   return (
     <div>
       {list.map((p) => (
-        <div key={p.pokingId} className="flex px-10 mb-5 ">
+        <div
+          key={p.pokingId}
+          className="flex px-10 py-10 border-b border-[#CEDBDE]"
+        >
           <img
             src={p.imageUrl || "/profile.svg"}
             alt="profile"
@@ -70,11 +79,6 @@ export default function ChatPokingSection() {
           />
 
           <div className="ml-4">
-            {p.recruitingId && (
-              <div className="text-xs text-[#00C3CC] font-bold">
-                [{p.recruitingTitle}]
-              </div>
-            )}
             <div className="font-bold">
               <div className="flex justify-between">
                 {p.senderName} 학부생
@@ -82,13 +86,18 @@ export default function ChatPokingSection() {
                   {p.date}
                 </div>
               </div>
-              <div className="font-medium mt-2">대화 신청이 왔어요.</div>
+              {p.recruitingId && (
+                <div className="font-bold text-sm mt-1 text-[#1A858A]">
+                  {p.projectSpecific}
+                </div>
+              )}
+              <div className="font-medium mt-1">대화 신청이 왔어요.</div>
             </div>
 
             <div className="flex font-bold mt-4">
               <button
                 onClick={() => handleReject(p.pokingId)}
-                className="w-23 px- py-3 text-sm mr-2 bg-[#E1EDF0] rounded text-[#495456]"
+                className="w-23 px- py-3 text-sm mr-2 bg-[#CEDBDE] rounded text-[#495456]"
               >
                 다음 기회에!
               </button>
