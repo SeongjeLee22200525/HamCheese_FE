@@ -132,9 +132,9 @@ export default function RecruitMateDetail() {
       <main className="flex-1">
         <div className="max-w-[1440px] mx-auto px-6 py-10">
           {/* breadcrumb */}
-          <div className="flex items-center text-sm text-[#838F91] mb-4">
+          <div className="flex items-center text-m text-[#838F91] mb-4">
             모집하기
-            <img src="/images/Vector.svg" className="w-2 h-2 mx-2" alt="" />
+            <img src="/images/Vector.svg" className="w-3 h-3 mx-2" alt="" />
             <span>{recruiting.projectType}</span>
           </div>
 
@@ -156,70 +156,124 @@ export default function RecruitMateDetail() {
                 </div>
 
                 {/* 제목 */}
-                <h1 className="text-[22px] font-extrabold text-[#222829] mb-4">
+                <h1 className="text-[22px] font-bold text-[#222829] mb-4">
                   {recruiting.title}
                 </h1>
 
-                {/* 작성자 영역 */}
-                <div className="flex items-start gap-4">
-                  {/* 프로필 이미지 */}
-                  <img
-                    src={recruiting.imageUrl || "/images/profile.svg"}
-                    alt="profile"
-                    className="w-20 h-20 rounded-full object-cover"
-                  />
+                {/* ================= 작성자 영역 ================= */}
+                <div className="flex justify-between items-end w-full">
+                  {/* ⬅️ 왼쪽 영역 */}
+                  <div className="flex items-start gap-4">
+                    {/* 프로필 이미지 */}
+                    <img
+                      src={recruiting.imageUrl || "/images/profile.svg"}
+                      alt="profile"
+                      className="w-16 h-16 rounded-full object-cover"
+                    />
 
-                  {/* 오른쪽 전체 영역 (flex-1 중요) */}
-                  <div className="flex-1">
-                    {/* 이름 / 전공 / 해시태그 */}
-                    <div className="flex flex-col gap-2">
-                      {/* 이름 + 정보 pill */}
-                      <div className="flex items-center gap-2.5 flex-wrap">
-                        <span className="text-xl font-extrabold text-[#222829]">
-                          {recruiting.name} 학부생
-                        </span>
-
-                        <span className="p-2 rounded bg-[#F5F8F8] text-[#838F91] font-semibold">
-                          {recruiting.studentId}학번
-                        </span>
-
-                        <span className="p-2 rounded bg-[#F5F8F8] text-[#0FA4AB] font-semibold">
-                          {recruiting.firstMajor}
-                        </span>
-
-                        {recruiting.secondMajor && (
-                          <span className="px-4 py-2 rounded bg-[#F5F8F8] text-[#0FA4AB] font-semibold">
-                            {recruiting.secondMajor}
+                    {/* 정보 영역 */}
+                    <div className="flex flex-col gap-4">
+                      {/* 이름 + 전공 */}
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="text-lg font-bold text-[#222829]">
+                            {recruiting.name} 학부생
                           </span>
-                        )}
+
+                          <span className="px-3 py-1.5 rounded bg-[#F5F8F8] text-[#838F91] font-semibold">
+                            {recruiting.studentId}학번
+                          </span>
+
+                          <span className="px-3 py-1.5 rounded bg-[#F5F8F8] text-[#0FA4AB] font-semibold">
+                            {recruiting.firstMajor}
+                          </span>
+
+                          {recruiting.secondMajor && (
+                            <span className="px-3 py-1.5 rounded bg-[#F5F8F8] text-[#0FA4AB] font-semibold">
+                              {recruiting.secondMajor}
+                            </span>
+                          )}
+                        </div>
+
+                        {/* 해시태그 */}
+                        <div className="flex gap-2 flex-wrap">
+                          {recruiting.myKeyword.map((k) => (
+                            <span
+                              key={k}
+                              className="px-2 py-1 text-sm text-[#838F91] rounded border border-[#CEDBDE]"
+                            >
+                              #{k}
+                            </span>
+                          ))}
+                        </div>
                       </div>
 
-                      {/* 해시태그 */}
-                      <div className="flex gap-2 flex-wrap">
-                        {recruiting.myKeyword.map((k) => (
-                          <span
-                            key={k}
-                            className="px-2 py-1 text-sm text-[#838F91] rounded border border-[#CEDBDE]"
-                          >
-                            #{k}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* 🔥 날짜 + 수정/삭제 (같은 줄, 카드 양끝) */}
-                    <div className="flex items-center justify-between w-full mt-1">
-                      <span className="text-base text-[#838F91]">
+                      {/* ✅ 시간 (왼쪽 컬럼 맨 아래) */}
+                      <div className="text-[#838F91] text-base">
                         {formatDateTime(recruiting.date)}
-                      </span>
-
-                      {recruiting.canEdit && (
-                        <RecruitingActions
-                          onEdit={handleEdit}
-                          onDelete={handleDelete}
-                        />
-                      )}
+                      </div>
                     </div>
+                  </div>
+
+                  {/* ➡️ 오른쪽 영역 */}
+                  <div>
+                    {recruiting.canEdit ? (
+                      /* ✅ 내 글: 수정 / 삭제 */
+                      <RecruitingActions
+                        onEdit={handleEdit}
+                        onDelete={handleDelete}
+                      />
+                    ) : (
+                      /* ✅ 남의 글: 안내 문구 + 버튼 */
+                      <div className="flex flex-col items-end gap-2">
+                        <div className="text-right text-[#1A858A] text-sm font-semibold">
+                          팀원으로 고민중이신가요?
+                          <br />한 번 대화해보세요!
+                        </div>
+
+                        <button
+                          onClick={async () => {
+                            if (!user?.myId || !recruitingId) return;
+
+                            const myId = user.myId;
+                            const rid = Number(recruitingId);
+                            if (Number.isNaN(rid)) return;
+
+                            try {
+                              const { canPoke } =
+                                await checkCanPokeInRecruiting(rid, myId);
+
+                              if (!canPoke) {
+                                setShowAlreadyPoked(true);
+                                return;
+                              }
+
+                              await sendPokingInRecruiting(rid, myId);
+                              setShowPokingSuccess(true);
+                            } catch {
+                              setShowAlreadyPoked(true);
+                            }
+                          }}
+                          className="
+            flex items-center gap-2
+            pl-3 pr-4 py-2.5
+            rounded-lg
+            bg-[#00C3CC]
+            text-[#F5F8F8]
+            font-bold
+            hover:bg-[#0FA4AB]
+            active:bg-[#1A858A]
+          "
+                        >
+                          <img
+                            src="/images/poke.svg"
+                            alt=""
+                            className="w-7 h-7"
+                          />
+                          메이트 체크!
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -230,49 +284,6 @@ export default function RecruitMateDetail() {
                   />
                 )}
               </div>
-
-              {/* 오른쪽 버튼 (본인 글 아닐 때) */}
-              {!recruiting.canEdit && (
-                <div className="flex-col">
-                  <div className="flex w-36 h-12.5 text-[#1A858A]">
-                    팀원으로 고민중이신가요? 한 번 찔러보세요!
-                  </div>
-                  <button
-                    onClick={async () => {
-                      if (!user?.myId || !recruitingId) return;
-
-                      const myId = user.myId;
-                      const rid = Number(recruitingId);
-                      if (Number.isNaN(rid)) return;
-
-                      try {
-                        // ✅ 모집글 기준 찌르기 가능 여부 (유일하게 안전)
-                        const { canPoke } = await checkCanPokeInRecruiting(
-                          rid,
-                          myId
-                        );
-
-                        if (!canPoke) {
-                          setShowAlreadyPoked(true);
-                          return;
-                        }
-
-                        // ✅ 찌르기 생성
-                        await sendPokingInRecruiting(rid, myId);
-
-                        setShowPokingSuccess(true);
-                      } catch (e) {
-                        console.error("❌ 조각 건네기 실패", e);
-                        setShowAlreadyPoked(true);
-                      }
-                    }}
-                    className="h-12.5 ml-6 mt-40 flex items-center gap-2 px-3 py-2.5 rounded-lg bg-[#00C3CC] text-[#F5F8F8] font-extrabold hover:bg-[#0FA4AB] active:bg-[#1A858A]"
-                  >
-                    <img src="/images/chat.svg" alt="" className="w-6 h-6" />
-                    조각 건네기
-                  </button>
-                </div>
-              )}
             </div>
 
             <hr className="border-[#E6EEF0] mb-8" />
@@ -319,7 +330,7 @@ export default function RecruitMateDetail() {
           <div className="flex justify-between items-center mt-10">
             <button
               onClick={() => router.push("/recruitmate/create")}
-              className="px-8 py-3 rounded bg-[#6EC6CC] text-white font-extrabold"
+              className="w-60 h-14 rounded bg-[#00C3CC] text-[#F5F8F8] text-lg font-bold"
             >
               모집글 쓰기
             </button>
