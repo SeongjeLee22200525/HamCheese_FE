@@ -16,6 +16,9 @@ export function useChat(channel: GroupChannel | null) {
     channelRef.current = channel;
     setMessages([]); // 채널 바뀔 때 메시지 초기화
 
+    // 🔥🔥🔥 여기 추가
+    channel.markAsRead();
+
     // 1️⃣ 이전 메시지 로드
     channel
       .getMessagesByTimestamp(Date.now(), {

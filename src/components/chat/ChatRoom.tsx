@@ -17,6 +17,22 @@ type UserMetaData = {
   major2?: string;
 };
 
+function formatDate(ts: number) {
+  const d = new Date(ts);
+  return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`;
+}
+
+function isSameDay(a: number, b: number) {
+  const da = new Date(a);
+  const db = new Date(b);
+
+  return (
+    da.getFullYear() === db.getFullYear() &&
+    da.getMonth() === db.getMonth() &&
+    da.getDate() === db.getDate()
+  );
+}
+
 export default function ChatRoom({ channel }: { channel: GroupChannel }) {
   const { messages, sendMessage } = useChat(channel);
   const myId = useUserStore((s) => s.user?.myId);
@@ -67,25 +83,39 @@ export default function ChatRoom({ channel }: { channel: GroupChannel }) {
       )}
 
       {/* ================= 메시지 리스트 ================= */}
-      <div className="flex-1 overflow-y-auto px-10 pt-4 space-y-1">
+      <div className="flex-1 overflow-y-auto pl-6 pr-10 pt-4 space-y-1">
         {messages.filter(isUserMessage).map((m, idx, arr) => {
+          const prev = arr[idx - 1];
           const next = arr[idx + 1];
 
           const isMine = m.sender?.userId === String(myId);
+
+          // 🔥 날짜가 바뀌는 첫 메시지인가?
+          const showDate = !prev || !isSameDay(prev.createdAt, m.createdAt);
 
           // 🔥 같은 사람이 다음 메시지를 보냈는지
           const isLastOfGroup =
             !next || next.sender?.userId !== m.sender?.userId;
 
           return (
-            <ChatMessage
-              key={m.messageId}
-              message={m}
-              isMine={isMine}
-              profileUrl={m.sender?.profileUrl}
-              showProfile={!isMine && isLastOfGroup}
-              showTime={isLastOfGroup}
-            />
+            <div key={m.messageId}>
+              {/* ================= 날짜 구분선 ================= */}
+              {showDate && (
+                <div className="flex justify-center mb-3">
+                  <span className="px-4 py-1 text-sm font-medium text-[#838F91] bg-[#F5F8F8] rounded-full">
+                    {formatDate(m.createdAt)}
+                  </span>
+                </div>
+              )}
+
+              <ChatMessage
+                message={m}
+                isMine={isMine}
+                profileUrl={m.sender?.profileUrl}
+                showProfile={!isMine && isLastOfGroup}
+                showTime={isLastOfGroup}
+              />
+            </div>
           );
         })}
       </div>

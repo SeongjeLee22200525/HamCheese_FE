@@ -22,6 +22,7 @@ export default function ChatPanel({ onClose }: Props) {
     }
 
     let alive = true;
+
     getGroupChannel(currentChannelUrl).then((ch) => {
       if (alive) setChannel(ch);
     });
@@ -34,7 +35,7 @@ export default function ChatPanel({ onClose }: Props) {
   return (
     <div className="fixed right-0 bottom-0 w-225 h-full bg-white rounded-tl-[20px] rounded-bl-[20px] shadow-[0px_-2px_20px_0px_rgba(225,237,240,1.00)] z-9999 flex text-[#222829]">
       {/* ================= 왼쪽 영역 ================= */}
-      <div className="w-84 bg-[#F5F8F8] h-full flex flex-col">
+      <div className="w-84 bg-[#E0EDEF] h-full flex flex-col">
         {/* 헤더 */}
         <div className="mt-10 mx-10">
           <button
@@ -43,7 +44,7 @@ export default function ChatPanel({ onClose }: Props) {
               onClose();
             }}
           >
-            <img src="chatclose.svg" />
+            <img src="/chatclose.svg" alt="close" />
           </button>
 
           <div className="text-lg font-bold mt-6 mb-10">나의 채팅 내역</div>
@@ -54,13 +55,14 @@ export default function ChatPanel({ onClose }: Props) {
         </div>
 
         {/* 찌르기 */}
-        <div className="mt-10 ">
+        <div className="mt-10">
           <ChatPokingSection />
         </div>
 
         {/* 채팅 리스트 */}
         <div className="flex-1 overflow-y-auto mt-6">
           <ChatList
+            currentChannelUrl={currentChannelUrl} // 🔥 선택된 채널 전달
             onSelect={(c) => {
               useChatWidget.getState().openChat(c.url);
             }}
@@ -69,7 +71,7 @@ export default function ChatPanel({ onClose }: Props) {
       </div>
 
       {/* ================= 오른쪽 영역 ================= */}
-      <div className="flex-1 h-full border-l border-[#E1EDF0]">
+      <div className="flex-1 h-full  ">
         {channel ? (
           <ChatRoom channel={channel} />
         ) : (

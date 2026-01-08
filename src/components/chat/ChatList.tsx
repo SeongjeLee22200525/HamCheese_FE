@@ -3,9 +3,11 @@
 import { useEffect, useState } from "react";
 import { sb } from "@/lib/sendbird/sendbird";
 import type { GroupChannel } from "@sendbird/chat/groupChannel";
+import { GroupChannelHandler } from "@sendbird/chat/groupChannel";
 
 type Props = {
   onSelect: (c: GroupChannel) => void;
+  currentChannelUrl?: string | null; // 🔥 선택된 채널
 };
 
 function formatRelativeTime(ts: number) {
@@ -22,7 +24,7 @@ function formatRelativeTime(ts: number) {
   return `${day}일 전`;
 }
 
-export default function ChatList({ onSelect }: Props) {
+export default function ChatList({ onSelect, currentChannelUrl }: Props) {
   const [channels, setChannels] = useState<GroupChannel[]>([]);
 
   useEffect(() => {
@@ -32,6 +34,24 @@ export default function ChatList({ onSelect }: Props) {
     });
 
     query.next().then(setChannels);
+
+    const handler = new GroupChannelHandler({
+      onChannelChanged: (updated) => {
+        const updatedChannel = updated as GroupChannel;
+
+        setChannels((prev) =>
+          prev.map((ch) =>
+            ch.url === updatedChannel.url ? updatedChannel : ch
+          )
+        );
+      },
+    });
+
+    sb.groupChannel.addGroupChannelHandler("chat-list-handler", handler);
+
+    return () => {
+      sb.groupChannel.removeGroupChannelHandler("chat-list-handler");
+    };
   }, []);
 
   return (
@@ -40,16 +60,21 @@ export default function ChatList({ onSelect }: Props) {
         const other = ch.members.find(
           (m) => m.userId !== sb.currentUser?.userId
         );
-
         if (!other) return null;
 
         const lastTs = ch.lastMessage?.createdAt;
+        const isActive = ch.url === currentChannelUrl;
 
         return (
           <div
             key={ch.url}
             onClick={() => onSelect(ch)}
-            className="px-10 py-4 flex gap-5.5 cursor-pointer hover:bg-[#E1EDF0] active:bg-[#CEDBDE]"
+            className={`
+              px-10 py-4 flex gap-5.5 cursor-pointer
+              ${isActive ? "bg-[#FFFFFF]" : ""}
+              hover:bg-[#CEDBDE]
+              active:bg-[#B7C4C7]
+            `}
           >
             {/* 프로필 이미지 */}
             <img
@@ -65,19 +90,26 @@ export default function ChatList({ onSelect }: Props) {
                 <div className="font-bold text-base truncate">
                   {other.nickname || other.userId}
                 </div>
+                {lastTs && (
+                  <span className="text-base text-[#838F91] whitespace-nowrap ml-2">
+                    {formatRelativeTime(lastTs)}
+                  </span>
+                )}
               </div>
 
-              {/* 마지막 메시지 */}
-              <div className="flex items-center">
-                {/* 마지막 메시지 */}
-                <div className="text-base text-[#838F91] truncate w-33">
-                  {ch.lastMessage?.message ?? "대화를 시작해보세요"}
+              {/* 메시지 + unread */}
+              <div className="flex items-center justify-between">
+                {/* 왼쪽: 마지막 메시지 */}
+                <div className="min-w-0">
+                  <div className="text-base text-[#838F91] truncate w-33">
+                    {ch.lastMessage?.message ?? "대화를 시작해보세요"}
+                  </div>
                 </div>
 
-                {/* 시간 */}
-                {lastTs && (
-                  <div className="text-base text-[#838F91] whitespace-nowrap ml-2">
-                    {formatRelativeTime(lastTs)}
+                {/* 오른쪽: unread badge */}
+                {ch.unreadMessageCount > 0 && (
+                  <div className="min-w-4.5 h-4.5 rounded-full bg-[#FF5454] text-white text-xs font-bold flex items-center justify-center">
+                    {ch.unreadMessageCount}
                   </div>
                 )}
               </div>
