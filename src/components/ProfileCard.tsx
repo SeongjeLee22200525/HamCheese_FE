@@ -148,7 +148,7 @@ export default function ProfileCard({ user }: Props) {
             </>
           ) : (
             <>
-              <p className="mb-3 text-base font-bold text-[#B7C4C7]">
+              <p className="mb-3 text-base font-bold text-[#838F91]">
                 동료평가를 아직 받지 못했어요
               </p>
 

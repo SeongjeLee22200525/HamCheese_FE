@@ -41,9 +41,9 @@ export default function Header() {
   if (!mounted) return null;
 
   return (
-    <header className="w-full h-[200px] bg-transparent">
-      <div className="w-full h-full px-[80px]">
-        <div className="flex items-center justify-between pt-[60px]">
+    <header className="w-full h-50 bg-transparent">
+      <div className="w-full h-full px-20">
+        <div className="flex items-center justify-between pt-15">
           {/* ================= 좌측 ================= */}
           <div className="flex items-baseline gap-16">
             <Link

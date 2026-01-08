@@ -69,18 +69,45 @@ export default function PeerReviewForm({
   const canSubmit = useMemo(() => {
     const yearValid = /^\d{4}$/.test(startedYear);
     const monthNum = Number(startedMonth);
-
     const monthValid = startedMonth !== "" && monthNum >= 1 && monthNum <= 12;
 
-    return yearValid && monthValid && meetWhere.trim() !== "";
-  }, [startedYear, startedMonth, meetWhere]);
+    return (
+      yearValid &&
+      monthValid &&
+      meetWhere.trim() !== "" &&
+      goodKeys.length >= 1 &&
+      badKeys.length >= 1
+    );
+  }, [
+    startedYear,
+    startedMonth,
+    meetWhere,
+    goodKeys, // 추가
+    badKeys, // 추가
+  ]);
 
-  const toggleWithLimit = (arr: string[], key: string, limit: number) => {
-    if (arr.includes(key)) {
-      return arr.filter((k) => k !== key);
+  const isValidState = (good: number, bad: number, totalLimit: number) => {
+    return good >= 1 && bad >= 1 && good + bad <= totalLimit;
+  };
+
+  const toggleWithTotalLimit = (
+    targetArr: string[],
+    otherArr: string[],
+    key: string,
+    totalLimit: number
+  ) => {
+    // 이미 선택된 경우 → 해제
+    if (targetArr.includes(key)) {
+      return targetArr.filter((k) => k !== key);
     }
-    if (arr.length >= limit) return arr;
-    return [...arr, key];
+
+    // 총합 10개 초과 방지
+    if (targetArr.length + otherArr.length >= totalLimit) {
+      return targetArr;
+    }
+
+    // 추가
+    return [...targetArr, key];
   };
 
   /* ===== constants → 렌더링용 배열 ===== */
@@ -121,7 +148,7 @@ export default function PeerReviewForm({
 
             <div>
               <div className="text-2xl font-extrabold text-[#222829]">
-                {targetName} 학부생의 동료평가 남기기
+                {targetName} 학부생의 동료평가 남기기 (총 10개)
               </div>
               <div className="flex gap-1 mt-2 flex-wrap text-xs font-semibold">
                 {targetMetaTags.map((tag, idx) => (
@@ -207,7 +234,7 @@ export default function PeerReviewForm({
           <div className="mb-20">
             <p className="font-extrabold text-xl mb-5 text-[#222829]">
               이런 면이 좋았어요{" "}
-              <span className="pl-3 font-medium ">(복수 선택)</span>
+              <span className="pl-3 font-medium ">(최소 1개 선택)</span>
             </p>
             <div className="flex flex-wrap gap-2">
               {GOOD_OPTIONS.map((o) => (
@@ -217,7 +244,9 @@ export default function PeerReviewForm({
                   label={o.label}
                   selected={goodKeys.includes(o.key)}
                   onClick={() =>
-                    setGoodKeys(toggleWithLimit(goodKeys, o.key, 5))
+                    setGoodKeys(
+                      toggleWithTotalLimit(goodKeys, badKeys, o.key, 10)
+                    )
                   }
                 />
               ))}
@@ -228,7 +257,7 @@ export default function PeerReviewForm({
           <div className="mb-30">
             <p className="font-extrabold text-xl mb-5 text-[#222829]">
               이런 면이 아쉬웠어요{" "}
-              <span className="pl-3 font-medium">(복수 선택)</span>
+              <span className="pl-3 font-medium">(최소 1개 선택)</span>
             </p>
             <div className="flex flex-wrap gap-2">
               {BAD_OPTIONS.map((o) => (
@@ -237,7 +266,11 @@ export default function PeerReviewForm({
                   emoji={o.emoji}
                   label={o.label}
                   selected={badKeys.includes(o.key)}
-                  onClick={() => setBadKeys(toggleWithLimit(badKeys, o.key, 5))}
+                  onClick={() =>
+                    setBadKeys(
+                      toggleWithTotalLimit(badKeys, goodKeys, o.key, 10)
+                    )
+                  }
                 />
               ))}
             </div>

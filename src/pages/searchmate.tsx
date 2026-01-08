@@ -64,7 +64,7 @@ export default function SearchMate() {
     fetchUsers();
   }, [selected, searchKeyword]);
 
-  /* ================= 🔥 goodKeywordCount 기준 정렬 ================= */
+  /*  goodKeywordCount 기준 정렬 */
   const sortedUsers = useMemo(() => {
     return [...items].sort(
       (a, b) => (b.goodKeywordCount ?? 0) - (a.goodKeywordCount ?? 0)
@@ -155,12 +155,6 @@ export default function SearchMate() {
               {!loading && error && (
                 <p className="text-center text-sm text-red-500 mt-20">
                   {error}
-                </p>
-              )}
-
-              {!loading && !error && items.length === 0 && (
-                <p className="text-center text-sm text-gray-400 mt-20">
-                  검색 결과가 없습니다.
                 </p>
               )}
 

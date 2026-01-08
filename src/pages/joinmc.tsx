@@ -213,7 +213,7 @@ export default function JoinMC() {
                 </div>
 
                 {/* 학부 */}
-                {/* 🔧 수정 1: <di> → <div> */}
+                {/* 수정 1: <di> → <div> */}
                 <div className="flex items-center gap-16 relative">
                   <div className="w-[100px] flex items-center gap-2 font-medium">
                     <div className="w-1 h-4 bg-[#00C3CC]" />
