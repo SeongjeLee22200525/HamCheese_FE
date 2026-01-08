@@ -154,7 +154,7 @@ export default function PeerReviewForm({
                 {targetMetaTags.map((tag, idx) => (
                   <span
                     key={`${tag.type}-${idx}`}
-                    className={`px-2 py-2 rounded bg-[#F5F8F8]
+                    className={`px-3 py-1.5 rounded bg-[#F5F8F8]
                       ${
                         tag.type === "studentId"
                           ? "text-[#838F91]"
