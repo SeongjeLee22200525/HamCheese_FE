@@ -12,6 +12,8 @@ import { useUserStore } from "@/stores/useUserStore";
 export default function JoinMC() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  /** 약관 동의 */
+  const [agree, setAgree] = useState(false);
 
   /** 로그인 페이지에서 전달받은 값 */
   const email = searchParams.get("email") ?? "";
@@ -354,34 +356,57 @@ export default function JoinMC() {
                   />
                 </div>
               </div>
+              {/* ================= 약관 동의 ================= */}
+              <div className="flex justify-center mt-18">
+                <label className="flex items-center gap-2 cursor-pointer select-none">
+                  {/* 접근성용 실제 checkbox */}
+                  <input
+                    type="checkbox"
+                    className="sr-only"
+                    checked={agree}
+                    onChange={() => setAgree((prev) => !prev)}
+                  />
 
-              {/* 버튼 */}
+                  {/* 커스텀 체크박스 */}
+                  <img
+                    src={agree ? "/images/agree.svg" : "/images/check.svg"}
+                    alt="checkbox"
+                    className="w-5 h-5"
+                  />
+
+                  <span className="text-sm text-[#838F91] font-medium">
+                    약관 개인정보 보호정책에 동의합니다.
+                  </span>
+                </label>
+              </div>
+
               <div className="flex justify-center mt-18">
                 <button
-                  className="w-72 py-4 bg-[#00C3CC] text-white font-bold rounded"
-                  disabled={loading}
-                  /* 🔧 수정 2: submit + zustand + 이동 */
+                  disabled={loading || !agree}
+                  className={`
+    w-72 py-4 font-bold rounded transition
+    ${
+      agree
+        ? "bg-[#00C3CC] text-white hover:bg-[#00b3bb]"
+        : "bg-[#E1EDF0] text-[#9CA3AF] cursor-not-allowed"
+    }
+  `}
                   onClick={async () => {
+                    if (!agree) return; // 🔒 안전장치 (혹시 모를 클릭 방지)
+
                     const result = await submit(form, profileFile);
 
-                    console.log("✅ signup result:", result);
-
-                    // 🔥 1. 쿠키 먼저 (제일 중요)
                     document.cookie = `myId=${result.myId}; path=/;`;
                     document.cookie = `name=${encodeURIComponent(
                       result.name
                     )}; path=/;`;
 
-                    console.log("🍪 after signup cookie:", document.cookie);
-
-                    // 🔥 2. store
                     setUser({
                       myId: result.myId,
                       name: result.name,
                     });
 
-                    // 🔥 3. 이동
-                    router.replace("/searchmate");
+                    router.replace("/mypage");
                   }}
                 >
                   가입하기

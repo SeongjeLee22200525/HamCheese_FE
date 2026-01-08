@@ -106,7 +106,7 @@ export default function SearchMate() {
                 </h3>
               </div>
 
-              <div className="bg-white border-[#6EC6CC] rounded-tr-lg rounded-br-lg rounded-bl-lg overflow-hidden border-2">
+              <div className="bg-white border-[#A1E6EA] rounded-tr-lg rounded-br-lg rounded-bl-lg overflow-hidden border-2">
                 <div className="mt-5 flex flex-col mb-5">
                   {departments.map((dept) => {
                     const checked = selected.includes(dept);
@@ -195,6 +195,25 @@ export default function SearchMate() {
           </div>
         </div>
       </main>
+      {/* TOP 버튼 */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className="
+    fixed
+    bottom-32 right-20
+    z-50
+    w-13 h-13
+    bg-[#E1EDF0]
+    rounded-full
+    inline-flex items-center justify-center gap-2
+    hover: shadow-[0px_0px_8px_0px_rgba(225,237,240,1.00)]
+    hover:bg-[#D9E4E8]
+    active:bg-[#B7C4C7]
+    transition
+  "
+      >
+        <img src="/images/top.svg" className="w-7 h-3.5" alt="top" />
+      </button>
 
       <Footer />
     </div>

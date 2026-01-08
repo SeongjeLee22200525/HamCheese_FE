@@ -110,7 +110,7 @@ export default function RecruitMate() {
                 </h3>
               </div>
 
-              <div className="bg-white border-[#6EC6CC] rounded-tr-lg rounded-br-lg rounded-bl-lg overflow-hidden border-2 mb-10">
+              <div className="bg-white border-[#A1E6EA] rounded-tr-lg rounded-br-lg rounded-bl-lg overflow-hidden border-2 mb-10">
                 <div className="mt-5 mb-5 flex flex-col">
                   {types.map((type) => {
                     const checked = selectedTypes.includes(type);
@@ -168,7 +168,7 @@ export default function RecruitMate() {
                 </h3>
               </div>
 
-              <div className="bg-white border-[#6EC6CC] rounded-tr-lg rounded-br-lg rounded-bl-lg overflow-hidden border-2">
+              <div className="bg-white border-[#A1E6EA] rounded-tr-lg rounded-br-lg rounded-bl-lg overflow-hidden border-2">
                 <div className="mt-5 mb-5 flex flex-col">
                   {departments.map((dept) => {
                     const checked = selectedDepartments.includes(dept);
@@ -238,8 +238,10 @@ export default function RecruitMate() {
               {/* ✅ 여기! 리스트 바로 아래 */}
               <div className="mt-12 flex justify-center">
                 {hasMore ? (
-                  <div className="w-80 px-2 py-5 bg-[#FFFFFF] rounded outline outline-2 outline-offset-[-2px] outline-[#00C3CC] inline-flex justify-center items-center gap-5 
-                  hover:bg-[#F5F8F8] active:bg-[#E1EDF0]">
+                  <div
+                    className="w-80 px-2 py-5 bg-[#FFFFFF] rounded outline outline-2 outline-offset-[-2px] outline-[#00C3CC] inline-flex justify-center items-center gap-5 
+                  hover:bg-[#F5F8F8] active:bg-[#E1EDF0]"
+                  >
                     <button
                       onClick={loadMore}
                       className="justify-start text-[#00C3CC] text-lg font-bold"
@@ -273,7 +275,25 @@ export default function RecruitMate() {
           onClose={() => setShowDeleteSnackbar(false)}
         />
       )}
-
+      {/* TOP 버튼 */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className="
+    fixed
+    bottom-32 right-20
+    z-50
+    w-13 h-13
+    bg-[#E1EDF0]
+    rounded-full
+    inline-flex items-center justify-center gap-2
+    hover: shadow-[0px_0px_8px_0px_rgba(225,237,240,1.00)]
+    hover:bg-[#D9E4E8]
+    active:bg-[#B7C4C7]
+    transition
+  "
+      >
+        <img src="/images/top.svg" className="w-7 h-3.5" alt="top" />
+      </button>
       <Footer />
     </div>
   );

@@ -407,7 +407,7 @@ export default function RecruitMateDetail() {
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         className="
     fixed
-    bottom-30 right-20
+    bottom-32 right-20
     z-50
     w-13 h-13
     bg-[#E1EDF0]
@@ -415,6 +415,7 @@ export default function RecruitMateDetail() {
     inline-flex items-center justify-center gap-2
     hover: shadow-[0px_0px_8px_0px_rgba(225,237,240,1.00)]
     hover:bg-[#D9E4E8]
+    active:bg-[#B7C4C7]
     transition
   "
       >

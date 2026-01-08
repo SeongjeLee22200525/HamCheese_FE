@@ -43,7 +43,7 @@ export default function ChatPanel({ onClose }: Props) {
               onClose();
             }}
           >
-            <img src="chatclose.svg" />
+            <img src="/chatclose.svg" />
           </button>
 
           <div className="text-lg font-bold mt-6 mb-10">나의 채팅 내역</div>
