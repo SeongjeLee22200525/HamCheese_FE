@@ -44,7 +44,7 @@ export default function ChatRoom({ channel }: { channel: GroupChannel }) {
   const meta = otherUser?.metaData as UserMetaData | undefined;
 
   return (
-    <div className="flex-1 flex flex-col">
+    <div className="h-full flex-1 flex flex-col ">
       {/* ================= 상단 상대 프로필 ================= */}
       {otherUser && (
         <div className="px-10 py-10 border-b border-[#E1EDF0] flex items-center gap-4">
@@ -83,7 +83,7 @@ export default function ChatRoom({ channel }: { channel: GroupChannel }) {
       )}
 
       {/* ================= 메시지 리스트 ================= */}
-      <div className="flex-1 overflow-y-auto pl-6 pr-10 pt-4 space-y-1">
+      <div className="flex-1 overflow-y-auto pl-6 pr-10 py-4 space-y-1">
         {messages.filter(isUserMessage).map((m, idx, arr) => {
           const prev = arr[idx - 1];
           const next = arr[idx + 1];
@@ -102,7 +102,7 @@ export default function ChatRoom({ channel }: { channel: GroupChannel }) {
               {/* ================= 날짜 구분선 ================= */}
               {showDate && (
                 <div className="flex justify-center mb-3">
-                  <span className="px-4 py-1 text-sm font-medium text-[#838F91] bg-[#F5F8F8] rounded-full">
+                  <span className="px-4 py-2 text-sm font-medium text-[#838F91] bg-[#F5F8F8] rounded-full">
                     {formatDate(m.createdAt)}
                   </span>
                 </div>

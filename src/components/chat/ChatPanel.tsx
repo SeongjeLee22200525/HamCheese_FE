@@ -33,7 +33,7 @@ export default function ChatPanel({ onClose }: Props) {
   }, [currentChannelUrl]);
 
   return (
-    <div className="fixed right-0 bottom-0 w-225 h-full bg-white rounded-tl-[20px] rounded-bl-[20px] shadow-[0px_-2px_20px_0px_rgba(225,237,240,1.00)] z-9999 flex text-[#222829]">
+    <div className="w-225 h-full bg-white rounded-tl-[20px] rounded-bl-[20px] shadow-[0px_-2px_20px_0px_rgba(225,237,240,1.00)] flex text-[#222829]">
       {/* ================= 왼쪽 영역 ================= */}
       <div className="w-84 bg-[#E0EDEF] h-full flex flex-col">
         {/* 헤더 */}
@@ -48,21 +48,21 @@ export default function ChatPanel({ onClose }: Props) {
           </button>
 
           <div className="text-lg font-bold mt-6 mb-10">나의 채팅 내역</div>
-
-          <div className="bg-[#E1EDF0] py-4 px-3 rounded text-sm">
-            <span className="font-bold">서예진 학부생</span>이 대화를 거절했어요
-          </div>
+        </div>
+        <div className="bg-[#E1EDF0] py-4 px-3 text-sm border-b border-[#CEDBDE]">
+          <span className="font-bold">서예진 학부생</span> 과 대화가 성사되지
+          못했어요 ㅠ
         </div>
 
         {/* 찌르기 */}
-        <div className="mt-10">
+        <div className="">
           <ChatPokingSection />
         </div>
 
         {/* 채팅 리스트 */}
-        <div className="flex-1 overflow-y-auto mt-6">
+        <div className="flex-1 overflow-y-auto">
           <ChatList
-            currentChannelUrl={currentChannelUrl} // 🔥 선택된 채널 전달
+            currentChannelUrl={currentChannelUrl}
             onSelect={(c) => {
               useChatWidget.getState().openChat(c.url);
             }}
@@ -71,7 +71,7 @@ export default function ChatPanel({ onClose }: Props) {
       </div>
 
       {/* ================= 오른쪽 영역 ================= */}
-      <div className="flex-1 h-full  ">
+      <div className="flex-1 h-full">
         {channel ? (
           <ChatRoom channel={channel} />
         ) : (

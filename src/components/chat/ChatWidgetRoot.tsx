@@ -5,44 +5,55 @@ import { sb } from "@/lib/sendbird/sendbird";
 import { useUserStore } from "@/stores/useUserStore";
 import ChatFab from "./ChatFab";
 import ChatPanel from "./ChatPanel";
-import { getOrCreateChannel } from "@/lib/sendbird/channel";
-import type { GroupChannel } from "@sendbird/chat/groupChannel";
 
 export default function ChatWidgetRoot() {
   const myId = useUserStore((s) => s.user?.myId);
+  const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
-  const [channel, setChannel] = useState<GroupChannel | null>(null);
 
   useEffect(() => {
     if (!myId) return;
     sb.connect(String(myId));
   }, [myId]);
 
-  // 🔥 외부에서 채팅 열기 (조각 건네기용)
-  useEffect(() => {
-    const handler = async (e: any) => {
-      const targetId = String(e.detail);
-      if (!myId) return;
+  const handleOpen = () => {
+    setMounted(true); // 1️⃣ 먼저 mount (w-0 상태)
+    requestAnimationFrame(() => {
+      setOpen(true); // 2️⃣ 다음 프레임에서 w-225
+    });
+  };
 
-      const ch = await getOrCreateChannel(String(myId), targetId);
-      setChannel(ch);
-      setOpen(true);
-    };
-
-    window.addEventListener("open-chat", handler);
-    return () => window.removeEventListener("open-chat", handler);
-  }, [myId]);
+  const handleClose = () => {
+    setOpen(false); // w-225 → w-0
+    setTimeout(() => {
+      setMounted(false); // 애니메이션 끝나고 unmount
+    }, 300);
+  };
 
   return (
     <>
-      {open && (
-        <ChatPanel
-          onClose={() => {
-            setOpen(false);
-          }}
-        />
+      {mounted && (
+        <div
+          className="fixed inset-0 z-[9998] bg-black/30"
+          onClick={handleClose}
+        >
+          <div
+            className={`
+              absolute right-0 bottom-0 h-full
+              overflow-hidden
+              transition-[width] duration-300 ease-out
+              ${open ? "w-225" : "w-0"}
+            `}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-225 h-full">
+              <ChatPanel onClose={handleClose} />
+            </div>
+          </div>
+        </div>
       )}
-      <ChatFab onClick={() => setOpen((p) => !p)} />
+
+      <ChatFab onClick={handleOpen} />
     </>
   );
 }
