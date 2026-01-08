@@ -28,39 +28,31 @@ export default function Home() {
     <div className="w-full min-h-screen flex flex-col bg-[#F5F8F8]">
       <Header />
 
-      <section className="w-full bg-[#F5F8F8] px-[240px] min-h-[640px]">
-        <main className="flex items-center gap-40 py-15">
+      <section className="w-full bg-[#F5F8F8] px-60 min-h-160">
+        <main className="flex items-start py-15">
           {/* Left */}
-          <div className="flex-1 flex flex-col items-start gap-10">
-            <img src="/images/ment.svg" alt="Ment" className="w-70 h-auto" />
+          <div className="flex-[0.8] flex flex-col items-start gap-10">
+            <img src="/images/ment.svg" alt="Ment" className="w-90 h-auto" />
             <img
               src="/images/slogan.svg"
               alt="Slogan"
-              className="w-140 h-auto"
+              className="w-120 h-auto"
             />
+            <Link
+                href="/signin"
+                className="w-80 px-2 py-5 bg-[#00C3CC] rounded inline-flex justify-center items-center gap-2.5 text-[#F5F8F8] text-lg font-semibold hover:bg-[#0FA4AB]"
+              >
+                학교인증하고 회원가입하기
+              </Link>
           </div>
 
           {/* Right */}
-          <div className="flex-1 flex flex-col items-center gap-14 mt-2">
+          <div className="flex-[1.2] flex flex-col items-center">
             <img
-              src="/images/logo.svg"
-              alt="MateCheck Logo"
-              className="w-160 h-auto"
+              src="/images/mainpage/feed.svg"
+              alt="Feed image"
+              className="w-full max-w-300 h-auto"
             />
-
-            <div className="w-220 h-24 px-6 rounded-lg shadow-[0px_0px_10px_0px_rgba(225,237,240,1.00)] outline outline-2 outline-offset-[-2px] outline-[#00C3CC] flex items-center gap-4 bg-white">
-              <input
-                placeholder="원하는 메이트의 이름을 검색해보세요."
-                className="flex-1 h-full px-1 outline-none text-[#838F91] leading-[96px] text-2xl font-medium
-    placeholder:leading-[96px] placeholder:text-[#838F91] placeholder:text-2xl placeholder:font-medium "
-              />
-              <img
-                src="/images/search-icon.svg"
-                alt="search"
-                className="w-7 h-7 cursor-pointer"
-                onClick={() => router.push("/signin")}
-              />
-            </div>
           </div>
         </main>
       </section>
