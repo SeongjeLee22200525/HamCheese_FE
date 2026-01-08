@@ -47,16 +47,18 @@ export default function ChatRoom({ channel }: { channel: GroupChannel }) {
     <div className="h-full flex-1 flex flex-col ">
       {/* ================= 상단 상대 프로필 ================= */}
       {otherUser && (
-        <div className="px-10 py-10 border-b border-[#E1EDF0] flex items-center gap-4">
-          <img
-            src={otherUser.profileUrl || "/profile.svg"}
-            className="w-17 h-17 rounded-full object-cover"
-            alt="profile"
-          />
+        <div className="px-10 py-10 border-b-2 border-[#E1EDF0] flex items-center gap-4">
+          <a href={`/mateprofile/${otherUser.userId}`}>
+            <img
+              src={otherUser.profileUrl || "/profile.svg"}
+              className="w-17 h-17 rounded-full object-cover"
+              alt="profile"
+            />
+          </a>
 
           <div>
             <div className="font-bold text-lg text-[#222829] mb-2">
-              {otherUser.nickname}
+              {otherUser.nickname} 학부생
             </div>
 
             <div className="text-sm font-semibold  text-[#838F91] flex gap-2">
@@ -102,7 +104,7 @@ export default function ChatRoom({ channel }: { channel: GroupChannel }) {
               {/* ================= 날짜 구분선 ================= */}
               {showDate && (
                 <div className="flex justify-center mb-3">
-                  <span className="px-4 py-2 text-sm font-medium text-[#838F91] bg-[#F5F8F8] rounded-full">
+                  <span className="px-4 py-2 text-sm font-medium text-[#838F91] ">
                     {formatDate(m.createdAt)}
                   </span>
                 </div>

@@ -68,6 +68,7 @@ export function useChat(channel: GroupChannel | null) {
             ? prev
             : [...prev, message]
         );
+        channelRef.current.markAsRead();
       },
     });
 

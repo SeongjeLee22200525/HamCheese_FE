@@ -6,12 +6,21 @@ import { useUserStore } from "@/stores/useUserStore";
 import ChatFab from "./ChatFab";
 import ChatPanel from "./ChatPanel";
 import Snackbar from "../common/Snackbar";
+import { useChatWidget } from "@/hooks/chat/useChatWidget";
+import { useChannelList } from "@/hooks/chat/useChannelList"; // 🔥 추가
 
 export default function ChatWidgetRoot() {
   const myId = useUserStore((s) => s.user?.myId);
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
   const [snackbar, setSnackbar] = useState<string | null>(null);
+  const { closeChat } = useChatWidget();
+
+  /* 🔥 채널 리스트 (source of truth) */
+  const channels = useChannelList(!!myId);
+
+  /* 🔥 unread 판단 */
+  const hasUnread = channels.some((ch) => ch.unreadMessageCount > 0);
 
   useEffect(() => {
     if (!myId) return;
@@ -25,6 +34,7 @@ export default function ChatWidgetRoot() {
 
   const handleClose = () => {
     setOpen(false);
+    closeChat();
     setTimeout(() => setMounted(false), 300);
   };
 
@@ -58,7 +68,8 @@ export default function ChatWidgetRoot() {
         <Snackbar message={snackbar} onClose={() => setSnackbar(null)} />
       )}
 
-      <ChatFab onClick={handleOpen} />
+      {/* 🔥 unread 기준 아이콘 */}
+      <ChatFab onClick={handleOpen} hasUnread={hasUnread} />
     </>
   );
 }
