@@ -80,7 +80,7 @@ export default function RecruitMateDetail() {
       try {
         const res = await getRecruitings({
           page: 0,
-          size: 6,
+          size: 5,
         });
 
         // 🔥 현재 보고 있는 글은 제외
