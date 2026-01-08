@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { sb } from "@/lib/sendbird/sendbird";
+import { getSendbird } from "@/lib/sendbird/sendbird";
 import { GroupChannelHandler } from "@sendbird/chat/groupChannel";
 import type { GroupChannel } from "@sendbird/chat/groupChannel";
 import type { BaseMessage } from "@sendbird/chat/message";
@@ -8,7 +8,7 @@ import { useUserStore } from "@/stores/useUserStore";
 export function useChat(channel: GroupChannel | null) {
   const [messages, setMessages] = useState<BaseMessage[]>([]);
   const channelRef = useRef<GroupChannel | null>(null);
-
+  const sb = getSendbird();
   useEffect(() => {
     if (!channel) return;
 

@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import { useUserStore } from "@/stores/useUserStore";
-import { sb } from "@/lib/sendbird/sendbird";
+import { getSendbird } from "@/lib/sendbird/sendbird";
 
 export default function SignIn() {
   const router = useRouter();
@@ -34,6 +34,7 @@ export default function SignIn() {
         document.cookie = `name=${encodeURIComponent(data.name)}; path=/`;
 
         try {
+          const sb = getSendbird();
           try {
             await sb.disconnect();
           } catch {}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { sb } from "@/lib/sendbird/sendbird";
+import { getSendbird } from "@/lib/sendbird/sendbird";
 import type { GroupChannel } from "@sendbird/chat/groupChannel";
 import { GroupChannelHandler } from "@sendbird/chat/groupChannel";
 
@@ -26,7 +26,7 @@ function formatRelativeTime(ts: number) {
 
 export default function ChatList({ onSelect, currentChannelUrl }: Props) {
   const [channels, setChannels] = useState<GroupChannel[]>([]);
-
+  const sb = getSendbird();
   useEffect(() => {
     const query = sb.groupChannel.createMyGroupChannelListQuery({
       includeEmpty: true,
