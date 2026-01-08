@@ -52,7 +52,7 @@ export default function ProfileCard({ user }: Props) {
   return (
     <article
       onClick={handleClick}
-      className="rounded-lg p-15 outline-1 outline-offset-[-1px] outline-[#E1EDF0] bg-white shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] hover:shadow-md transition cursor-pointer"
+      className="rounded-lg p-15 outline-1 outline-offset-[-1px] outline-[#E1EDF0] bg-white hover:shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] transition cursor-pointer"
     >
       <div className="flex items-start gap-6">
         {/* ================= 이미지 블록 ================= */}
@@ -90,7 +90,7 @@ export default function ProfileCard({ user }: Props) {
               ))}
           </div>
 
-          <p className="mt-5 mb-6 text-xl text-[#222829] max-w-[569px] truncate leading-relaxed">
+          <p className="mt-5 mb-6 text-xl text-[#222829] max-w-[540px] truncate leading-relaxed">
             {user.introduction || "자기소개가 아직 작성되지 않았어요."}
           </p>
 
@@ -109,43 +109,60 @@ export default function ProfileCard({ user }: Props) {
         </div>
 
         {/* ================= 평가 블록 ================= */}
-        {topPeerKeywords.length > 0 && (
-          <div>
-            <p className="mb-3 text-base font-bold text-[#838F91]">
-              저는 이런 평가를 받았어요
-            </p>
+        <div>
+          {topPeerKeywords.length > 0 ? (
+            <>
+              <p className="mb-3 text-base font-bold text-[#838F91]">
+                저는 이런 평가를 받았어요
+              </p>
 
-            <div className="space-y-1">
-              {topPeerKeywords.map(([keyword, count]) => {
-                const meta = POSITIVE_PEER_KEYWORDS[keyword];
-                if (!meta) return null;
+              <div className="space-y-1">
+                {topPeerKeywords.map(([keyword, count]) => {
+                  const meta = POSITIVE_PEER_KEYWORDS[keyword];
+                  if (!meta) return null;
 
-                const barWidth = getMiniBarWidth(count);
+                  const barWidth = getMiniBarWidth(count);
 
-                return (
-                  <div
-                    key={keyword}
-                    className="relative w-[370px] h-11 rounded bg-[#F5F8F8] px-4 flex items-center justify-between overflow-hidden"
-                  >
+                  return (
                     <div
-                      className="absolute left-0 top-0 h-full rounded bg-[#E1EDF0]"
-                      style={{ width: `${barWidth}px` }}
-                    />
+                      key={keyword}
+                      className="relative w-[370px] h-11 rounded bg-[#F5F8F8] px-4 flex items-center justify-between overflow-hidden"
+                    >
+                      <div
+                        className="absolute left-0 top-0 h-full rounded bg-gradient-to-r from-[#98CBCD] to-[#C3EFF1]"
+                        style={{ width: `${barWidth}px` }}
+                      />
 
-                    <span className="relative z-10 flex items-center gap-2 text-sm font-semibold text-[#222829]">
-                      <span>{meta.emoji}</span>
-                      {keyword}
-                    </span>
+                      <span className="relative z-10 flex items-center gap-2 text-sm font-semibold text-[#222829]">
+                        <span>{meta.emoji}</span>
+                        {keyword}
+                      </span>
 
-                    <span className="relative z-10 text-base font-extrabold text-[#00C3CC]">
-                      {count}
-                    </span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
+                      <span className="relative z-10 text-base font-extrabold text-[#00C3CC]">
+                        {count}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="mb-3 text-base font-bold text-[#B7C4C7]">
+                동료평가를 아직 받지 못했어요
+              </p>
+
+              <div className="space-y-1">
+                {[0, 1, 2].map((i) => (
+                  <div
+                    key={i}
+                    className="w-[370px] h-11 rounded bg-[#F5F8F8]"
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </article>
   );
