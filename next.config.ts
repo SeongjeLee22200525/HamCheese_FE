@@ -4,7 +4,13 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
 
   images: {
-    domains: ["pard-fileupload-practice.s3.ap-northeast-2.amazonaws.com"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "pard-fileupload-practice.s3.ap-northeast-2.amazonaws.com",
+        pathname: "/**",
+      },
+    ],
   },
 
   async headers() {
@@ -15,7 +21,6 @@ const nextConfig: NextConfig = {
           /**
            * 🔥 핵심
            * Google OAuth iframe → postMessage 허용
-           * (회원가입 페이지 이동 안 되던 문제 해결)
            */
           {
             key: "Cross-Origin-Opener-Policy",
@@ -23,9 +28,7 @@ const nextConfig: NextConfig = {
           },
 
           /**
-           * ❌ 절대 넣지 말 것
-           * 아래 설정이 있으면 GoogleLogin 깨짐
-           *
+           * ❌ 절대 추가하면 안 됨
            * Cross-Origin-Embedder-Policy: require-corp
            */
         ],
