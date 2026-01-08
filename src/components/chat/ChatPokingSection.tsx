@@ -5,6 +5,7 @@ import axios from "@/api/axios";
 import { useUserStore } from "@/stores/useUserStore";
 import { getOrCreateChannel } from "@/lib/sendbird/channel";
 import { useChatWidget } from "@/hooks/chat/useChatWidget";
+import ConfirmModal from "../common/ConfirmModal";
 
 type Poking = {
   pokingId: number;
@@ -63,11 +64,21 @@ function getRelativeTimeWithKST(dateStr?: string) {
   return `${diffDay}일 전`;
 }
 
-export default function ChatPokingSection() {
+type Props = {
+  onAcceptSuccess?: () => void;
+  onRejectSuccess?: () => void;
+};
+
+export default function ChatPokingSection({
+  onAcceptSuccess,
+  onRejectSuccess,
+}: Props) {
   const myId = useUserStore((s) => s.user?.myId);
   const { openChat } = useChatWidget();
 
   const [list, setList] = useState<Poking[]>([]);
+  //메이트 체크 거절 모달
+  const [rejectTargetId, setRejectTargetId] = useState<number | null>(null);
 
   /* ================= 받은 찌르기 조회 ================= */
   useEffect(() => {
@@ -96,6 +107,7 @@ export default function ChatPokingSection() {
     });
 
     setList((prev) => prev.filter((p) => p.pokingId !== pokingId));
+    onRejectSuccess?.();
   };
 
   /* ================= 수락 ================= */
@@ -115,6 +127,8 @@ export default function ChatPokingSection() {
       setList((prev) => prev.filter((item) => item.pokingId !== p.pokingId));
 
       openChat(channel.url);
+      console.log("handleAccept success");
+      onAcceptSuccess?.();
     } catch (err) {
       console.error("채팅 연결 실패", err);
     }
@@ -155,7 +169,7 @@ export default function ChatPokingSection() {
 
             <div className="flex font-bold mt-4">
               <button
-                onClick={() => handleReject(p.pokingId)}
+                onClick={() => setRejectTargetId(p.pokingId)}
                 className="w-23 py-3 text-sm mr-2 bg-[#CEDBDE] rounded text-[#495456]"
               >
                 다음 기회에!
@@ -171,6 +185,18 @@ export default function ChatPokingSection() {
           </div>
         </div>
       ))}
+      {rejectTargetId !== null && (
+        <ConfirmModal
+          title={`정말로 거절하시겠습니까?\n거절하면 채팅을 시작할 수 없어요.`}
+          cancelText="취소"
+          confirmText="거절하기"
+          onCancel={() => setRejectTargetId(null)}
+          onConfirm={() => {
+            handleReject(rejectTargetId);
+            setRejectTargetId(null);
+          }}
+        />
+      )}
     </div>
   );
 }

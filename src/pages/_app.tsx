@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useUserStore } from "@/stores/useUserStore";
 import ChatWidgetRoot from "@/components/chat/ChatWidgetRoot";
+import { SnackbarProvider } from "@/providers/SnackbarProvider";
+import { useSnackbar } from "@/providers/SnackbarProvider";
 
 const PROTECTED_ROUTES = ["/searchmate", "/recruitmate"];
 
@@ -16,10 +18,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
   /* 1️⃣ 최초 유저 복원 */
   useEffect(() => {
-    const run = async () => {
-      await hydrateUser();
-    };
-    run();
+    hydrateUser();
   }, []);
 
   /* 2️⃣ 로그인 필요한 페이지만 가드 */
@@ -42,10 +41,13 @@ export default function App({ Component, pageProps }: AppProps) {
       <GoogleOAuthProvider
         clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ""}
       >
-        <Component {...pageProps} />
+        {/* ✅ 여기 안으로 전부 넣는다 */}
+        <SnackbarProvider>
+          <Component {...pageProps} />
 
-        {/* 로그인 상태에서만 채팅 */}
-        {user?.myId && <ChatWidgetRoot />}
+          {/* ✅ 이제 ChatWidget도 Provider 안 */}
+          {user?.myId && <ChatWidgetRoot />}
+        </SnackbarProvider>
       </GoogleOAuthProvider>
     </>
   );

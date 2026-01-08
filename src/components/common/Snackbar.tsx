@@ -29,7 +29,7 @@ export default function Snackbar({
   };
 
   return (
-    <div className="fixed bottom-12 left-12 z-[10000]">
+    <div className="fixed bottom-12 left-12 z-[99999]">
       <div className="flex items-center justify-between w-[440px] h-[90px] bg-[#222829E5] px-10 rounded-lg">
         <div className="flex items-center text-white font-medium">
           {message}
