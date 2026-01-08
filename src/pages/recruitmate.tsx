@@ -53,7 +53,7 @@ export default function RecruitMate() {
 
     if (deleted === "true") {
       setShowDeleteSnackbar(true);
-      sessionStorage.removeItem("recruitingDeleted"); // ✅ 1회성
+      sessionStorage.removeItem("recruitingDeleted"); // 1회성
     }
   }, []);
   const [showEditSnackbar, setShowEditSnackbar] = useState(false);
@@ -62,7 +62,7 @@ export default function RecruitMate() {
 
     if (edited === "true") {
       setShowEditSnackbar(true);
-      sessionStorage.removeItem("recruitingEdited"); // ✅ 1회성
+      sessionStorage.removeItem("recruitingEdited"); // 1회성
     }
   }, []);
 
@@ -145,7 +145,7 @@ export default function RecruitMate() {
                           onChange={() => toggleItem(type, setSelectedTypes)}
                         />
 
-                        {/* ✅ SVG 체크박스 */}
+                        {/*  SVG 체크박스 */}
                         <img
                           src={
                             checked
@@ -205,7 +205,7 @@ export default function RecruitMate() {
                           }
                         />
 
-                        {/* ✅ SVG 체크박스 */}
+                        {/* SVG 체크박스 */}
                         <img
                           src={
                             checked
@@ -244,7 +244,7 @@ export default function RecruitMate() {
                 onClickItem={(id) => router.push(`/recruitmate/${id}`)}
               />
 
-              {/* ✅ 여기! 리스트 바로 아래 */}
+              {/* 여기! 리스트 바로 아래 */}
               <div className="mt-12 flex justify-center">
                 {hasMore ? (
                   <div
