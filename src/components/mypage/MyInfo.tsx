@@ -43,6 +43,15 @@ export default function MyInfo({ profile, setProfile }: Props) {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [profileImage, setProfileImage] = useState<string | null>(null);
 
+  useEffect(() => {
+    const saved = sessionStorage.getItem("profileSaved");
+
+    if (saved === "true") {
+      setShowSaveSnackbar(true);
+      sessionStorage.removeItem("profileSaved"); // 한 번만 뜨게
+    }
+  }, []);
+
   const uploadProfileImage = async (file: File) => {
     if (!myId) return;
 
@@ -50,10 +59,8 @@ export default function MyInfo({ profile, setProfile }: Props) {
     formData.append("profileImage", file);
 
     try {
-      // 1️⃣ 업로드
       await axios.post(`/user/updateImage/${myId}`, formData);
 
-      // 2️⃣ 🔥 signin과 동일하게 서버 프로필 다시 조회
       const profileRes = await axios.get(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/mateProfile/${myId}`
       );
@@ -61,12 +68,15 @@ export default function MyInfo({ profile, setProfile }: Props) {
       const imageUrl = profileRes.data.imageUrl;
 
       setProfileImage(imageUrl);
-      alert("프로필 사진이 변경되었습니다.");
 
-      // 3️⃣ Sendbird 동기화
       await sb.updateCurrentUserInfo({
         profileUrl: imageUrl || "/profile.svg",
       });
+
+      alert("프로필 사진이 변경되었습니다.");
+
+      /* ✅ 새로고침 */
+      window.location.reload();
     } catch (e) {
       console.error(e);
     }
@@ -92,6 +102,7 @@ export default function MyInfo({ profile, setProfile }: Props) {
       });
 
       alert("프로필 사진이 삭제되었습니다.");
+      window.location.reload();
     } catch (e) {
       console.error("❌ image delete error", e);
       alert("사진 삭제 실패");
@@ -240,16 +251,20 @@ export default function MyInfo({ profile, setProfile }: Props) {
       });
 
       /* ================= Sendbird 메타데이터 ================= */
-      const metaPayload: Record<string, string> = {
-        studentId: payload.studentId ?? "",
-        major1: payload.firstMajor ?? "",
-        major2: payload.secondMajor ?? "",
-      };
+      await sb.currentUser.updateMetaData(
+        {
+          studentId: payload.studentId ?? "",
+          major1: payload.firstMajor ?? "",
+          major2: payload.secondMajor ?? "",
+        },
+        true
+      );
 
-      //  upsert = true
-      await sb.currentUser.updateMetaData(metaPayload, true);
+      /* ✅ 새로고침 후 스낵바 표시용 플래그 */
+      sessionStorage.setItem("profileSaved", "true");
 
-      setShowSaveSnackbar(true);
+      /* ✅ 새로고침 */
+      window.location.reload();
     } catch (e) {
       console.error("❌ update profile error", e);
       alert("저장에 실패했습니다.");

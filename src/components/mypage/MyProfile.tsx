@@ -74,12 +74,6 @@ export default function Profile({ profile }: Props) {
             <InfoRow label="이메일" value={email} />
 
             {/* ===== 버튼 영역 ===== */}
-            <button
-              onClick={handleGoToMateProfile}
-              className="w-72 h-16 mt-4 bg-[#00C3CC] rounded text-white text-xl font-extrabold"
-            >
-              프로필 확인하기
-            </button>
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import axios from "@/api/axios";
 import { useUserStore } from "@/stores/useUserStore";
 import { getOrCreateChannel } from "@/lib/sendbird/channel";
@@ -12,9 +12,56 @@ type Poking = {
   senderName: string;
   recruitingId: number | null;
   projectSpecific?: string;
-  date: string;
+  date: string; // "2026-01-09 07-10"
   imageUrl?: string | null;
 };
+
+/* ================= 시간 파싱 + 상대시간 ================= */
+/**
+ * 서버 시간 형식: "YYYY-MM-DD HH-mm" (UTC)
+ */
+function getRelativeTimeWithKST(dateStr?: string) {
+  if (!dateStr) return "";
+
+  // "2026-01-09 07-10" | "2026-01-09 07:10" | "2026-01-09"
+  const [datePart, timePart] = dateStr.split(" ");
+
+  if (!datePart) return "";
+
+  const [year, month, day] = datePart.split("-").map(Number);
+
+  let hour = 0;
+  let minute = 0;
+
+  if (timePart) {
+    // "-" or ":" 둘 다 대응
+    const timeTokens = timePart.includes(":")
+      ? timePart.split(":")
+      : timePart.split("-");
+
+    hour = Number(timeTokens[0] ?? 0);
+    minute = Number(timeTokens[1] ?? 0);
+  }
+
+  // UTC 기준
+  const utcTime = Date.UTC(year, month - 1, day, hour, minute);
+
+  // KST 보정
+  const kstTime = utcTime + 9 * 60 * 60 * 1000;
+
+  const now = Date.now();
+  const diffMs = now - kstTime;
+
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHour = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHour / 24);
+
+  if (diffSec < 60) return "방금 전";
+  if (diffMin < 60) return `${diffMin}분 전`;
+  if (diffHour < 24) return `${diffHour}시간 전`;
+  return `${diffDay}일 전`;
+}
 
 export default function ChatPokingSection() {
   const myId = useUserStore((s) => s.user?.myId);
@@ -22,6 +69,7 @@ export default function ChatPokingSection() {
 
   const [list, setList] = useState<Poking[]>([]);
 
+  /* ================= 받은 찌르기 조회 ================= */
   useEffect(() => {
     if (!myId) return;
 
@@ -30,6 +78,16 @@ export default function ChatPokingSection() {
       .then((res) => setList(res.data))
       .catch(console.error);
   }, [myId]);
+
+  /* ✅ 상대시간 한 번만 계산해서 고정 */
+  const formattedList = useMemo(
+    () =>
+      list.map((p) => ({
+        ...p,
+        relativeTime: getRelativeTimeWithKST(p.date),
+      })),
+    [list]
+  );
 
   /* ================= 거절 ================= */
   const handleReject = async (pokingId: number) => {
@@ -45,31 +103,28 @@ export default function ChatPokingSection() {
     if (!myId) return;
 
     try {
-      // 1️⃣ 채널 생성 / 재사용
       const channel = await getOrCreateChannel(
         String(myId),
         String(p.senderId)
       );
 
-      // 2️⃣ 찌르기 삭제 + 수락 처리
       await axios.delete(`/poking/${p.pokingId}`, {
         data: { ok: true },
       });
 
       setList((prev) => prev.filter((item) => item.pokingId !== p.pokingId));
 
-      // 3️⃣ 채팅 열기
       openChat(channel.url);
     } catch (err) {
       console.error("채팅 연결 실패", err);
     }
   };
 
-  if (list.length === 0) return null;
+  if (formattedList.length === 0) return null;
 
   return (
     <div>
-      {list.map((p) => (
+      {formattedList.map((p) => (
         <div
           key={p.pokingId}
           className="flex px-10 py-8 border-b border-[#CEDBDE]"
@@ -80,12 +135,12 @@ export default function ChatPokingSection() {
             className="w-11 h-11 rounded-full object-cover"
           />
 
-          <div className="ml-4">
+          <div className="ml-4 flex-1">
             <div className="font-bold">
               <div className="flex justify-between">
                 {p.senderName} 학부생
                 <div className="text-sm font-medium text-[#838F91]">
-                  {p.date}
+                  {p.relativeTime}
                 </div>
               </div>
 

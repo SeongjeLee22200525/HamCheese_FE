@@ -1,3 +1,4 @@
+import { useLayoutEffect, useEffect, useMemo, useRef } from "react";
 import type { GroupChannel } from "@sendbird/chat/groupChannel";
 import type { BaseMessage, UserMessage } from "@sendbird/chat/message";
 import { useUserStore } from "@/stores/useUserStore";
@@ -40,8 +41,71 @@ export default function ChatRoom({ channel }: { channel: GroupChannel }) {
   /* 상대 유저 */
   const otherUser = channel.members.find((m) => m.userId !== String(myId));
 
-  /* metaData 캐스팅 (🔥 핵심) */
+  /* metaData 캐스팅 */
   const meta = otherUser?.metaData as UserMetaData | undefined;
+
+  // ✅ 1) 실제 스크롤되는 컨테이너 ref
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  // ✅ 2) 맨 아래 앵커 ref
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+
+  // ✅ (선택) user 메시지만 렌더링하는 너의 기존 로직 유지
+  const userMessages = useMemo(
+    () => messages.filter(isUserMessage),
+    [messages]
+  );
+
+  /** 🔥 맨 아래로 내리는 함수 (한 번에 끝내지 말고 2프레임 + scrollIntoView) */
+  const scrollToBottom = (behavior: ScrollBehavior = "auto") => {
+    const scroller = scrollRef.current;
+    const bottom = bottomRef.current;
+    if (!scroller || !bottom) return;
+
+    // 1) 가장 확실한 방식: 컨테이너 scrollTop 강제
+    scroller.scrollTop = scroller.scrollHeight;
+
+    // 2) 레이아웃이 늦게 커지는 케이스(이미지/폰트) 대비: 앵커로 한번 더
+    bottom.scrollIntoView({ block: "end", behavior });
+  };
+
+  /**
+   * ✅ 핵심: 메시지가 바뀌는 순간
+   * - 렌더 직후(useLayoutEffect)
+   * - 다음 프레임(raf)
+   * - 그 다음 프레임(raf)  ← 이미지/폰트 때문에 높이가 한 프레임 더 늦는 경우가 많음
+   */
+  useLayoutEffect(() => {
+    scrollToBottom("auto");
+
+    const r1 = requestAnimationFrame(() => {
+      scrollToBottom("auto");
+      const r2 = requestAnimationFrame(() => {
+        scrollToBottom("auto");
+      });
+      // cleanup
+      return () => cancelAnimationFrame(r2);
+    });
+
+    return () => cancelAnimationFrame(r1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [channel.url, userMessages.length]);
+
+  /**
+   * ✅ 추가 안전장치: 채팅 영역 높이가 "나중에" 변할 때도(이미지 로드/폰트/줄바꿈)
+   * ResizeObserver로 감지해서 맨 아래 유지
+   */
+  useEffect(() => {
+    const scroller = scrollRef.current;
+    if (!scroller) return;
+
+    const ro = new ResizeObserver(() => {
+      scrollToBottom("auto");
+    });
+
+    ro.observe(scroller);
+    return () => ro.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [channel.url]);
 
   return (
     <div className="h-full flex-1 flex flex-col ">
@@ -61,7 +125,7 @@ export default function ChatRoom({ channel }: { channel: GroupChannel }) {
               {otherUser.nickname} 학부생
             </div>
 
-            <div className="text-sm font-semibold  text-[#838F91] flex gap-2">
+            <div className="text-sm font-semibold text-[#838F91] flex gap-2">
               {meta?.studentId && (
                 <span className="bg-[#F5F8F8] rounded p-2">
                   {meta.studentId}학번
@@ -85,23 +149,24 @@ export default function ChatRoom({ channel }: { channel: GroupChannel }) {
       )}
 
       {/* ================= 메시지 리스트 ================= */}
-      <div className="flex-1 overflow-y-auto pl-6 pr-10 py-4 space-y-1">
-        {messages.filter(isUserMessage).map((m, idx, arr) => {
+      {/* ✅ 여기 ref가 제일 중요: 실제 스크롤 컨테이너에 달아야 함 */}
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto pl-6 pr-10 py-4 space-y-1"
+      >
+        {userMessages.map((m, idx, arr) => {
           const prev = arr[idx - 1];
           const next = arr[idx + 1];
 
           const isMine = m.sender?.userId === String(myId);
 
-          // 🔥 날짜가 바뀌는 첫 메시지인가?
           const showDate = !prev || !isSameDay(prev.createdAt, m.createdAt);
 
-          // 🔥 같은 사람이 다음 메시지를 보냈는지
           const isLastOfGroup =
             !next || next.sender?.userId !== m.sender?.userId;
 
           return (
             <div key={m.messageId}>
-              {/* ================= 날짜 구분선 ================= */}
               {showDate && (
                 <div className="flex justify-center mb-3">
                   <span className="px-4 py-2 text-sm font-medium text-[#838F91] ">
@@ -120,9 +185,13 @@ export default function ChatRoom({ channel }: { channel: GroupChannel }) {
             </div>
           );
         })}
+
+        {/* ✅ 맨 아래 앵커 (이게 있어야 scrollIntoView가 정확해짐) */}
+        <div ref={bottomRef} />
       </div>
 
       {/* ================= 입력 ================= */}
+      {/* ✅ 입력으로 보낼 때도 messages에 추가되면서 위 effect가 자동으로 내려줌 */}
       <ChatInput onSend={sendMessage} />
     </div>
   );
