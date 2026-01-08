@@ -3,11 +3,12 @@
 import { useState } from "react";
 import axios from "axios";
 import { SignUpRequest } from "@/types/user";
-import { sb } from "@/lib/sendbird/sendbird";
+import { getSendbird } from "@/lib/sendbird/sendbird";
 
 export function useSignUp() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const sb = getSendbird();
 
   const submit = async (payload: SignUpRequest, profileImage?: File | null) => {
     try {
