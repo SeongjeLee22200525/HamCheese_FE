@@ -68,7 +68,7 @@ export default function RecruitingCard({ item, onClick }: Props) {
                   {item.projectType === "수업" ? (
                     <>
                     <span className="mx-1 font-medium text-[#B7C4C7]">|{" "}</span>
-                    {item.classes} 분반
+                    {item.classes}분반
                     </>
                   ) : item.projectType === "졸업작품" ? (
                     <>

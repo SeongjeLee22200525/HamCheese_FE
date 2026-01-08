@@ -239,7 +239,7 @@ export default function RecruitMateEdit() {
     if (!config) return null;
 
     return (
-      <div className="flex items-center gap-3 ml-[calc(1rem+7rem)]">
+      <div className="flex items-center gap-3 ml-33">
         {config.fields.map((field) => {
           const name = field.name as ProjectFieldName;
 
