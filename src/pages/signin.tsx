@@ -22,17 +22,17 @@ export default function Home() {
       const data = res.data;
 
       if (data.exists) {
-        /* 1️⃣ 전역 상태 */
+        /* 전역 상태 */
         setUser({
           myId: data.myId,
           name: data.name,
         });
 
-        /* 2️⃣ 쿠키 */
+        /* 쿠키 */
         document.cookie = `myId=${data.myId}; path=/`;
         document.cookie = `name=${encodeURIComponent(data.name)}; path=/`;
 
-        /* 🔥 3️⃣ Sendbird 인스턴스 생성 */
+        /* Sendbird 인스턴스 생성 */
         const sb = getSendbird();
 
         try {
@@ -40,10 +40,10 @@ export default function Home() {
             await sb.disconnect();
           } catch {}
 
-          /* 4️⃣ Sendbird 연결 */
+          /* Sendbird 연결 */
           await sb.connect(String(data.myId));
 
-          /* 5️⃣ 서버 프로필 조회 */
+          /* 서버 프로필 조회 */
           const profileRes = await axios.get(
             `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/mateProfile/${data.myId}`
           );
@@ -51,13 +51,13 @@ export default function Home() {
           const { name, imageUrl, studentId, firstMajor, secondMajor } =
             profileRes.data;
 
-          /* 6️⃣ Sendbird 기본 프로필 */
+          /* Sendbird 기본 프로필 */
           await sb.updateCurrentUserInfo({
             nickname: name,
             profileUrl: imageUrl || "/profile.svg",
           });
 
-          /* 7️⃣ 메타데이터 */
+          /* 메타데이터 */
           const metaPayload: Record<string, string> = {
             studentId: studentId ?? "",
             major1: firstMajor ?? "",
