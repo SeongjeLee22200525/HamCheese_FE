@@ -37,11 +37,8 @@ export default function ChatWidgetRoot() {
     <>
       {open && (
         <ChatPanel
-          channel={channel}
-          onSelect={setChannel}
           onClose={() => {
             setOpen(false);
-            setChannel(null);
           }}
         />
       )}

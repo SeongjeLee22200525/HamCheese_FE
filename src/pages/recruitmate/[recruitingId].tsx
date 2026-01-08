@@ -5,12 +5,15 @@ import Snackbar from "@/components/common/Snackbar";
 import Header from "@/components/common/Header";
 import Footer from "@/components/common/Footer";
 import RecruitingActions from "@/components/recruiting/RecruitingActions";
+import { Recruiting } from "@/types/recruiting";
+import { getRecruitings } from "@/api/recruiting";
 
 import { useUserStore } from "@/stores/useUserStore";
 import { getRecruitingDetail } from "@/api/recruiting";
 import { RecruitingDetail } from "@/types/recruitingDetail";
 import { useRecruitingActions } from "@/hooks/useRecruitingActions";
 import { sendPokingInRecruiting, checkCanPokeInRecruiting } from "@/api/poking";
+import RecruitingCard from "@/components/recruiting/RecruitingCard";
 
 /* 날짜 포맷 */
 const formatDateTime = (dateString: string) => {
@@ -24,6 +27,9 @@ const formatDateTime = (dateString: string) => {
 };
 
 export default function RecruitMateDetail() {
+  const [relatedRecruitings, setRelatedRecruitings] = useState<Recruiting[]>(
+    []
+  );
   const router = useRouter();
   const { recruitingId } = router.query;
   const user = useUserStore((state) => state.user);
@@ -65,6 +71,30 @@ export default function RecruitMateDetail() {
     };
 
     fetchDetail();
+  }, [recruitingId, user]);
+
+  useEffect(() => {
+    if (!recruitingId || !user) return;
+
+    const fetchRelatedRecruitings = async () => {
+      try {
+        const res = await getRecruitings({
+          page: 0,
+          size: 6,
+        });
+
+        // 🔥 현재 보고 있는 글은 제외
+        const filtered = res.filter(
+          (item: Recruiting) => item.recruitingId !== Number(recruitingId)
+        );
+
+        setRelatedRecruitings(filtered);
+      } catch (e) {
+        console.error("❌ 하단 모집글 불러오기 실패", e);
+      }
+    };
+
+    fetchRelatedRecruitings();
   }, [recruitingId, user]);
 
   /* ================= 로딩 / 에러 ================= */
@@ -293,22 +323,66 @@ export default function RecruitMateDetail() {
             >
               모집글 쓰기
             </button>
-
-            <div className="flex gap-3">
-              <button
-                onClick={() => router.push("/recruitmate")}
-                className="px-5 py-3 rounded bg-[#E6EEF0] text-[#495456] font-extrabold"
-              >
-                목록
-              </button>
-              <button
-                onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                className="px-5 py-3 rounded bg-[#E6EEF0] text-[#495456] font-extrabold"
-              >
-                TOP
-              </button>
-            </div>
           </div>
+          {/* ================= 하단 모집글 리스트 ================= */}
+          <section className="mt-20">
+            <h2 className="text-lg font-bold text-[#222829] mb-6">전체글</h2>
+
+            <div className="flex flex-col border-t border-Neutral_gray2">
+              {relatedRecruitings.map((item) => (
+                <div
+                  key={item.recruitingId}
+                  onClick={() =>
+                    router.push(`/recruitmate/${item.recruitingId}`)
+                  }
+                  className="
+        px-10 py-4
+        border-b border-Neutral_gray2
+        bg-white
+        flex items-center gap-14
+        cursor-pointer
+        hover:bg-[#F5F8F8]
+        transition
+      "
+                >
+                  {/* 왼쪽 */}
+                  <div className="flex-1 flex items-center gap-5">
+                    {/* 모집인원 + 타입 */}
+                    <div className="w-60 flex items-center gap-4">
+                      <div className="px-3 py-1.5 bg-[#F5F8F8] rounded">
+                        <span className="text-sm font-bold text-[#6B7280]">
+                          모집인원 {item.recruitPeople}
+                        </span>
+                        <span className="mx-1 text-sm text-[#6B7280]">/</span>
+                        <span className="text-sm font-bold text-[#6B7280]">
+                          {item.totalPeople}
+                        </span>
+                      </div>
+
+                      <div className="text-[#00AEB5] font-bold text-base">
+                        {item.projectType}
+                      </div>
+                    </div>
+
+                    {/* 제목 */}
+                    <div className="flex-1 text-[#222829] text-base font-medium truncate">
+                      {item.title}
+                    </div>
+                  </div>
+
+                  {/* 작성자 */}
+                  <div className="w-32 text-center text-sm font-medium text-[#222829]">
+                    {item.name} 학부생
+                  </div>
+
+                  {/* 날짜 */}
+                  <div className="w-20 text-right text-sm text-[#9AA4A6]">
+                    {item.date}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
       </main>
       {showPokingSuccess && (
@@ -328,7 +402,24 @@ export default function RecruitMateDetail() {
           onClose={() => setShowAlreadyPoked(false)}
         />
       )}
-
+      {/* TOP 버튼 */}
+      <button
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        className="
+    fixed
+    bottom-30 right-20
+    z-50
+    w-13 h-13
+    bg-[#E1EDF0]
+    rounded-full
+    inline-flex items-center justify-center gap-2
+    hover: shadow-[0px_0px_8px_0px_rgba(225,237,240,1.00)]
+    hover:bg-[#D9E4E8]
+    transition
+  "
+      >
+        <img src="/images/top.svg" className="w-7 h-3.5" alt="top" />
+      </button>
       <Footer />
     </div>
   );

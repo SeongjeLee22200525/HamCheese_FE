@@ -6,10 +6,10 @@ import { RecruitingDetail } from "@/types/recruitingDetail";
  * 모집글 생성 body (명세 기준)
  */
 export type CreateRecruitingBody = {
-  projectType: string;         // 수업 / 졸업작품
-  projectSpecific: string;     // 과목명
-  classes: string;             // 분반
-  topic: string;               // 주제
+  projectType: string; // 수업 / 졸업작품
+  projectSpecific: string; // 과목명
+  classes: string; // 분반
+  topic: string; // 주제
   totalPeople: number;
   recruitPeople: number;
   title: string;
@@ -25,10 +25,7 @@ export const createRecruiting = async (
   userId: number,
   body: CreateRecruitingBody
 ) => {
-  const res = await axios.post(
-    `/recruiting/createPost/${userId}`,
-    body
-  );
+  const res = await axios.post(`/recruiting/createPost/${userId}`, body);
   return res.data;
 };
 
@@ -59,16 +56,13 @@ type FilterRecruitingsParams = {
 export const filterRecruitings = async (
   params: FilterRecruitingsParams
 ): Promise<Recruiting[]> => {
-  const res = await axios.get<Recruiting[]>(
-    "/recruiting/filter",
-    {
-      params: {
-        type: params.types?.join(","),
-        departments: params.departments?.join(","),
-        name: params.name,
-      },
-    }
-  );
+  const res = await axios.get<Recruiting[]>("/recruiting/filter", {
+    params: {
+      type: params.types?.join(","),
+      departments: params.departments?.join(","),
+      name: params.name,
+    },
+  });
   return res.data;
 };
 
@@ -77,6 +71,8 @@ export const filterRecruitings = async (
  * GET /recruiting/findAll
  */
 type GetRecruitingsParams = {
+  page?: number;
+  size?: number;
   types?: string[];
   departments?: string[];
   keyword?: string;
@@ -85,10 +81,15 @@ type GetRecruitingsParams = {
 export const getRecruitings = async (
   params?: GetRecruitingsParams
 ): Promise<Recruiting[]> => {
-  const res = await axios.get<Recruiting[]>(
-    "/recruiting/findAll",
-    { params }
-  );
+  const res = await axios.get<Recruiting[]>("/recruiting/findAll", {
+    params: {
+      page: params?.page,
+      size: params?.size,
+      types: params?.types?.join(","),
+      departments: params?.departments?.join(","),
+      keyword: params?.keyword,
+    },
+  });
   return res.data;
 };
 
@@ -109,19 +110,11 @@ export const updateRecruiting = async (
   myId: number,
   body: UpdateRecruitingBody
 ) => {
-  const res = await axios.patch(
-    `/recruiting/${recruitingId}/${myId}`,
-    body
-  );
+  const res = await axios.patch(`/recruiting/${recruitingId}/${myId}`, body);
   return res.data;
 };
 
-export const deleteRecruiting = async (
-  recruitingId: number,
-  myId: number
-) => {
-  const res = await axios.delete(
-    `/recruiting/${recruitingId}/${myId}`
-  );
+export const deleteRecruiting = async (recruitingId: number, myId: number) => {
+  const res = await axios.delete(`/recruiting/${recruitingId}/${myId}`);
   return res.data;
 };
