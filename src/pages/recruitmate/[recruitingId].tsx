@@ -291,19 +291,26 @@ export default function RecruitMateDetail() {
             {/* ---------- 정보 박스 ---------- */}
             <div className="bg-[#F5F8F8] rounded-lg px-8 py-5 mb-10">
               <div className="grid grid-cols-[90px_1fr] gap-y-2">
-                {/* 과목 */}
-                <span className="text-[#00AEB5] text-xl font-bold">과목</span>
+                {/* 첫 번째 줄: 과목 / 활동명 / 대회명 */}
+                <span className="text-[#00AEB5] text-xl font-bold">
+                  {recruiting.projectType === "동아리/학회"
+                    ? "활동명"
+                    : recruiting.projectType === "대회"
+                    ? "대회명"
+                    : "과목"}
+                </span>
+
                 <span className="font-bold text-xl text-[#222829]">
                   {recruiting.projectSpecific}
                 </span>
 
-                {/* 분반 / 지도교수 / 파트 */}
+                {/* 두 번째 줄: 분반 / 지도교수 / 모집파트 */}
                 <span className="text-[#00AEB5] text-xl font-bold">
                   {recruiting.projectType === "수업"
                     ? "분반"
                     : recruiting.projectType === "졸업작품"
                     ? "지도교수"
-                    : "파트"}
+                    : "모집파트"}
                 </span>
 
                 <span className="font-bold text-xl text-[#222829]">
@@ -312,7 +319,7 @@ export default function RecruitMateDetail() {
                     : recruiting.classes}
                 </span>
 
-                {/* 주제 */}
+                {/* 주제 (공통) */}
                 <span className="text-[#00AEB5] text-xl font-bold">주제</span>
                 <span className="font-bold text-xl text-[#222829]">
                   {recruiting.topic}
@@ -330,7 +337,7 @@ export default function RecruitMateDetail() {
           <div className="flex justify-between items-center mt-10">
             <button
               onClick={() => router.push("/recruitmate/create")}
-              className="w-60 h-14 rounded bg-[#00C3CC] text-[#F5F8F8] text-lg font-bold"
+              className="w-60 h-14 rounded bg-[#00C3CC] text-[#F5F8F8] text-lg font-bold hover:bg-[#0FA4AB] active:bg-[#1A858A]"
             >
               모집글 쓰기
             </button>

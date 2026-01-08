@@ -129,7 +129,7 @@ export default function ProfileCard({ user }: Props) {
                       className="relative w-[370px] h-11 rounded bg-[#F5F8F8] px-4 flex items-center justify-between overflow-hidden"
                     >
                       <div
-                        className="absolute left-0 top-0 h-full rounded bg-gradient-to-r from-[#98CBCD] to-[#C3EFF1]"
+                        className="absolute left-0 top-0 h-full rounded bg-gradient-to-r from-[#B9EAED] to-[#E1EDF0]"
                         style={{ width: `${barWidth}px` }}
                       />
 

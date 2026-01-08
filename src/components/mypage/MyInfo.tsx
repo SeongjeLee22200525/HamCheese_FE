@@ -253,7 +253,7 @@ export default function MyInfo({ profile, setProfile }: Props) {
           </div>
 
           <div className="relative">
-            <div className="w-[172px] h-[172px] rounded-full bg-[#D9EEF0] overflow-hidden flex items-center justify-center">
+            <div className="w-43 h-43 rounded-full bg-[#D9EEF0] overflow-hidden flex items-center justify-center">
               {profileImage ? (
                 <img
                   src={profileImage}

@@ -56,6 +56,15 @@ export default function RecruitMate() {
       sessionStorage.removeItem("recruitingDeleted"); // ✅ 1회성
     }
   }, []);
+  const [showEditSnackbar, setShowEditSnackbar] = useState(false);
+  useEffect(() => {
+    const edited = sessionStorage.getItem("recruitingEdited");
+
+    if (edited === "true") {
+      setShowEditSnackbar(true);
+      sessionStorage.removeItem("recruitingEdited"); // ✅ 1회성
+    }
+  }, []);
 
   const toggleItem = (
     value: string,
@@ -223,7 +232,7 @@ export default function RecruitMate() {
               <div className="flex justify-end mb-4">
                 <button
                   onClick={() => router.push("/recruitmate/create")}
-                  className="w-60 h-14 rounded bg-[#00C3CC] text-[#F5F8F8] text-lg font-extrabold"
+                  className="w-60 h-14 rounded bg-[#00C3CC] text-[#F5F8F8] text-lg font-bold hover:bg-[#0FA4AB] active:bg-[#1A858A]"
                 >
                   모집글 쓰기
                 </button>
@@ -275,6 +284,15 @@ export default function RecruitMate() {
           onClose={() => setShowDeleteSnackbar(false)}
         />
       )}
+      {showEditSnackbar && (
+        <Snackbar
+          message="글이 수정되었습니다."
+          actionText="확인"
+          duration={5000}
+          onClose={() => setShowEditSnackbar(false)}
+        />
+      )}
+
       {/* TOP 버튼 */}
       <button
         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
