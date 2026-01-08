@@ -64,17 +64,17 @@ export default function Profile({ profile, onGivePiece, onPeerReview }: Props) {
         </div>
       </div>
       {/* ===== 버튼 영역 ===== */}
-      <div className="mt-6 flex flex- gap-3">
+      <div className="mt-6 flex gap-3">
         <button
           onClick={onGivePiece}
-          className="w-[169px] h-16 py-2 rounded bg-[#00C3CC] text-white text-xl font-extrabold flex items-center justify-center gap-2.5 hover:bg-[#0FA4AB] active:bg-[#1A858A]"
+          className="w-[169px] h-16 py-2 rounded bg-[#00C3CC] text-white text-lg font-bold flex items-center justify-center gap-1 hover:bg-[#0FA4AB] active:bg-[#1A858A]"
         >
-          <img src="/sendingpiece.svg" className="w-7.5 h-7.5" />
-          조각 건네기
+          <img src="/poke.svg" className="w-7.5 h-7.5" />
+          메이트 체크!
         </button>
         <button
           onClick={onPeerReview}
-          className="w-[169px] h-16 py-2 rounded bg-[#00C3CC] text-white text-xl font-extrabold hover:bg-[#0FA4AB] active:bg-[#1A858A]"
+          className="w-[169px] h-16 py-2 rounded bg-[#00C3CC] text-white text-lg font-bold hover:bg-[#0FA4AB] active:bg-[#1A858A]"
         >
           동료평가 하기
         </button>

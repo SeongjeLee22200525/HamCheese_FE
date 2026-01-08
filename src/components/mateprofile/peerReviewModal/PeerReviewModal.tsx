@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import PeerReviewForm, { PeerReviewSubmitPayload } from "./PeerReviewForm";
 import ConfirmExitModal from "./ConfirmExitModal";
+import ConfirmModal from "@/components/common/ConfirmModal";
 import Snackbar from "@/components/common/Snackbar";
 
 import type { MetaTag } from "@/types/user";

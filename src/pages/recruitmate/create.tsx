@@ -7,10 +7,13 @@ import Footer from "@/components/common/Footer";
 import { useUserStore } from "@/stores/useUserStore";
 import { createRecruiting } from "@/api/recruiting";
 import { types, PROJECT_TYPE_CONFIG } from "@/constants/types";
+import ConfirmModal from "@/components/common/ConfirmModal";
 
 export default function RecruitMateCreate() {
   const router = useRouter();
   const user = useUserStore((state) => state.user);
+  //그만두기 모달 상태 관리
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
 
   type ProjectFieldName =
     | "projectSpecific"
@@ -438,7 +441,7 @@ export default function RecruitMateCreate() {
           {/* 버튼 */}
           <div className="flex justify-center gap-6 mt-12">
             <button
-              onClick={() => router.back()}
+              onClick={() => setShowExitConfirm(true)}
               className="w-40 h-12 rounded bg-[#E5E7EB] text-[#374151] font-extrabold"
             >
               취소
@@ -453,6 +456,18 @@ export default function RecruitMateCreate() {
           </div>
         </div>
       </main>
+      {showExitConfirm && (
+        <ConfirmModal
+          title={`정말로 글쓰기를 그만두시겠습니까?\n지금까지 작성된 글은 저장되지 않아요.`}
+          cancelText="계속 하기"
+          confirmText="그만두기"
+          onCancel={() => setShowExitConfirm(false)}
+          onConfirm={() => {
+            setShowExitConfirm(false);
+            router.back();
+          }}
+        />
+      )}
 
       <Footer />
     </div>

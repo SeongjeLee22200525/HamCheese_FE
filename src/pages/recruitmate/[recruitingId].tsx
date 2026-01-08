@@ -15,6 +15,8 @@ import { useRecruitingActions } from "@/hooks/useRecruitingActions";
 import { sendPokingInRecruiting, checkCanPokeInRecruiting } from "@/api/poking";
 import RecruitingCard from "@/components/recruiting/RecruitingCard";
 
+import ConfirmModal from "@/components/common/ConfirmModal";
+
 /* 날짜 포맷 */
 const formatDateTime = (dateString: string) => {
   const date = new Date(dateString);
@@ -40,6 +42,8 @@ export default function RecruitMateDetail() {
   // 조각건네기 관련
   const [showPokingSuccess, setShowPokingSuccess] = useState(false);
   const [showAlreadyPoked, setShowAlreadyPoked] = useState(false);
+  //모집글 삭제 모달 상태관리
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   /* 수정 / 삭제 핸들러 */
   const { handleEdit, handleDelete } = useRecruitingActions(
@@ -221,7 +225,7 @@ export default function RecruitMateDetail() {
                       /* ✅ 내 글: 수정 / 삭제 */
                       <RecruitingActions
                         onEdit={handleEdit}
-                        onDelete={handleDelete}
+                        onDelete={() => setShowDeleteConfirm(true)}
                       />
                     ) : (
                       /* ✅ 남의 글: 안내 문구 + 버튼 */
@@ -439,6 +443,20 @@ export default function RecruitMateDetail() {
       >
         <img src="/images/top.svg" className="w-7 h-3.5" alt="top" />
       </button>
+
+      {showDeleteConfirm && (
+        <ConfirmModal
+          title={`정말로 삭제하시겠습니까?\n삭제하면 복구할 수 없어요.`}
+          cancelText="취소"
+          confirmText="삭제하기"
+          onCancel={() => setShowDeleteConfirm(false)}
+          onConfirm={() => {
+            setShowDeleteConfirm(false);
+            handleDelete(); // 🔥 여기서 실제 삭제
+          }}
+        />
+      )}
+
       <Footer />
     </div>
   );

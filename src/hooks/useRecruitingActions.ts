@@ -12,9 +12,6 @@ export const useRecruitingActions = (recruitingId: number, myId: number) => {
   };
 
   const handleDelete = async () => {
-    const ok = confirm("모집글을 삭제하시겠습니까?");
-    if (!ok) return;
-
     await deleteRecruiting(recruitingId, myId);
 
     //  삭제 성공 스낵바 플래그
