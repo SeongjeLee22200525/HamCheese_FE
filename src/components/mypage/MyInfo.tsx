@@ -240,15 +240,12 @@ export default function MyInfo({ profile, setProfile }: Props) {
 
       /* ================= Sendbird 메타데이터 ================= */
       const metaPayload: Record<string, string> = {
-        studentId: payload.studentId,
-        major1: payload.firstMajor,
+        studentId: payload.studentId ?? "",
+        major1: payload.firstMajor ?? "",
+        major2: payload.secondMajor ?? "",
       };
 
-      if (payload.secondMajor) {
-        metaPayload.major2 = payload.secondMajor;
-      }
-
-      // 🔥 핵심: upsert = true
+      //  upsert = true
       await sb.currentUser.updateMetaData(metaPayload, true);
 
       setShowSaveSnackbar(true);

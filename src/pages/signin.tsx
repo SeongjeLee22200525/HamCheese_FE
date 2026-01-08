@@ -32,11 +32,11 @@ export default function Home() {
         /* 2️⃣ 쿠키 */
         document.cookie = `myId=${data.myId}; path=/`;
         document.cookie = `name=${encodeURIComponent(data.name)}; path=/`;
-
         try {
           try {
             await sb.disconnect();
           } catch {}
+
           /* 3️⃣ Sendbird 연결 (유저 생성 포함) */
           await sb.connect(String(data.myId));
 
@@ -54,25 +54,15 @@ export default function Home() {
             profileUrl: imageUrl || "/profile.svg",
           });
 
-          /* 6️⃣ 🔥 Sendbird 메타데이터 (완성 로직) */
+          /* 6️⃣ 🔥 Sendbird 메타데이터 (최종 정답) */
           const metaPayload: Record<string, string> = {
-            studentId,
-            major1: firstMajor,
+            studentId: studentId ?? "",
+            major1: firstMajor ?? "",
+            major2: secondMajor ?? "",
           };
 
-          if (secondMajor) {
-            metaPayload.major2 = secondMajor;
-          }
-
-          const currentMeta = sb.currentUser?.metaData;
-
-          if (!currentMeta || Object.keys(currentMeta).length === 0) {
-            // 최초 로그인 / 신규 Sendbird 유저
-            await sb.currentUser?.createMetaData(metaPayload);
-          } else {
-            // 기존 유저
-            await sb.currentUser?.updateMetaData(metaPayload);
-          }
+          // ✅ 존재하면 덮어쓰기, 없으면 생성
+          await sb.currentUser?.updateMetaData(metaPayload, true);
         } catch (e) {
           console.error("❌ Sendbird profile / metadata sync failed", e);
         }

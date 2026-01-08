@@ -72,7 +72,7 @@ export default function ChatPokingSection() {
       {list.map((p) => (
         <div
           key={p.pokingId}
-          className="flex px-10 py-10 border-b border-[#CEDBDE]"
+          className="flex px-10 py-8 border-b border-[#CEDBDE]"
         >
           <img
             src={p.imageUrl || "/profile.svg"}

@@ -14,9 +14,9 @@ export default function AlarmHandler() {
         .map((alarm) => (
           <div
             key={alarm.alarmId}
-            className="bg-[#E1EDF0] justify-between items-center px-4 py-3 rounded mb-2"
+            className="bg-[#E1EDF0] justify-between items-center px-9.75 py-5"
           >
-            <div>
+            <div className="flex justify-center">
               <span className="font-bold">{alarm.senderName}</span>
               님이 대화가 성사되지 못했어요
             </div>
@@ -24,7 +24,7 @@ export default function AlarmHandler() {
             {/* 🔥 확인 버튼 오른쪽 정렬 (기존 스타일 유지) */}
             <div className="flex mt-3">
               <button
-                className="ml-auto text-sm text-[#00C3CC]"
+                className="ml-auto text-sm font-bold text-[#00C3CC]"
                 onClick={() => removeAlarm(alarm.alarmId)}
               >
                 확인
