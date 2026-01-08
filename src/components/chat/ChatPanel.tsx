@@ -9,6 +9,7 @@ import AlarmHandler from "./AlarmHandler";
 
 type Props = {
   onClose: () => void;
+  onAccept: () => void; // 🔥 추가
 };
 
 export default function ChatPanel({ onClose }: Props) {

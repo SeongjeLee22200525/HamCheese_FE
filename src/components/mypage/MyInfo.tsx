@@ -49,26 +49,34 @@ export default function MyInfo({ profile, setProfile }: Props) {
     formData.append("profileImage", file);
 
     try {
-      const res = await axios.post(`/user/updateImage/${myId}`, formData);
+      // 1️⃣ 업로드
+      await axios.post(`/user/updateImage/${myId}`, formData);
 
-      const imageUrl = res.data.imageUrl; // 🔥 서버에서 받은 실제 URL
+      // 2️⃣ 🔥 signin과 동일하게 서버 프로필 다시 조회
+      const profileRes = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/user/mateProfile/${myId}`
+      );
 
-      setProfileImage(imageUrl); // UI 반영
+      const imageUrl = profileRes.data.imageUrl;
 
-      // ✅ Sendbird 즉시 동기화
-      await sb.updateCurrentUserInfo({
-        profileUrl: imageUrl,
-      });
-
+      setProfileImage(imageUrl);
       alert("프로필 사진이 변경되었습니다.");
+
+      // 3️⃣ Sendbird 동기화
+      await sb.updateCurrentUserInfo({
+        profileUrl: imageUrl || "/profile.svg",
+      });
     } catch (e) {
-      console.error("❌ image upload error", e);
-      alert("사진 업로드 실패");
+      console.error(e);
     }
   };
 
   const deleteProfileImage = async () => {
     if (!myId) return;
+    if (!profileImage) {
+      alert("기본 프로필 이미지입니다.");
+      return;
+    }
 
     try {
       // 1️⃣ 서버에서 프로필 이미지 삭제
@@ -79,7 +87,7 @@ export default function MyInfo({ profile, setProfile }: Props) {
 
       // 3️⃣ 🔥 Sendbird 프로필 이미지 제거
       await sb.updateCurrentUserInfo({
-        profileUrl: "/profile.svg", // ← 이게 핵심
+        profileUrl: "", // ← 이게 핵심
       });
 
       alert("프로필 사진이 삭제되었습니다.");
@@ -220,15 +228,29 @@ export default function MyInfo({ profile, setProfile }: Props) {
     };
 
     try {
+      /* ================= 서버 저장 ================= */
       await axios.patch(`/user/update/${myId}`, payload);
+
+      if (!sb.currentUser) return;
+
+      /* ================= Sendbird 기본 정보 ================= */
       await sb.updateCurrentUserInfo({
         nickname: payload.name,
       });
-      await sb.currentUser?.updateMetaData({
+
+      /* ================= Sendbird 메타데이터 ================= */
+      const metaPayload: Record<string, string> = {
         studentId: payload.studentId,
         major1: payload.firstMajor,
-        ...(payload.secondMajor ? { major2: payload.secondMajor } : {}),
-      });
+      };
+
+      if (payload.secondMajor) {
+        metaPayload.major2 = payload.secondMajor;
+      }
+
+      // 🔥 핵심: upsert = true
+      await sb.currentUser.updateMetaData(metaPayload, true);
+
       setShowSaveSnackbar(true);
     } catch (e) {
       console.error("❌ update profile error", e);

@@ -31,6 +31,7 @@ export default function ChatPokingSection() {
       .catch(console.error);
   }, [myId]);
 
+  /* ================= 거절 ================= */
   const handleReject = async (pokingId: number) => {
     await axios.delete(`/poking/${pokingId}`, {
       data: { ok: false },
@@ -39,11 +40,12 @@ export default function ChatPokingSection() {
     setList((prev) => prev.filter((p) => p.pokingId !== pokingId));
   };
 
+  /* ================= 수락 ================= */
   const handleAccept = async (p: Poking) => {
     if (!myId) return;
 
     try {
-      // 1️⃣ 채널 생성
+      // 1️⃣ 채널 생성 / 재사용
       const channel = await getOrCreateChannel(
         String(myId),
         String(p.senderId)
@@ -82,29 +84,31 @@ export default function ChatPokingSection() {
             <div className="font-bold">
               <div className="flex justify-between">
                 {p.senderName} 학부생
-                <div className="text-sm font-medium text-[#838F91] ">
+                <div className="text-sm font-medium text-[#838F91]">
                   {p.date}
                 </div>
               </div>
+
               {p.recruitingId && (
                 <div className="font-bold text-sm mt-1 text-[#1A858A]">
                   {p.projectSpecific}
                 </div>
               )}
+
               <div className="font-medium mt-1">대화 신청이 왔어요.</div>
             </div>
 
             <div className="flex font-bold mt-4">
               <button
                 onClick={() => handleReject(p.pokingId)}
-                className="w-23 px- py-3 text-sm mr-2 bg-[#CEDBDE] rounded text-[#495456]"
+                className="w-23 py-3 text-sm mr-2 bg-[#CEDBDE] rounded text-[#495456]"
               >
                 다음 기회에!
               </button>
 
               <button
                 onClick={() => handleAccept(p)}
-                className="w-23 px-2 py-3 text-sm bg-[#00C3CC] text-white rounded"
+                className="w-23 py-3 text-sm bg-[#00C3CC] text-white rounded"
               >
                 대화해보기
               </button>

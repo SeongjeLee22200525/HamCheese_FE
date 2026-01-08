@@ -5,11 +5,13 @@ import { sb } from "@/lib/sendbird/sendbird";
 import { useUserStore } from "@/stores/useUserStore";
 import ChatFab from "./ChatFab";
 import ChatPanel from "./ChatPanel";
+import Snackbar from "../common/Snackbar";
 
 export default function ChatWidgetRoot() {
   const myId = useUserStore((s) => s.user?.myId);
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
+  const [snackbar, setSnackbar] = useState<string | null>(null);
 
   useEffect(() => {
     if (!myId) return;
@@ -17,17 +19,13 @@ export default function ChatWidgetRoot() {
   }, [myId]);
 
   const handleOpen = () => {
-    setMounted(true); // 1️⃣ 먼저 mount (w-0 상태)
-    requestAnimationFrame(() => {
-      setOpen(true); // 2️⃣ 다음 프레임에서 w-225
-    });
+    setMounted(true);
+    requestAnimationFrame(() => setOpen(true));
   };
 
   const handleClose = () => {
-    setOpen(false); // w-225 → w-0
-    setTimeout(() => {
-      setMounted(false); // 애니메이션 끝나고 unmount
-    }, 300);
+    setOpen(false);
+    setTimeout(() => setMounted(false), 300);
   };
 
   return (
@@ -47,10 +45,17 @@ export default function ChatWidgetRoot() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="w-225 h-full">
-              <ChatPanel onClose={handleClose} />
+              <ChatPanel
+                onClose={handleClose}
+                onAccept={() => setSnackbar("대화가 성사되었어요!")}
+              />
             </div>
           </div>
         </div>
+      )}
+
+      {snackbar && (
+        <Snackbar message={snackbar} onClose={() => setSnackbar(null)} />
       )}
 
       <ChatFab onClick={handleOpen} />

@@ -14,7 +14,7 @@ type Props = {
 export default function Snackbar({
   message,
   actionText = "확인",
-  duration = 3000,
+  duration = 5000,
   onAction,
   onClose,
 }: Props) {
