@@ -143,16 +143,21 @@ export default function ChatPokingSection({
           key={p.pokingId}
           className="flex px-10 py-8 border-b border-[#CEDBDE]"
         >
-          <img
-            src={p.imageUrl || "/profile.svg"}
-            alt="profile"
-            className="w-11 h-11 rounded-full object-cover"
-          />
+          <a href={`/mateprofile/${p.senderId}`}>
+            <img
+              src={p.imageUrl || "/profile.svg"}
+              alt="profile"
+              className="w-11 h-11 rounded-full object-cover"
+            />
+          </a>
 
           <div className="ml-4 flex-1">
             <div className="font-bold">
-              <div className="flex justify-between">
-                {p.senderName} 학부생
+              <div className="flex justify-between ">
+                <a href={`/mateprofile/${p.senderId}`}>
+                  <span className="hover:border-b"> {p.senderName} 학부생</span>
+                </a>
+
                 <div className="text-sm font-medium text-[#838F91]">
                   {p.relativeTime}
                 </div>
@@ -170,14 +175,14 @@ export default function ChatPokingSection({
             <div className="flex font-bold mt-4">
               <button
                 onClick={() => setRejectTargetId(p.pokingId)}
-                className="w-23 py-3 text-sm mr-2 bg-[#CEDBDE] rounded text-[#495456]"
+                className="w-23 py-3 text-sm mr-2 bg-[#CEDBDE] rounded text-[#495456] hover:bg-[#B7C4C7]  active:bg-[#838F91]"
               >
                 다음 기회에!
               </button>
 
               <button
                 onClick={() => handleAccept(p)}
-                className="w-23 py-3 text-sm bg-[#00C3CC] text-white rounded"
+                className="w-23 py-3 text-sm bg-[#00C3CC] text-white rounded hover:bg-[#0FA4AB] active:bg-[#1A858A]"
               >
                 대화해보기
               </button>
