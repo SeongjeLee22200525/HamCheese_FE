@@ -92,7 +92,7 @@ export default function JoinMC() {
 
       <main className="flex-1">
         <div className="w-full flex justify-center">
-          <div className="w-[920px]">
+          <div className="w-230">
             <h1 className="text-[32px] font-light text-[#222829] mb-5">
               회원가입하기
             </h1>
@@ -101,13 +101,13 @@ export default function JoinMC() {
               {/* ================= 프로필 이미지 ================= */}
               <div className="mb-14">
                 <div className="flex items-start">
-                  <div className="w-[160px] flex items-center gap-2 text-sm font-medium text-[#222829] mt-2">
+                  <div className="w-40 flex items-center gap-2 text-sm font-medium text-[#222829] mt-2">
                     <div className="w-1 h-4 bg-[#00C3CC]" />
                     프로필 이미지
                   </div>
 
                   <div className="relative">
-                    <div className="w-[172px] h-[172px] rounded-full bg-[#D9EEF0] overflow-hidden flex items-center justify-center">
+                    <div className="w-43 h-43 rounded-full bg-[#D9EEF0] overflow-hidden flex items-center justify-center">
                       {profileImage ? (
                         <img
                           src={profileImage}
@@ -160,7 +160,7 @@ export default function JoinMC() {
               <div className="font-medium space-y-5 text-sm text-[#222829]">
                 {/* 이름 */}
                 <div className="flex items-center gap-11">
-                  <div className="w-[120px] flex items-center gap-2 font-medium">
+                  <div className="w-30 flex items-center gap-2 font-medium">
                     <div className="w-1 h-4 bg-[#00C3CC]" />
                     이름 <span className="text-[#00C3CC]">*</span>
                   </div>
@@ -176,7 +176,7 @@ export default function JoinMC() {
 
                 {/* 학번 */}
                 <div className="flex items-center gap-16">
-                  <div className="w-[100px] flex items-center gap-2 font-medium">
+                  <div className="w-25 flex items-center gap-2 font-medium">
                     <div className="w-1 h-4 bg-[#00C3CC]" />
                     학번 <span className="text-[#00C3CC]">*</span>
                   </div>
@@ -198,7 +198,7 @@ export default function JoinMC() {
 
                 {/* 학년 / 학기 */}
                 <div className="flex items-center gap-16">
-                  <div className="w-[100px] flex items-center gap-2 font-medium">
+                  <div className="w-25 flex items-center gap-2 font-medium">
                     <div className="w-1 h-4 bg-[#00C3CC]" />
                     학년/학기수 <span className="text-[#00C3CC]">*</span>
                   </div>
@@ -237,7 +237,7 @@ export default function JoinMC() {
                 {/* 학부 */}
                 {/* 수정 1: <di> → <div> */}
                 <div className="flex items-center gap-16 relative">
-                  <div className="w-[100px] flex items-center gap-2 font-medium">
+                  <div className="w-25 flex items-center gap-2 font-medium">
                     <div className="w-1 h-4 bg-[#00C3CC]" />
                     학부 <span className="text-[#00C3CC]">*</span>
                   </div>
@@ -274,10 +274,10 @@ export default function JoinMC() {
         shadow-[0px_0px_20px_0px_rgba(225,237,240,1.00)]
         z-10 overflow-hidden
         transition-[max-height] duration-300 ease-in-out
-        ${deptOpen ? "max-h-[245px]" : "max-h-0 pointer-events-none"}
+        ${deptOpen ? "max-h-61" : "max-h-0 pointer-events-none"}
       `}
                     >
-                      <ul className="max-h-[220px] overflow-y-auto">
+                      <ul className="max-h-55 overflow-y-auto">
                         {departments.map((dept) => {
                           const isSelected = selectedDepartment === dept;
 
@@ -312,7 +312,7 @@ export default function JoinMC() {
 
                 {/* 전공 */}
                 <div className="flex items-start gap-16">
-                  <div className="w-[100px] flex items-center gap-2 font-medium mt-6">
+                  <div className="w-25 flex items-center gap-2 font-medium mt-6">
                     <div className="w-1 h-4 bg-[#00C3CC]" />
                     전공 <span className="text-[#00C3CC]">*</span>
                   </div>
@@ -354,7 +354,7 @@ export default function JoinMC() {
 
                 {/* 학점 */}
                 <div className="flex items-center gap-16">
-                  <div className="w-[100px] flex items-center gap-2 font-medium">
+                  <div className="w-25 flex items-center gap-2 font-medium">
                     <div className="w-1 h-4 bg-[#00C3CC]" />
                     평점 평균
                   </div>

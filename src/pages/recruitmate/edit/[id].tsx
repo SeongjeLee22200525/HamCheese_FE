@@ -413,7 +413,7 @@ export default function RecruitMateEdit() {
                   {keywords.map((k) => (
                     <div
                       key={k}
-                      className="h-10 px-3 flex items-center gap-1 rounded outline outline-2 outline-offset-[-2px] outline-[#E1EDF0] text-sm text-[#495456]"
+                      className="h-10 px-3 flex items-center gap-1 rounded outline-2 -outline-offset-2 outline-[#E1EDF0] text-sm text-[#495456]"
                     >
                       #{k}
                       <button

@@ -29,8 +29,8 @@ export default function Snackbar({
   };
 
   return (
-    <div className="fixed bottom-12 left-12 z-[99999]">
-      <div className="flex items-center justify-between w-[440px]  bg-[#222829E5] px-10 py-8 rounded-lg">
+    <div className="fixed bottom-12 left-12 z-99999">
+      <div className="flex items-center justify-between w-110  bg-[#222829E5] px-10 py-8 rounded-lg">
         <div className="flex items-center text-white font-medium  whitespace-pre-line break-keep">
           {message}
         </div>
