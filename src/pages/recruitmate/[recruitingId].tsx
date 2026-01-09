@@ -155,7 +155,7 @@ export default function RecruitMateDetail() {
                 {/* 모집 정보 */}
                 <div className="flex items-center gap-2 text-m text-[#6B7280] mb-3">
                   <span className="px-3 py-2 rounded bg-[#F5F8F8] text-[#0FA4AB] font-bold">
-                    모집인원 {recruiting.recruitPeople}/{recruiting.totalPeople}
+                    모집인원 {recruiting.totalPeople - recruiting.recruitPeople}/{recruiting.totalPeople}
                   </span>
                   <span className="text-[#B7C4C7] text-xl font-medium">|</span>
                   <span className="text-[#00AEB5] font-bold">

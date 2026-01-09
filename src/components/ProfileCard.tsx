@@ -90,7 +90,7 @@ export default function ProfileCard({ user }: Props) {
               ))}
           </div>
 
-          <p className="mt-5 mb-6 text-xl text-[#222829] max-w-[540px] truncate leading-relaxed">
+          <p className="mt-5 mb-6 text-xl text-[#222829] max-w-135 truncate leading-relaxed">
             {user.introduction || "자기소개가 아직 작성되지 않았어요."}
           </p>
 
