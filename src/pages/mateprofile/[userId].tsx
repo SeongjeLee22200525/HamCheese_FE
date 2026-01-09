@@ -206,7 +206,7 @@ export default function MateProfilePage() {
 
         {showPokingSuccess && (
           <Snackbar
-            message="상대방을 찔렀어요!"
+            message={`상대방을 찔렀어요!\n상대가 수락하면 대화를 시작할 수 있어요.`}
             actionText="확인"
             duration={3000}
             onClose={() => setShowPokingSuccess(false)}

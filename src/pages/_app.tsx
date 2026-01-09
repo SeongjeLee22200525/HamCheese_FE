@@ -6,7 +6,6 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useUserStore } from "@/stores/useUserStore";
 import ChatWidgetRoot from "@/components/chat/ChatWidgetRoot";
-import { SnackbarProvider } from "@/providers/SnackbarProvider";
 
 /** 로그인 필요한 페이지 */
 const PROTECTED_ROUTES = ["/searchmate", "/recruitmate"];
@@ -50,12 +49,10 @@ export default function App({ Component, pageProps }: AppProps) {
       <GoogleOAuthProvider
         clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ""}
       >
-        <SnackbarProvider>
-          <Component {...pageProps} />
+        <Component {...pageProps} />
 
-          {/* 로그인된 경우에만 채팅 위젯 */}
-          {user?.myId && <ChatWidgetRoot />}
-        </SnackbarProvider>
+        {/* 로그인된 경우에만 채팅 위젯 */}
+        {user?.myId && <ChatWidgetRoot />}
       </GoogleOAuthProvider>
     </>
   );

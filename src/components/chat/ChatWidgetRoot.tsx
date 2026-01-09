@@ -45,8 +45,8 @@ export default function ChatWidgetRoot() {
           onClick={handleClose}
         >
           <div
-            className={`absolute right-0 bottom-0 h-full overflow-hidden
-              transition-[width] duration-300 ease-out
+            className={`absolute right-0 bottom-0 h-full overflow-hidden shadow-[0px_-2px_20px_0px_rgba(225,237,240,1.00)]
+              transition-[width] duration-300 ease-out rounded-tl-[20px] rounded-bl-[20px]
               ${open ? "w-225" : "w-0"}`}
             onClick={(e) => e.stopPropagation()}
           >
@@ -58,11 +58,6 @@ export default function ChatWidgetRoot() {
       )}
 
       <ChatFab onClick={handleOpen} hasUnread={hasUnread} />
-
-      <ChatPokingSection
-        onAcceptSuccess={() => {}}
-        onRejectSuccess={() => {}}
-      />
     </>
   );
 }
