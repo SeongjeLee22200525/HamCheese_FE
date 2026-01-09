@@ -92,9 +92,11 @@ export default function Home() {
 
       <main className="flex-1 flex flex-col items-center justify-center py-16.5">
         <div className="flex flex-col items-center gap-18">
-          <img src="/loginlogo.png" />
+          <img src="/loginlogo.svg" />
 
-          <div className="relative w-[360px] h-[56px]">
+          <span className="text-center justify-start text-[#838F91] text-base font-bold mt-2 -mb-12">학교 이메일로 회원가입해주세요.</span>
+
+          <div className="relative w-90 h-14">
             <div className="absolute inset-0 flex items-center justify-center gap-3 rounded-full border border-[#D0D7DE] bg-white">
               <Image
                 src="/images/google-logo.png"

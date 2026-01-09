@@ -84,13 +84,16 @@ export default function RecruitMateDetail() {
       try {
         const res = await getRecruitings({
           page: 0,
-          size: 5,
+          size: 9999, // 의미 없음 (서버가 무시함)
         });
 
-        // 🔥 현재 보고 있는 글은 제외
-        const filtered = res.filter(
-          (item: Recruiting) => item.recruitingId !== Number(recruitingId)
-        );
+        const filtered = res
+          // 🔥 현재 보고 있는 글 제외
+          .filter(
+            (item: Recruiting) => item.recruitingId !== Number(recruitingId)
+          )
+          // 🔥 여기서 5개만 사용
+          .slice(0, 5);
 
         setRelatedRecruitings(filtered);
       } catch (e) {

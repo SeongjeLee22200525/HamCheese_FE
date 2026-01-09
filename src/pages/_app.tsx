@@ -7,28 +7,37 @@ import { useRouter } from "next/router";
 import { useUserStore } from "@/stores/useUserStore";
 import ChatWidgetRoot from "@/components/chat/ChatWidgetRoot";
 import { SnackbarProvider } from "@/providers/SnackbarProvider";
-import { useSnackbar } from "@/providers/SnackbarProvider";
 
+/** 로그인 필요한 페이지 */
 const PROTECTED_ROUTES = ["/searchmate", "/recruitmate"];
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
+
   const hydrateUser = useUserStore((s) => s.hydrateUser);
   const user = useUserStore((s) => s.user);
+  const hydrated = useUserStore((s) => s.hydrated);
 
-  /* 1️⃣ 최초 유저 복원 */
+  /* 1️⃣ 최초 1회 유저 복원 */
   useEffect(() => {
     hydrateUser();
   }, []);
 
-  /* 2️⃣ 로그인 필요한 페이지만 가드 */
+  /* 2️⃣ 보호 라우트 가드 (⭐ hydration 이후에만 실행) */
   useEffect(() => {
+    if (!hydrated) return; // 🔥 핵심
+
     const isProtected = PROTECTED_ROUTES.includes(router.pathname);
 
     if (isProtected && !user?.myId) {
       router.replace("/signin");
     }
-  }, [router.pathname, user?.myId]);
+  }, [hydrated, router.pathname, user?.myId]);
+
+  /* 3️⃣ hydration 전에는 화면 렌더링 차단 (깜빡임/오작동 방지) */
+  if (!hydrated) {
+    return null; // 또는 <Loading />
+  }
 
   return (
     <>
@@ -41,11 +50,10 @@ export default function App({ Component, pageProps }: AppProps) {
       <GoogleOAuthProvider
         clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? ""}
       >
-        {/* ✅ 여기 안으로 전부 넣는다 */}
         <SnackbarProvider>
           <Component {...pageProps} />
 
-          {/* ✅ 이제 ChatWidget도 Provider 안 */}
+          {/* 로그인된 경우에만 채팅 위젯 */}
           {user?.myId && <ChatWidgetRoot />}
         </SnackbarProvider>
       </GoogleOAuthProvider>
