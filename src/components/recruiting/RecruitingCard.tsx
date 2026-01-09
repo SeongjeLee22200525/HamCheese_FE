@@ -52,7 +52,8 @@ export default function RecruitingCard({ item, onClick }: Props) {
           {/* 상단 메타 */}
           <div className="flex items-center gap-3 text-sm text-[#6B7280] mb-3 flex-wrap">
             <span className="px-3 py-1.5 rounded bg-[#F5F8F8] text-[#0FA4AB] font-bold whitespace-nowrap">
-              모집인원 {item.recruitPeople} <span className="font-medium">/</span> {item.totalPeople}
+              모집인원 {item.recruitPeople}{" "}
+              <span className="font-medium">/</span> {item.totalPeople}
             </span>
 
             <span className="text-[#00AEB5] font-bold whitespace-nowrap">
@@ -67,12 +68,16 @@ export default function RecruitingCard({ item, onClick }: Props) {
                   {" "}
                   {item.projectType === "수업" ? (
                     <>
-                    <span className="mx-1 font-medium text-[#B7C4C7]">|{" "}</span>
-                    {item.classes}분반
+                      <span className="mx-1 font-medium text-[#B7C4C7]">
+                        |{" "}
+                      </span>
+                      {item.classes}분반
                     </>
                   ) : item.projectType === "졸업작품" ? (
                     <>
-                      <span className="mx-1 font-medium text-[#B7C4C7]">|{" "}</span>
+                      <span className="mx-1 font-medium text-[#B7C4C7]">
+                        |{" "}
+                      </span>
                       {item.classes} 교수님
                     </>
                   ) : (
@@ -84,15 +89,23 @@ export default function RecruitingCard({ item, onClick }: Props) {
 
             <img src="/images/Vector.svg" alt="arrow" className="w-3 h-3" />
 
-            <span className="whitespace-nowrap">
-              <span className="font-bold text-sm text-[#222829]">주제</span>
-              <span className="mx-2 font-medium text-[#B7C4C7]">|</span>
-              <span className="font-medium text-sm text-[#222829]">{item.topic}</span>
+            <span className="inline-flex items-center max-w-50">
+              <span className="font-bold text-sm text-[#222829] shrink-0">
+                주제
+              </span>
+
+              <span className="mx-2 font-medium text-[#B7C4C7] shrink-0">
+                |
+              </span>
+
+              <span className="font-medium text-sm text-[#222829] truncate">
+                {item.topic}
+              </span>
             </span>
           </div>
 
           {/* 제목 */}
-          <h3 className="text-xl font-bold text-[#111827] truncate">
+          <h3 className="text-xl font-bold text-[#111827] truncate max-w-140">
             {item.title}
           </h3>
         </div>

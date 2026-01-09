@@ -359,7 +359,7 @@ export default function RecruitMateCreate() {
                 <div className="flex items-center gap-6">
                   <div className="w-1 h-4 bg-[#00C3CC]" />
                   <span className="text-lg font-bold text-[#495456]">
-                    이 수업에서 본인이 가장 잘 할 수 있는 키워드를 적어주세요
+                    이 {form.projectType}에서 본인이 가장 잘 할 수 있는 키워드를 적어주세요
                     <span className="text-[#9CA3AF] font-medium">
                       {" "}
                       (10개 제한)
