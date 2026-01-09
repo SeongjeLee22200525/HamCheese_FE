@@ -15,7 +15,7 @@
 ## 📖 Service Introduction
 
 <p align="center">
-  <img src="./public/images/logo-white.svg" alt="MateCheck Logo" width="180" />
+  <img src="./public/images/slogan-white.svg" alt="MateCheck Logo" width="200" />
 </p>
 
 <strong>MateCheck</strong>는 대학생들이 팀 프로젝트, 스터디, 공모전에서  
