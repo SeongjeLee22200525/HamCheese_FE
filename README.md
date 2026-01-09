@@ -21,7 +21,9 @@
 <strong>MateCheck</strong>는 대학생들이 팀 프로젝트, 스터디, 공모전에서  
 함께할 메이트를 더 공정하고 쉽게 찾을 수 있도록 돕는 웹 서비스입니다.
 </p>
+
 ## 🎯 Problem & Solution
+
 <p align="center">
 <img src="./public/images/problem-needs.svg" alt="Problem-Needs"/>
 <img src="./public/images/solution.svg" alt="Solution"/>
@@ -92,11 +94,29 @@
 ### 🛠 Tech Stack
 <strong> 
 🎨 Frontend
+<p></p>
 
-Next.js (Pages Router) – React 기반 SSR/CSR 웹 애플리케이션
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Sendbird](https://img.shields.io/badge/Sendbird-742DDD?style=flat-square&logo=sendbird&logoColor=white)
+![Axios](https://img.shields.io/badge/Axios-5A29E4?style=flat-square)
+![Zustand](https://img.shields.io/badge/Zustand-2D2D2D?style=flat-square)
 
-TypeScript – 정적 타입을 통한 안정적인 개발
+<p></p>
 
-Tailwind CSS – 빠르고 일관된 UI 스타일링
+⚙️ Backend
+![Spring Boot](https://img.shields.io/badge/SpringBoot-6DB33F?style=flat-square&logo=springboot&logoColor=white)
+![Java](https://img.shields.io/badge/Java-007396?style=flat-square&logo=openjdk&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat-square&logo=mysql&logoColor=white)
 
-Zustand – 간결한 전역 상태 관리</strong>
+
+<p></p>
+
+👥 협업도구
+![Figma](https://img.shields.io/badge/Figma-F24E1E?style=flat-square&logo=figma&logoColor=white)
+![Notion](https://img.shields.io/badge/Notion-000000?style=flat-square&logo=notion&logoColor=white)
+![Slack](https://img.shields.io/badge/Slack-4A154B?style=flat-square&logo=slack&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=github&logoColor=white)
+
+
+</strong>
