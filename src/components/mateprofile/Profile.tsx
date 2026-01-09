@@ -21,6 +21,8 @@ export default function Profile({ profile, onGivePiece, onPeerReview }: Props) {
     imageUrl,
   } = profile;
 
+  const parsedGpa = gpa !== undefined && gpa !== null ? gpa : null;
+
   return (
     // 전체 블럭
     <div>
@@ -33,9 +35,14 @@ export default function Profile({ profile, onGivePiece, onPeerReview }: Props) {
                 <img
                   src={imageUrl}
                   alt={`${name} profile`}
+                  className="w-full h-full object-cover rounded-full"
+                />
+              ) : (
+                <img
+                  src="/profile.svg"
                   className="w-full h-full object-cover"
                 />
-              ) : <img src="/profile.svg" className="w-full h-full object-cover"/>}
+              )}
             </div>
 
             <h2 className="text-2xl font-extrabold mb-2">
@@ -55,8 +62,8 @@ export default function Profile({ profile, onGivePiece, onPeerReview }: Props) {
                 secondMajor ? `${firstMajor} · ${secondMajor}` : firstMajor
               }
             />
-            {gpa && !isNaN(Number(gpa)) && (
-              <InfoRow label="학점" value={Number(gpa).toFixed(2)} />
+            {gpa !== undefined && gpa !== null && gpa !== 0 && (
+              <InfoRow label="학점" value={gpa.toFixed(2)} />
             )}
 
             <InfoRow label="이메일" value={email} />
