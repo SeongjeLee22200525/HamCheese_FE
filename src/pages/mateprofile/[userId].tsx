@@ -13,13 +13,11 @@ import PeerReviewModal from "@/components/mateprofile/peerReviewModal/PeerReview
 import Snackbar from "@/components/common/Snackbar";
 
 import { MetaTag } from "@/types/user";
-import { checkUserEqual, getMateProfile } from "@/api/profile";
+import { getMateProfile } from "@/api/profile";
 import { useUserStore } from "@/stores/useUserStore";
 import { submitPeerReview } from "@/api/peerReview";
 
-import PokingConfirmModal from "@/components/poking/PokingConfirmModal";
-import { sendPoking } from "@/api/poking";
-import { checkCanPoke } from "@/api/poking";
+import { sendPoking, checkCanPoke } from "@/api/poking";
 
 export default function MateProfilePage() {
   const router = useRouter();
@@ -29,20 +27,18 @@ export default function MateProfilePage() {
 
   const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  //동료평가 모달 상태관리
+
+  // 동료평가
   const [isPeerReviewOpen, setIsPeerReviewOpen] = useState(false);
   const [showReviewSuccess, setShowReviewSuccess] = useState(false);
-  //조각건네기 모달 상태관리
-  const [isgivePieceOpen, setIsGivePieceOpen] = useState(false);
-  //조각건네기 성공 스낵바
+
+  // 조각건네기 스낵바
   const [showPokingSuccess, setShowPokingSuccess] = useState(false);
-  //찔렀는지 여부
   const [showAlreadyPoked, setShowAlreadyPoked] = useState(false);
 
   /* =========================
    * 프로필 조회
    * ========================= */
-
   useEffect(() => {
     if (!myId) return;
     if (typeof userId !== "string") return;
@@ -53,7 +49,6 @@ export default function MateProfilePage() {
     const fetchProfile = async () => {
       try {
         setLoading(true);
-
         const data = await getMateProfile(targetUserId);
         setProfile(data);
       } catch (e) {
@@ -126,10 +121,14 @@ export default function MateProfilePage() {
                   return;
                 }
 
-                // ✅ 찌르기 가능 → 기존 로직
-                setIsGivePieceOpen(true);
+                // ✅ 바로 찌르기
+                await sendPoking(targetUserId, myId);
+
+                // ✅ 성공 스낵바
+                setShowPokingSuccess(true);
               } catch (e) {
-                console.error("❌ 찌르기 가능 여부 조회 실패", e);
+                console.error("❌ 조각 건네기 실패", e);
+                alert("조각 건네기에 실패했습니다.");
               }
             }}
             onPeerReview={() => setIsPeerReviewOpen(true)}
@@ -150,51 +149,19 @@ export default function MateProfilePage() {
               if (Number.isNaN(targetUserId)) return;
 
               try {
-                // 1️⃣ 동료평가 제출
                 await submitPeerReview(myId, targetUserId, payload);
-
-                // 2️⃣ 최신 프로필 즉시 반영
                 await getMateProfile(targetUserId).then(setProfile);
-                // ⬆️ 또는 fetchProfile() 사용 중이면 그걸로 교체
-
-                // 3️⃣ 성공 UX
                 setShowReviewSuccess(true);
               } catch (e) {
                 console.error("❌ 동료평가 제출 실패", e);
               } finally {
-                // 4️⃣ 모달 닫기
                 setIsPeerReviewOpen(false);
               }
             }}
           />
         )}
 
-        {/* ===== 조각건네기 모달 ===== */}
-        {isgivePieceOpen && myId && typeof userId === "string" && (
-          <PokingConfirmModal
-            open={isgivePieceOpen}
-            onClose={() => setIsGivePieceOpen(false)}
-            onConfirm={async () => {
-              try {
-                const targetUserId = Number(userId);
-                if (Number.isNaN(targetUserId)) return;
-
-                //조각 건네기
-                await sendPoking(targetUserId, myId);
-
-                // 모달 닫기
-                setIsGivePieceOpen(false);
-
-                setShowPokingSuccess(true);
-              } catch (e) {
-                console.error("❌ 조각 건네기 실패", e);
-                alert("조각 건네기에 실패했습니다.");
-              }
-            }}
-          />
-        )}
-
-        {/* ===== 성공 스낵바 (공용 Snackbar 사용) ===== */}
+        {/* ===== Snackbar ===== */}
         {showReviewSuccess && (
           <Snackbar
             message="동료평가가 완료되었어요!"
@@ -206,7 +173,7 @@ export default function MateProfilePage() {
 
         {showPokingSuccess && (
           <Snackbar
-            message={`상대방을 찔렀어요!\n상대가 수락하면 대화를 시작할 수 있어요.`}
+            message={`메이트 체크를 보냈어요!\n상대가 수락하면 대화를 시작할 수 있어요.`}
             actionText="확인"
             duration={3000}
             onClose={() => setShowPokingSuccess(false)}
@@ -215,7 +182,7 @@ export default function MateProfilePage() {
 
         {showAlreadyPoked && (
           <Snackbar
-            message="이미 이 유저를 찔렀어요!"
+            message="이미 이 유저에게 메이트 체크를 보냈어요!"
             actionText="확인"
             duration={3000}
             onClose={() => setShowAlreadyPoked(false)}
@@ -224,7 +191,6 @@ export default function MateProfilePage() {
 
         {/* ===== RIGHT ===== */}
         <section className="flex-col space-y-14.5 pl-10 w-full pr-49 pt-10">
-          {/* 자기소개 */}
           <ProfileSection tabTitle="자기소개">
             <div className="py-17 px-20">
               <div className="flex h-16 mb-10">
@@ -237,7 +203,6 @@ export default function MateProfilePage() {
                 </p>
               </div>
 
-              {/* 강점 태그 */}
               <div className="flex">
                 <span className="w-1 h-5 bg-[#00C3CC] mt-1" />
                 <div className="pl-5 font-extrabold text-xl w-40 text-[#495456]">
@@ -264,7 +229,6 @@ export default function MateProfilePage() {
             </div>
           </ProfileSection>
 
-          {/* 활동내역 */}
           <ProfileSection tabTitle="활동내역">
             <ul className="space-y-4 text-xl text-[#222829] py-17 px-20">
               {profile.activity.length === 0 && (
@@ -296,7 +260,6 @@ export default function MateProfilePage() {
             </ul>
           </ProfileSection>
 
-          {/* 동료평가 */}
           <div className="pb-30">
             <PeerReview
               name={profile.name}

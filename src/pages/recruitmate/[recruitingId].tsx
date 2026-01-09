@@ -78,32 +78,31 @@ export default function RecruitMateDetail() {
   }, [recruitingId, user]);
 
   useEffect(() => {
-  if (!recruitingId || !user) return;
+    if (!recruitingId || !user) return;
 
-  const fetchRelatedRecruitings = async () => {
-    try {
-      const res = await getRecruitings({
-        page: 0,
-        size: 9999, // 의미 없음 (서버가 무시함)
-      });
+    const fetchRelatedRecruitings = async () => {
+      try {
+        const res = await getRecruitings({
+          page: 0,
+          size: 9999, // 의미 없음 (서버가 무시함)
+        });
 
-      const filtered = res
-        // 🔥 현재 보고 있는 글 제외
-        .filter(
-          (item: Recruiting) => item.recruitingId !== Number(recruitingId)
-        )
-        // 🔥 여기서 5개만 사용
-        .slice(0, 5);
+        const filtered = res
+          // 🔥 현재 보고 있는 글 제외
+          .filter(
+            (item: Recruiting) => item.recruitingId !== Number(recruitingId)
+          )
+          // 🔥 여기서 5개만 사용
+          .slice(0, 5);
 
-      setRelatedRecruitings(filtered);
-    } catch (e) {
-      console.error("❌ 하단 모집글 불러오기 실패", e);
-    }
-  };
+        setRelatedRecruitings(filtered);
+      } catch (e) {
+        console.error("❌ 하단 모집글 불러오기 실패", e);
+      }
+    };
 
-  fetchRelatedRecruitings();
-}, [recruitingId, user]);
-
+    fetchRelatedRecruitings();
+  }, [recruitingId, user]);
 
   /* ================= 로딩 / 에러 ================= */
 
@@ -413,7 +412,7 @@ export default function RecruitMateDetail() {
       </main>
       {showPokingSuccess && (
         <Snackbar
-          message={`상대방을 찔렀어요!\n상대가 수락하면 대화를 시작할 수 있어요.`}
+          message={`상대방에게 메이트 체크를 보냈어요!\n상대가 수락하면 대화를 시작할 수 있어요.`}
           actionText="확인"
           duration={3000}
           onClose={() => setShowPokingSuccess(false)}
@@ -422,7 +421,7 @@ export default function RecruitMateDetail() {
 
       {showAlreadyPoked && (
         <Snackbar
-          message="이미 이 모집글 작성자를 찔렀어요!"
+          message="이미 이 유저에게 메이트 체크를 보냈어요!"
           actionText="확인"
           duration={3000}
           onClose={() => setShowAlreadyPoked(false)}
