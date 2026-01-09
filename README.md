@@ -23,8 +23,8 @@
 
 ## 🎯 Problem & Solution
 <p align="center">
-<img src="./public/images/problem-needs.svg" alt="MateCheck p-s"/>
-<img src="./public/images/solution.svg" alt="MateCheck Logo" width="300" />
+<img src="./public/images/problem-needs.svg" alt="Problem-Needs"/>
+<img src="./public/images/solution.svg" alt="Solution"/>
 </p>
 
 ## 🚀 Features
