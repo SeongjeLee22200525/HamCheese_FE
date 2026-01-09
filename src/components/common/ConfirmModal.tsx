@@ -99,7 +99,7 @@ export default function ConfirmModal({
 
       {/* 카드 */}
       <div
-        className="relative w-[536px] h-[300px] bg-white rounded-xl shadow-xl p-15"
+        className="relative w-134 h-75 bg-white rounded-xl shadow-xl p-15"
         onClick={(e) => e.stopPropagation()}
       >
         <p className="text-center text-lg font-bold text-[#222829] mb-13 whitespace-pre-line">
@@ -109,7 +109,7 @@ export default function ConfirmModal({
         <div className="flex items-center justify-center gap-4">
           <button
             onClick={() => safeClose(onCancel)}
-            className="w-[200px] h-16 rounded-md text-lg font-bold
+            className="w-50 h-16 rounded-md text-lg font-bold
               bg-[#E8EFF1] text-[#495456]
               hover:bg-[#DDE7EA] active:bg-[#CFDDE1]"
           >
@@ -118,7 +118,7 @@ export default function ConfirmModal({
 
           <button
             onClick={() => safeClose(onConfirm)}
-            className="w-[200px] h-16 rounded-md text-lg font-bold
+            className="w-50 h-16 rounded-md text-lg font-bold
               bg-[#00C3CC] text-white
               hover:bg-[#00B2BA] active:bg-[#009AA1]"
           >

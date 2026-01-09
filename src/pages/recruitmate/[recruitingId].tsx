@@ -78,31 +78,32 @@ export default function RecruitMateDetail() {
   }, [recruitingId, user]);
 
   useEffect(() => {
-    if (!recruitingId || !user) return;
+  if (!recruitingId || !user) return;
 
-    const fetchRelatedRecruitings = async () => {
-      try {
-        const res = await getRecruitings({
-          page: 0,
-          size: 9999, // 의미 없음 (서버가 무시함)
-        });
+  const fetchRelatedRecruitings = async () => {
+    try {
+      const res = await getRecruitings({
+        page: 0,
+        size: 9999, // 의미 없음 (서버가 무시함)
+      });
 
-        const filtered = res
-          // 🔥 현재 보고 있는 글 제외
-          .filter(
-            (item: Recruiting) => item.recruitingId !== Number(recruitingId)
-          )
-          // 🔥 여기서 5개만 사용
-          .slice(0, 5);
+      const filtered = res
+        // 🔥 현재 보고 있는 글 제외
+        .filter(
+          (item: Recruiting) => item.recruitingId !== Number(recruitingId)
+        )
+        // 🔥 여기서 5개만 사용
+        .slice(0, 5);
 
-        setRelatedRecruitings(filtered);
-      } catch (e) {
-        console.error("❌ 하단 모집글 불러오기 실패", e);
-      }
-    };
+      setRelatedRecruitings(filtered);
+    } catch (e) {
+      console.error("❌ 하단 모집글 불러오기 실패", e);
+    }
+  };
 
-    fetchRelatedRecruitings();
-  }, [recruitingId, user]);
+  fetchRelatedRecruitings();
+}, [recruitingId, user]);
+
 
   /* ================= 로딩 / 에러 ================= */
 
@@ -137,7 +138,7 @@ export default function RecruitMateDetail() {
       <Header />
 
       <main className="flex-1">
-        <div className="max-w-[1440px] mx-auto px-6 py-10">
+        <div className="max-w-360 mx-auto px-6 py-10">
           {/* breadcrumb */}
           <div className="flex items-center text-m text-[#838F91] mb-4">
             모집하기

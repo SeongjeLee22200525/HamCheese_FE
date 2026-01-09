@@ -24,7 +24,7 @@ export default function Profile({ profile, onGivePiece, onPeerReview }: Props) {
   return (
     // 전체 블럭
     <div>
-      <div className="w-[350px] bg-[#F5F8F8]">
+      <div className="w-88 bg-[#F5F8F8]">
         <div className="p-10 text-[#222829]">
           {/* ===== 프로필 이미지 ===== */}
           <div className="flex flex-col items-center">
@@ -67,14 +67,14 @@ export default function Profile({ profile, onGivePiece, onPeerReview }: Props) {
       <div className="mt-6 flex gap-3">
         <button
           onClick={onGivePiece}
-          className="w-[169px] h-16 py-2 rounded bg-[#00C3CC] text-white text-lg font-bold flex items-center justify-center gap-1 hover:bg-[#0FA4AB] active:bg-[#1A858A]"
+          className="w-42 h-16 py-2 rounded bg-[#00C3CC] text-white text-lg font-bold flex items-center justify-center gap-1 hover:bg-[#0FA4AB] active:bg-[#1A858A]"
         >
           <img src="/poke.svg" className="w-7.5 h-7.5" />
           메이트 체크!
         </button>
         <button
           onClick={onPeerReview}
-          className="w-[169px] h-16 py-2 rounded bg-[#00C3CC] text-white text-lg font-bold hover:bg-[#0FA4AB] active:bg-[#1A858A]"
+          className="w-42 h-16 py-2 rounded bg-[#00C3CC] text-white text-lg font-bold hover:bg-[#0FA4AB] active:bg-[#1A858A]"
         >
           동료평가 하기
         </button>

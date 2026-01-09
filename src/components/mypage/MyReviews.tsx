@@ -91,7 +91,7 @@ export default function MyReviews(props: Props) {
       <div
         className={`
           overflow-y-auto pr-2
-          ${sortType === "count" ? "max-h-100vh" : "max-h-[520px]"}
+          ${sortType === "count" ? "max-h-100vh" : "max-h-130"}
         `}
         style={{ scrollbarGutter: "stable" }}
       >

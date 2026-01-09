@@ -91,10 +91,10 @@ export default function Home() {
       <Header />
 
       <main className="flex-1 flex flex-col items-center justify-center py-16.5">
-        <div className="flex flex-col items-center gap-18">
+        <div className="flex flex-col items-center gap-16">
           <img src="/loginlogo.svg" />
 
-          <span className="text-center justify-start text-[#838F91] text-base font-bold mt-2 -mb-12">학교 이메일로 회원가입해주세요.</span>
+          <span className="text-center justify-start text-[#838F91] text-base font-semibold -mb-14">학교 이메일로 회원가입해주세요.</span>
 
           <div className="relative w-90 h-14">
             <div className="absolute inset-0 flex items-center justify-center gap-3 rounded-full border border-[#D0D7DE] bg-white">

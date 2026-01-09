@@ -318,14 +318,14 @@ export default function MyInfo({ profile, setProfile }: Props) {
   return (
     <div className="px-20 py-17">
       {/* 섹션 제목 */}
-      <div className="text-2xl font-extrabold text-[#222829] mb-10">
-        <img src="/chat.svg" className="inline-flex pr-2.5" />
-        <span className="w-[83px] h-[23px]">기본정보</span>
+      <div className="text-2xl font-extrabold text-[#222829] mb-10 bg-[#F5F8F8] rounded p-3">
+        <img src="/images/mypage/icon-my.svg" className="inline-flex pr-2.5  relative -top-0.5"/>
+        <span className="w-21 h-6">기본정보</span>
       </div>
       {/* ================= 프로필 이미지 ================= */}
       <div className="mb-13">
         <div className="flex items-start">
-          <div className="w-[160px] flex items-center gap-2 text-base font-medium text-[#222829] mt-2">
+          <div className="w-40 flex items-center gap-2 text-base font-bold text-[#222829] mt-2">
             <div className="w-1 h-4 bg-[#00C3CC]" />
             프로필 이미지
           </div>
@@ -376,10 +376,10 @@ export default function MyInfo({ profile, setProfile }: Props) {
         </div>
       </div>
       {/* ================= 입력 폼 ================= */}
-      <div className="font-medium space-y-5 text-base text-[#222829]">
+      <div className="font-bold space-y-5 text-base text-[#222829]">
         {/* 이름 */}
-        <div className="flex items-center gap-13 h-[45px]">
-          <div className="w-[116px] flex items-center">
+        <div className="flex items-center gap-13 h-11">
+          <div className="w-29 flex items-center">
             <div className="w-1 h-4 bg-[#00C3CC] mr-3" />
             이름 <span className="text-[#0FA4AB] ml-1">*</span>
           </div>
@@ -391,8 +391,8 @@ export default function MyInfo({ profile, setProfile }: Props) {
         </div>
 
         {/* 학번 */}
-        <div className="flex items-center gap-13 h-[45px]">
-          <div className="w-[116px] flex items-center">
+        <div className="flex items-center gap-13 h-11">
+          <div className="w-29 flex items-center">
             <div className="w-1 h-4 bg-[#00C3CC] mr-3" />
             학번<span className="text-[#0FA4AB] ml-1">*</span>
           </div>
@@ -406,8 +406,8 @@ export default function MyInfo({ profile, setProfile }: Props) {
         </div>
 
         {/* 학년 / 학기 */}
-        <div className="flex items-center gap-13 h-[45px]">
-          <div className="w-[116px] flex items-center">
+        <div className="flex items-center gap-13 h-11">
+          <div className="w-29 flex items-center">
             <div className="w-1 h-4 bg-[#00C3CC] mr-3" />
             <span className="w-25">
               학년/학기수 <span className="text-[#0FA4AB] ml-1">*</span>
@@ -432,8 +432,8 @@ export default function MyInfo({ profile, setProfile }: Props) {
         </div>
 
         {/* 학부 */}
-        <div className="flex items-center gap-13 h-[45px]">
-          <div className="w-[116px] flex items-center">
+        <div className="flex items-center gap-13 h-11">
+          <div className="w-29 flex items-center">
             <div className="w-1 h-4 bg-[#00C3CC] mr-3" />
             학부<span className="text-[#0FA4AB] ml-1">*</span>
           </div>
@@ -461,10 +461,10 @@ export default function MyInfo({ profile, setProfile }: Props) {
     shadow-[0px_0px_20px_0px_rgba(225,237,240,1.00)]
     z-10 overflow-hidden
     transition-[max-height] duration-300 ease-in-out
-    ${deptOpen ? "max-h-[245px]" : "max-h-0 pointer-events-none"}
+    ${deptOpen ? "max-h-61" : "max-h-0 pointer-events-none"}
   `}
             >
-              <ul className="max-h-[220px] overflow-y-auto">
+              <ul className="max-h-55 overflow-y-auto">
                 {departments.map((dept) => {
                   const isSelected = selectedDepartment === dept;
 
@@ -495,14 +495,14 @@ export default function MyInfo({ profile, setProfile }: Props) {
         </div>
 
         {/* 전공 */}
-        <div className="flex items-center gap-13 h-[63px]">
-          <div className="w-[116px] flex items-center">
+        <div className="flex items-center gap-13 h-16">
+          <div className="w-29 flex items-center">
             <div className="w-1 h-4 bg-[#00C3CC] mr-3" />
             전공<span className="text-[#0FA4AB] ml-1">*</span>
           </div>
           <div className="flex">
             <div className="mr-2.5">
-              <span className="flex text-xs w-[291px] h-3.5 mb-1 text-[#1A858A]">
+              <span className="flex text-xs w-73 h-3.5 mb-1 text-[#1A858A]">
                 1전공 *
               </span>
               <input
@@ -515,7 +515,7 @@ export default function MyInfo({ profile, setProfile }: Props) {
               />
             </div>
             <div>
-              <span className="flex text-xs w-[291px] h-3.5 mb-1 text-[#1A858A]">
+              <span className="flex text-xs w-73 h-3.5 mb-1 text-[#1A858A]">
                 2전공 *
               </span>
               <input
@@ -531,8 +531,8 @@ export default function MyInfo({ profile, setProfile }: Props) {
         </div>
 
         {/* 학점 */}
-        <div className="flex items-center gap-13 h-[45px]">
-          <div className="w-[116px] flex items-center">
+        <div className="flex items-center gap-13 h-11">
+          <div className="w-29 flex items-center">
             <div className="w-1 h-4 bg-[#00C3CC] mr-3" />
             평점 평균
           </div>
@@ -544,8 +544,8 @@ export default function MyInfo({ profile, setProfile }: Props) {
         </div>
 
         {/* 이메일 (읽기 전용) */}
-        <div className="flex items-center gap-13 h-[45px]">
-          <div className="w-[116px] flex items-center">
+        <div className="flex items-center gap-13 h-11">
+          <div className="w-29 flex items-center">
             <div className="w-1 h-4 bg-[#00C3CC] mr-3" />
             이메일
           </div>
@@ -558,9 +558,9 @@ export default function MyInfo({ profile, setProfile }: Props) {
 
         {/* 자기소개 섹션 */}
         <div>
-          <div className="text-2xl font-extrabold text-[#222829] mt-18 mb-10">
+          <div className="text-2xl font-extrabold text-[#222829] mt-18 mb-10 bg-[#F5F8F8] rounded p-3 gap-3">
             <img src="/chat.svg" className="inline-flex pr-2.5" />
-            <span className="w-[83px] h-[23px]">자기소개</span>
+            <span className="w-21 h-6">자기소개</span>
           </div>
           <div className=" flex items-center mb-3">
             <div className="w-1 h-4 bg-[#00C3CC] mr-3" />
@@ -568,7 +568,7 @@ export default function MyInfo({ profile, setProfile }: Props) {
             <span className="text-[#B7C4C7] ml-1"> (100자제한)</span>
           </div>
           <input
-            className="mc-input w-[956px] ml-4 mb-10"
+            className="mc-input w-239 ml-4 mb-10"
             value={form.introduction}
             onChange={(e) =>
               setForm((p) => ({ ...p, introduction: e.target.value }))
@@ -591,9 +591,9 @@ export default function MyInfo({ profile, setProfile }: Props) {
                 <button
                   type="button"
                   onClick={() => removeKeyword(keyword)}
-                  className="text-[#B7C4C7] ml-1 text-xl mb-1 hover:text-[#00C3CC]"
+                  className="text-[#B7C4C7] ml-1 text-xl hover:text-[#00C3CC]"
                 >
-                  ×
+                  <img src="/images/cancel.svg" alt="delete" />
                 </button>
               </div>
             ))}
@@ -601,7 +601,7 @@ export default function MyInfo({ profile, setProfile }: Props) {
             {form.skillList.length < 10 && (
               <>
                 <input
-                  className="mc-input w-[145px]"
+                  className="mc-input w-36"
                   placeholder="(ex) 자료조사"
                   value={keywordInput}
                   onChange={(e) => setKeywordInput(e.target.value)}
@@ -625,9 +625,9 @@ export default function MyInfo({ profile, setProfile }: Props) {
         </div>
 
         {/* 활동내역 섹션 */}
-        <div className="text-2xl font-extrabold text-[#222829] mt-18 mb-10">
+        <div className="text-2xl font-extrabold text-[#222829] mt-18 mb-10 bg-[#F5F8F8] rounded p-3">
           <img src="/activitylist.svg" className="inline-flex pr-2.5" />
-          <span className="w-[83px] h-[23px]">활동내역</span>
+          <span className="w-21 h-6">활동내역</span>
         </div>
         <div className=" flex items-center mb-3">
           <div className="w-1 h-4 bg-[#00C3CC] mr-3" />
@@ -646,7 +646,7 @@ export default function MyInfo({ profile, setProfile }: Props) {
 
               {/* 내용 */}
               <input
-                className="mc-input w-[420px]"
+                className="mc-input w-105"
                 placeholder="내용"
                 value={act.title}
                 onChange={(e) => updateActivity(idx, "title", e.target.value)}
@@ -654,7 +654,7 @@ export default function MyInfo({ profile, setProfile }: Props) {
 
               {/* 링크 */}
               <input
-                className="mc-input w-[164px]"
+                className="mc-input w-41"
                 placeholder="링크"
                 value={act.link || ""}
                 onChange={(e) => updateActivity(idx, "link", e.target.value)}
@@ -666,7 +666,7 @@ export default function MyInfo({ profile, setProfile }: Props) {
                 onClick={() => removeActivity(idx)}
                 className="text-[#B7C4C7] hover:text-[#00C3CC] text-lg"
               >
-                ×
+                <img src="/images/cancel.svg" alt="delete" />
               </button>
             </div>
           ))}

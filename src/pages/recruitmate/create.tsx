@@ -219,7 +219,7 @@ export default function RecruitMateCreate() {
       <Header />
 
       <main className="flex-1">
-        <div className="max-w-[1440px] mx-auto px-10 py-12">
+        <div className="max-w-360 mx-auto px-10 py-12">
           {/* breadcrumb */}
           <div className="flex items-center text-lg font-medium text-[#838F91] mb-3">
             모집하기
@@ -313,7 +313,7 @@ export default function RecruitMateCreate() {
                   />
                 </div>
 
-                <p className="text-xs text-[#9CA3AF] ml-[calc(1rem+7rem)]">
+                <p className="text-xs text-[#9CA3AF] ml-32">
                   * 주제가 정해지지 않았다면 미정이라고 적어주세요.
                 </p>
               </div>
@@ -377,7 +377,7 @@ export default function RecruitMateCreate() {
         flex
         items-center
         gap-1
-        rounded outline outline-2 outline-offset-[-2px] outline-[#E1EDF0]
+        rounded outline-2 -outline-offset-2 outline-[#E1EDF0]
         text-sm
         text-[#495456]
       "

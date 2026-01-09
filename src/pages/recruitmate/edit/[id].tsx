@@ -294,7 +294,7 @@ export default function RecruitMateEdit() {
       <Header />
 
       <main className="flex-1">
-        <div className="max-w-[1440px] mx-auto px-10 py-12">
+        <div className="max-w-360 mx-auto px-10 py-12">
           <div className="flex items-center text-lg font-medium text-[#838F91] mb-3">
             모집하기
             <img src="/images/Vector.svg" className="w-3 h-3 mx-2" />글 수정

@@ -42,6 +42,7 @@ export default function RecruitingPostCard({ item, onClick }: Props) {
         bg-white
         cursor-pointer
         border-b
+        hover:bg-[#F5F8F8]
       "
     >
       <div className="flex items-start justify-between ">

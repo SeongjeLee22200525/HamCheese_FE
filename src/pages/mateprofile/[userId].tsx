@@ -228,7 +228,7 @@ export default function MateProfilePage() {
           <ProfileSection tabTitle="자기소개">
             <div className="py-17 px-20">
               <div className="flex h-16 mb-10">
-                <span className="w-1 h-5 bg-[#00C3CC] mt-[5px]" />
+                <span className="w-1 h-5 bg-[#00C3CC] mt-1" />
                 <div className="pl-5 font-extrabold text-xl w-30 text-[#495456]">
                   자기소개
                 </div>
@@ -239,7 +239,7 @@ export default function MateProfilePage() {
 
               {/* 강점 태그 */}
               <div className="flex">
-                <span className="w-1 h-5 bg-[#00C3CC] mt-[5px]" />
+                <span className="w-1 h-5 bg-[#00C3CC] mt-1" />
                 <div className="pl-5 font-extrabold text-xl w-40 text-[#495456]">
                   강점 해시태그
                 </div>

@@ -5,9 +5,9 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="w-full h-75 bg-white ">
-      <div className="w-full h-full px-[240px]">
+      <div className="w-full h-full px-60">
         {/* 실제 콘텐츠 영역 */}
-        <div className="flex items-center justify-between pt-[200px]">
+        <div className="flex items-center justify-between pt-50">
           {/* 왼쪽 링크들 */}
           <div className="flex items-center gap-14 text-base font-medium font-['Pretendard_Variable'] text-[#838F91]">
             <span>이용약관</span>

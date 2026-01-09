@@ -32,7 +32,7 @@ export default function Profile({ profile }: Props) {
 
   return (
     <div>
-      <div className="w-[350px] bg-[#F5F8F8]">
+      <div className="w-88 bg-[#F5F8F8]">
         <div className="p-10 text-[#222829]">
           {/* ===== 프로필 이미지 ===== */}
           <div className="flex flex-col items-center">

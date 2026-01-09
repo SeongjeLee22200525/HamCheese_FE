@@ -30,7 +30,7 @@ export default function MyPageTabs() {
               className={`
                   absolute inset-0 flex items-center justify-center -ml-2
                   text-xl font-extrabold
-                  ${isActive ? "text-white" : "text-[#495456] font-medium"}
+                  ${isActive ? "text-[#1A858A]" : "text-[#495456] font-medium"}
                 `}
             >
               {tab.label}
