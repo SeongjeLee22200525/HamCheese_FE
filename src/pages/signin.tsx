@@ -99,7 +99,7 @@ export default function Home() {
           <div className="relative w-90 h-14">
             <div className="absolute inset-0 flex items-center justify-center gap-3 rounded-full border border-[#D0D7DE] bg-white">
               <Image
-                src="/images/google-logo.png"
+                src="/images/google-logo.svg"
                 alt="Google"
                 width={24}
                 height={24}
