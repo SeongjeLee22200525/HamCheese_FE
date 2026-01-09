@@ -39,7 +39,7 @@ export default function RecruitingCard({ item, onClick }: Props) {
       className="
         w-full
         outline-1 -outline-offset-1 outline-[#CEDBDE]
-        rounded-2
+        rounded-lg
         hover:shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)]
         px-10 py-10
         bg-white
