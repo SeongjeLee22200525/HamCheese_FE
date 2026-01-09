@@ -10,7 +10,6 @@ export default function Document() {
       </Head>
       <body className="antialiased">
         <Main />
-        <div id="snackbar-root" />
         <NextScript />
       </body>
     </Html>

@@ -6,15 +6,22 @@ import type { GroupChannel } from "@sendbird/chat/groupChannel";
 import { getGroupChannel } from "@/lib/sendbird/channel";
 import { useChatWidget } from "@/hooks/chat/useChatWidget";
 import AlarmHandler from "./AlarmHandler";
+import ChatSnackbar from "@/components/chat/ChatSnackbar";
 
 type Props = {
   onClose: () => void;
-  onAccept?: () => void; // 🔥 추가
+  onAcceptSuccess?: () => void;
+  onRejectSuccess?: () => void;
 };
 
-export default function ChatPanel({ onClose }: Props) {
+export default function ChatPanel({
+  onClose,
+  onAcceptSuccess,
+  onRejectSuccess,
+}: Props) {
   const { currentChannelUrl, closeChat } = useChatWidget();
   const [channel, setChannel] = useState<GroupChannel | null>(null);
+  const [snackbarMsg, setSnackbarMsg] = useState<string | null>(null);
 
   /* channelUrl → GroupChannel */
   useEffect(() => {
@@ -35,7 +42,7 @@ export default function ChatPanel({ onClose }: Props) {
   }, [currentChannelUrl]);
 
   return (
-    <div className="w-225 h-full bg-white rounded-tl-[20px] rounded-bl-[20px] shadow-[0px_-2px_20px_0px_rgba(225,237,240,1.00)] flex text-[#222829]">
+    <div className="w-225 h-full bg-white  flex text-[#222829] relative">
       {/* ================= 왼쪽 영역 ================= */}
       <div className="w-84 bg-[#E0EDEF] h-full flex flex-col">
         {/* 헤더 */}
@@ -57,7 +64,16 @@ export default function ChatPanel({ onClose }: Props) {
 
         {/* 찌르기 */}
         <div>
-          <ChatPokingSection />
+          <ChatPokingSection
+            onAcceptSuccess={() =>
+              setSnackbarMsg(
+                "상대방의 대화 신청을 수락했어요!\n이제 채팅을 시작할 수 있어요."
+              )
+            }
+            onRejectSuccess={() =>
+              setSnackbarMsg("상대방의 대화 신청을 거절했어요.")
+            }
+          />
         </div>
 
         {/* 채팅 리스트 */}
@@ -81,6 +97,12 @@ export default function ChatPanel({ onClose }: Props) {
           </div>
         )}
       </div>
+      {snackbarMsg && (
+        <ChatSnackbar
+          message={snackbarMsg}
+          onClose={() => setSnackbarMsg(null)}
+        />
+      )}
     </div>
   );
 }

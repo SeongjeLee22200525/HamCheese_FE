@@ -21,37 +21,16 @@ type Poking = {
 /**
  * 서버 시간 형식: "YYYY-MM-DD HH-mm" (UTC)
  */
-function getRelativeTimeWithKST(dateStr?: string) {
+function getRelativeTime(dateStr?: string) {
   if (!dateStr) return "";
 
-  // "2026-01-09 07-10" | "2026-01-09 07:10" | "2026-01-09"
-  const [datePart, timePart] = dateStr.split(" ");
+  // ISO 문자열 → Date 객체 (서버가 KST 기준이면 그대로 사용)
+  const serverDate = new Date(dateStr);
 
-  if (!datePart) return "";
-
-  const [year, month, day] = datePart.split("-").map(Number);
-
-  let hour = 0;
-  let minute = 0;
-
-  if (timePart) {
-    // "-" or ":" 둘 다 대응
-    const timeTokens = timePart.includes(":")
-      ? timePart.split(":")
-      : timePart.split("-");
-
-    hour = Number(timeTokens[0] ?? 0);
-    minute = Number(timeTokens[1] ?? 0);
-  }
-
-  // UTC 기준
-  const utcTime = Date.UTC(year, month - 1, day, hour, minute);
-
-  // KST 보정
-  const kstTime = utcTime + 9 * 60 * 60 * 1000;
+  if (isNaN(serverDate.getTime())) return "";
 
   const now = Date.now();
-  const diffMs = now - kstTime;
+  const diffMs = now - serverDate.getTime();
 
   const diffSec = Math.floor(diffMs / 1000);
   const diffMin = Math.floor(diffSec / 60);
@@ -86,7 +65,10 @@ export default function ChatPokingSection({
 
     axios
       .get(`/poking/received/${myId}`)
-      .then((res) => setList(res.data))
+      .then((res) => {
+        console.log("📦 raw poking response:", res.data);
+        setList(res.data);
+      })
       .catch(console.error);
   }, [myId]);
 
@@ -95,7 +77,7 @@ export default function ChatPokingSection({
     () =>
       list.map((p) => ({
         ...p,
-        relativeTime: getRelativeTimeWithKST(p.date),
+        relativeTime: getRelativeTime(p.date),
       })),
     [list]
   );
