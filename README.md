@@ -22,8 +22,10 @@
 함께할 메이트를 더 공정하고 쉽게 찾을 수 있도록 돕는 웹 서비스입니다.
 
 ## 🎯 Problem & Solution
-<img src="./public/images/problem-needs.svg" alt="MateCheck Logo" width="300" />
+<p align="center">
+<img src="./public/images/problem-needs.svg" alt="MateCheck p-s"/>
 <img src="./public/images/solution.svg" alt="MateCheck Logo" width="300" />
+</p>
 
 ## 🚀 Features
 
