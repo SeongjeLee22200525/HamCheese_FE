@@ -8,6 +8,7 @@ import { departments } from "@/constants/departments";
 import { SignUpRequest } from "@/types/user";
 import { useSignUp } from "@/hooks/useSignUp";
 import { useUserStore } from "@/stores/useUserStore";
+import { useMemo } from "react";
 
 export default function JoinMC() {
   const router = useRouter();
@@ -45,6 +46,27 @@ export default function JoinMC() {
     email,
     socialId,
   });
+  const REQUIRED_FIELDS = [
+    "name",
+    "studentId",
+    "grade",
+    "semester",
+    "department",
+    "firstMajor",
+  ];
+
+  const isFormValid = useMemo(() => {
+    if (!agree) return false;
+
+    // 필수값 비어있는지 체크
+    for (const key of REQUIRED_FIELDS) {
+      const value = form[key as keyof SignUpRequest];
+      if (!value || String(value).trim() === "") return false;
+    }
+
+    return true;
+  }, [form, agree]);
+
   const [gpaInput, setGpaInput] = useState("");
 
   const { submit, loading } = useSignUp();
@@ -382,17 +404,16 @@ export default function JoinMC() {
 
               <div className="flex justify-center mt-18">
                 <button
-                  disabled={loading || !agree}
+                  disabled={loading || !isFormValid} // 🔥 1. agree → isFormValid
                   className={`
-    w-72 py-4 font-bold rounded transition
-    ${
-      agree
-        ? "bg-[#00C3CC] text-white hover:bg-[#00b3bb]"
-        : "bg-[#E1EDF0] text-[#9CA3AF] cursor-not-allowed"
-    }
-  `}
+                       w-72 py-4 font-bold rounded transition
+                      ${
+                        isFormValid // 🔥 2. agree → isFormValid
+                          ? "bg-[#00C3CC] text-white hover:bg-[#00b3bb]"
+                          : "bg-[#E1EDF0] text-[#9CA3AF] cursor-not-allowed"
+                      }`}
                   onClick={async () => {
-                    if (!agree) return; // 🔒 안전장치 (혹시 모를 클릭 방지)
+                    if (!isFormValid) return; // 🔥 3. agree → isFormValid
 
                     const result = await submit(form, profileFile);
 
@@ -405,7 +426,6 @@ export default function JoinMC() {
                       myId: result.myId,
                       name: result.name,
                     });
-
                     router.replace("/mypage");
                   }}
                 >
