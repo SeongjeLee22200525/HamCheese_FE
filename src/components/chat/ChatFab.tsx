@@ -14,15 +14,15 @@ export default function ChatFab({
                  "
     >
       {/* 채팅 아이콘 */}
-      <img src="/images/chat.svg" className="flex ml-2.75" />
+      <img src="/images/chat.svg" className="flex ml-3.5 w-6" />
 
-      {/* 🔵 unread 파란 점 */}
+      {/*  unread 빨간 점 */}
       {hasUnread && (
         <span
           className="
-            absolute top-2 right-2
-            w-3 h-3 rounded-full
-            bg-[#1A858A]
+            absolute top-0.5 left-10
+            w-3.75 h-3.75 rounded-full
+            bg-[#FF5454]
           "
         />
       )}
