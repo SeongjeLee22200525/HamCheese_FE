@@ -38,8 +38,8 @@ export default function RecruitingCard({ item, onClick }: Props) {
       onClick={() => onClick(item.recruitingId)}
       className="
         w-full
-        outline outline-1 outline-offset-[-1px] outline-[#CEDBDE]
-        rounded-[8px]
+        outline-1 -outline-offset-1 outline-[#CEDBDE]
+        rounded-2
         hover:shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)]
         px-10 py-10
         bg-white
@@ -98,7 +98,7 @@ export default function RecruitingCard({ item, onClick }: Props) {
         </div>
 
         {/* 오른쪽 영역 */}
-        <div className="shrink-0 w-[420px] mr-4">
+        <div className="shrink-0 w-105 mr-4">
           <div className="grid grid-cols-[1fr_96px] items-center">
             {/* 이름 + 해시태그 */}
             <div className="flex flex-col items-center">
@@ -115,9 +115,8 @@ export default function RecruitingCard({ item, onClick }: Props) {
                         px-3 py-1.5
                         text-sm
                         rounded
-                        outline
                         outline-1
-                        outline-offset-[-1px]
+                        -outline-offset-1
                         outline-[#CEDBDE]
                         text-[#838F91]
                         whitespace-nowrap

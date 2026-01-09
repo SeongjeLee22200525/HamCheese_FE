@@ -188,7 +188,7 @@ export default function SearchMate() {
               <div className="flex justify-center mt-8">
                 {hasMore ? (
                   <div
-                    className="w-80 px-2 py-5 bg-[#FFFFFF] rounded outline outline-2 outline-offset-[-2px] outline-[#00C3CC] inline-flex justify-center items-center gap-5 
+                    className="w-80 px-2 py-5 bg-[#FFFFFF] rounded outline-2 -outline-offset-2 outline-[#00C3CC] inline-flex justify-center items-center gap-5 
                   hover:bg-[#F5F8F8] active:bg-[#E1EDF0]"
                   >
                     <button
