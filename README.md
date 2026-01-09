@@ -37,6 +37,10 @@
 주제, 전공, 모집 인원, 진행 방식 등을 명확하게 작성하여  
 서로의 기대치를 맞춘 상태로 팀원을 모집할 수 있습니다.
 
+<p align="center">
+  <img src="./public/images/README/recruit.png" alt="MateCheck Logo"/>
+</p>
+
 ---
 
 ### 👤 학생 프로필 카드
@@ -45,25 +49,37 @@
 프로필 카드를 제공하여,  
 단순한 인맥이 아닌 **정보 기반의 선택**이 가능하도록 돕습니다.
 
+<p align="center">
+  <img src="./public/images/README/mate.png" alt="MateCheck Logo"/>
+</p>
+
 ---
 
-### 👉 찌르기 기능
+### 👉 메이트 체크 기능
 
 관심 있는 학생이나 모집글에  
-부담 없이 의사를 표현할 수 있는 **찌르기 기능**을 제공합니다.
+부담 없이 의사를 표현할 수 있는 **메이트 체크 기능**을 제공합니다.
 
 직접적인 연락이 부담스러울 때,  
 가볍게 연결의 시작점을 만들 수 있습니다.
+
+<p align="center">
+  <img src="./public/images/README/matecheck.png" alt="MateCheck Logo"/>
+</p>
 
 ---
 
 ### 💬 실시간 채팅
 
-찌르기를 통해 연결된 사용자끼리는  
+메이트체크를 통해 연결된 사용자끼리는  
 플랫폼 내에서 바로 실시간 채팅을 할 수 있습니다.
 
 외부 메신저로 이동하지 않고도  
 팀 구성에 필요한 대화를 자연스럽게 이어갈 수 있습니다.
+
+<p align="center">
+  <img src="./public/images/README/chat.png" alt="MateCheck Logo"/>
+</p>
 
 ---
 
@@ -74,6 +90,10 @@
 
 필요한 메이트를 빠르게 찾을 수 있도록  
 탐색 과정을 최소화했습니다.
+
+<p align="center">
+  <img src="./public/images/README/search.png" alt="MateCheck Logo"/>
+</p>
 
 ---
 
@@ -88,6 +108,10 @@
 
 이를 통해, 단기적인 인상이나 인맥이 아닌 <strong>누적된 협업 기록과 평판</strong>을 바탕으로
 더 건강한 팀 문화와 공정한 팀 구성이 이루어질 수 있도록 돕습니다.
+
+<p align="center">
+  <img src="./public/images/README/matereview.png" alt="MateCheck Logo"/>
+</p>
 
 ---
 
