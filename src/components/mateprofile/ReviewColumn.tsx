@@ -69,7 +69,7 @@ export default function ReviewColumn({
               >
                 {/* ===== 막대 ===== */}
                 <div
-                  className="absolute left-0 top-0 h-full bg-gradient-to-r from-[#B9EAED] to-[#E1EDF0]"
+                  className="absolute left-0 top-0 h-full bg-linear-to-r from-[#B9EAED] to-[#E1EDF0]"
                   style={{ width: `${barWidth}px` }}
                 />
 

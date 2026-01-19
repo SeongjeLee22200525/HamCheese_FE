@@ -10,7 +10,7 @@ export default function ChatInput({
   const [text, setText] = useState("");
 
   return (
-    <div className="w-[563px] flex px-10 py-4  border-t border-[#E1EDF0]">
+    <div className="w-140.75 flex px-10 py-4  border-t border-[#E1EDF0]">
       <input
         value={text}
         onChange={(e) => setText(e.target.value)}

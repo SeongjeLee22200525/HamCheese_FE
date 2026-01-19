@@ -99,8 +99,7 @@ export default function RecruitingPostCard({ item, onClick }: Props) {
                 text-xm
                 rounded
                 outline
-                outline-1
-                outline-offset-[-1px]
+                -outline-offset-1
                 outline-[#CEDBDE]
                 text-[#838F91]
                 whitespace-nowrap

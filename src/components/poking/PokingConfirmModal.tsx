@@ -14,7 +14,7 @@ export default function PokingConfirmModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999]">
+    <div className="fixed inset-0 z-9999">
       {/* dim */}
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
 

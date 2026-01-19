@@ -65,13 +65,13 @@ export default function PeerReviewModal({
   return (
     <>
       {/* ================= MODAL ================= */}
-      <div className="fixed inset-0 z-[9999]">
+      <div className="fixed inset-0 z-9999">
         {/* dim */}
         <div className="absolute inset-0 bg-black/40" onClick={requestClose} />
 
         {/* modal wrapper */}
         <div className="relative w-full h-full flex items-center justify-center px-6">
-          <div className="relative w-[1200px] h-[800px] bg-white rounded-xl overflow-hidden">
+          <div className="relative w-300 h-200 bg-white rounded-xl overflow-hidden">
             {/* X 버튼 */}
             <button
               onClick={requestClose}

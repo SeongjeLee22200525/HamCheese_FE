@@ -14,7 +14,7 @@ export default function ConfirmExitModal({ onExit, onContinue }: Props) {
       <div className="absolute inset-0 bg-black/20" />
 
       {/* 작은 확인 카드 */}
-      <div className="relative w-[536px] h-[300px] bg-white rounded-xl shadow-xl p-15">
+      <div className="relative w-134 h-75 bg-white rounded-xl shadow-xl p-15">
         <p className="text-center text-lg font-bold  text-[#222829] mb-13 mt-5">
           정말로 동료평가를 그만두시겠습니까?
         </p>
@@ -22,7 +22,7 @@ export default function ConfirmExitModal({ onExit, onContinue }: Props) {
         <div className="flex items-center justify-center gap-4">
           <button
             onClick={onExit}
-            className="w-[200px] h-16 rounded-md text-lg font-bold
+            className="w-50 h-16 rounded-md text-lg font-bold
               bg-[#E8EFF1] text-[#495456]
               hover:bg-[#DDE7EA] active:bg-[#CFDDE1]"
           >
@@ -31,7 +31,7 @@ export default function ConfirmExitModal({ onExit, onContinue }: Props) {
 
           <button
             onClick={onContinue}
-            className="w-[200px] h-16 rounded-md text-lg font-bold
+            className="w-50 h-16 rounded-md text-lg font-bold
               bg-[#00C3CC] text-white
               hover:bg-[#00B2BA] active:bg-[#009AA1]"
           >

@@ -132,13 +132,13 @@ export default function PeerReviewForm({
   );
 
   return (
-    <div className="pl-[95px] pr-40 pt-25 ">
+    <div className="pl-23.75 pr-40 pt-25 ">
       <div className="flex flex-col h-[78vh]">
         {/* ================= 스크롤 영역 ================= */}
         <div className="flex-1 overflow-y-auto scrollbar-hide">
           {/* 상단 프로필 */}
           <div className="flex items-center gap-8 mb-15">
-            <div className="w-[110px] h-[110px] rounded-full bg-[#D6E1E3] overflow-hidden">
+            <div className="w-27.5 h-27.5 rounded-full bg-[#D6E1E3] overflow-hidden">
               <img
                 src={targetImageUrl || "/images/default-profile.png"}
                 className="w-full h-full object-cover"
@@ -170,7 +170,7 @@ export default function PeerReviewForm({
 
           {/* 프로젝트 시작 시점 */}
           <div className="flex items-start mb-8">
-            <p className="w-[250px] text-xl font-extrabold text-[#222829] mt-4">
+            <p className="w-62.5 text-xl font-extrabold text-[#222829] mt-4">
               언제 프로젝트가 시작되었나요?
             </p>
 
@@ -179,7 +179,7 @@ export default function PeerReviewForm({
                 <input
                   value={startedYear}
                   onChange={(e) => setStartedYear(e.target.value)}
-                  className="w-20 h-[58px] px-4 border-2 border-[#E1EDF0] rounded font-medium
+                  className="w-20 h-14.5 px-4 border-2 border-[#E1EDF0] rounded font-medium
                              text-[#495456] focus:border-[#00C3CC] focus:outline-none"
                   placeholder="2026"
                 />
@@ -203,7 +203,7 @@ export default function PeerReviewForm({
                       setStartedMonth(String(monthNum).padStart(2, "0"));
                     }
                   }}
-                  className="w-20 h-[58px] px-4 border-2 border-[#E1EDF0] rounded font-medium
+                  className="w-20 h-14.5 px-4 border-2 border-[#E1EDF0] rounded font-medium
              text-[#495456] focus:border-[#00C3CC] focus:outline-none placeholder:text-[#CEDBDE]"
                   placeholder="MM"
                 />
@@ -215,7 +215,7 @@ export default function PeerReviewForm({
 
           {/* 만난 곳 */}
           <div className="flex items-start mb-15">
-            <p className="w-[250px] text-xl font-extrabold text-[#222829] mt-4">
+            <p className="w-62.5 text-xl font-extrabold text-[#222829] mt-4">
               어디에서 이 분을 만났나요?
             </p>
 
@@ -223,7 +223,7 @@ export default function PeerReviewForm({
               <input
                 value={meetWhere}
                 onChange={(e) => setMeetWhere(e.target.value)}
-                className="w-[450px] h-[58px] px-4 border-2 border-[#E1EDF0] rounded font-medium
+                className="w-112.5 h-14.5 px-4 border-2 border-[#E1EDF0] rounded font-medium
                            text-[#495456] focus:border-[#00C3CC] focus:outline-none placeholder:text-[#CEDBDE]"
                 placeholder="과목을 입력하세요. ex) 전산 캠스톤"
               />
@@ -280,7 +280,7 @@ export default function PeerReviewForm({
             <div className="flex justify-center gap-6 pb-25">
               <button
                 onClick={onCancel}
-                className="w-[280px] h-14 rounded-md font-extrabold bg-[#E8EFF1] text-[#495456] hover:bg-[#DDE7EA] "
+                className="w-70 h-14 rounded-md font-extrabold bg-[#E8EFF1] text-[#495456] hover:bg-[#DDE7EA] "
               >
                 취소
               </button>
@@ -295,7 +295,7 @@ export default function PeerReviewForm({
                     badKeys,
                   })
                 }
-                className={`w-[280px] h-14 rounded-md font-extrabold
+                className={`w-70 h-14 rounded-md font-extrabold
                 ${
                   canSubmit
                     ? "bg-[#00C3CC] text-white hover:bg-[#00B2BA]"

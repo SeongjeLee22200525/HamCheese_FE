@@ -51,7 +51,7 @@ export default function ChatWidgetRoot() {
     <>
       {mounted && (
         <div
-          className="fixed inset-0 z-[9998] bg-black/30"
+          className="fixed inset-0 z-9998 bg-black/30"
           onClick={handleClose}
         >
           <div

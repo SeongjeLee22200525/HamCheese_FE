@@ -52,7 +52,7 @@ export default function ProfileCard({ user }: Props) {
   return (
     <article
       onClick={handleClick}
-      className="rounded-lg p-15 outline-1 outline-offset-[-1px] outline-[#E1EDF0] bg-white hover:shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] transition cursor-pointer"
+      className="rounded-lg p-15 outline-1 -outline-offset-1 outline-[#E1EDF0] bg-white hover:shadow-[0px_2px_4px_0px_rgba(225,237,240,1.00)] transition cursor-pointer"
     >
       <div className="flex items-start gap-6">
         {/* ================= 이미지 블록 ================= */}
@@ -99,7 +99,7 @@ export default function ProfileCard({ user }: Props) {
               {user.skillList.map((skill) => (
                 <span
                   key={skill}
-                  className="p-2 h-7.5 flex items-center outline-1 outline-offset-[-1px] outline-[#CEDBDE] text-xs font-semibold rounded text-[#838F91]"
+                  className="p-2 h-7.5 flex items-center outline-1 -outline-offset-1 outline-[#CEDBDE] text-xs font-semibold rounded text-[#838F91]"
                 >
                   #{skill}
                 </span>
@@ -126,10 +126,10 @@ export default function ProfileCard({ user }: Props) {
                   return (
                     <div
                       key={keyword}
-                      className="relative w-[370px] h-11 rounded bg-[#F5F8F8] px-4 flex items-center justify-between overflow-hidden"
+                      className="relative w-92.5 h-11 rounded bg-[#F5F8F8] px-4 flex items-center justify-between overflow-hidden"
                     >
                       <div
-                        className="absolute left-0 top-0 h-full rounded bg-gradient-to-r from-[#B9EAED] to-[#E1EDF0]"
+                        className="absolute left-0 top-0 h-full rounded bg-linear-to-r from-[#B9EAED] to-[#E1EDF0]"
                         style={{ width: `${barWidth}px` }}
                       />
 
@@ -156,7 +156,7 @@ export default function ProfileCard({ user }: Props) {
                 {[0, 1, 2].map((i) => (
                   <div
                     key={i}
-                    className="w-[370px] h-11 rounded bg-[#F5F8F8]"
+                    className="w-92.5 h-11 rounded bg-[#F5F8F8]"
                   />
                 ))}
               </div>
